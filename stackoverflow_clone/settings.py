@@ -54,7 +54,7 @@ ROOT_URLCONF = 'stackoverflow_clone.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'stackoverflow_clone.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'stackoverflow',
+        'USER': 'admin',
+        'PASSWORD': 'Password123',
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
