@@ -1,0 +1,107 @@
+.text-editor{
+    border: solid #afafaf 1px;
+    width: 835px;
+    border-radius: 5px;
+}
+
+.btn-group{
+    border-bottom: solid #afafaf 1px;
+    width: 834px;
+    height: 45px;
+    position: absolute;
+
+    padding-left: 10px;
+}
+
+.editor-button{
+    border: 0px;
+    background-color: white;
+    color: #6d6d6d;
+}
+
+.disabled-button{
+    border: 0px;
+    background-color: white;
+    width: 20px;
+}
+
+.curly_brackets_icon{
+    font-family: Monospace;
+    font-size: 17px;
+    font-weight: 1000;
+}
+
+.text-button{
+    border: 0px;
+    height: 35px;
+    border-radius: 3px;
+    color: #4b4b4b;
+    font-size: 13px;
+    font-family: Sans-Serif, sans-serif;
+    background-color: white;
+    margin-left: 260px;
+    margin-top: 4px;
+}
+
+.button-descriptions{
+    height: 29px;
+    width: 833px;
+    background-color: #f1f1f1;
+    display: none;
+}
+
+.description-button{
+    border: 0px;
+    font-size: 14px;
+    font-weight: 400;
+    color: black;
+    margin-right: 5px;
+
+}
+
+.description{
+    border-bottom: solid #afafaf 1px;
+}
+
+.bold{
+    font-size: 13px;
+    font-family: Sans-Serif, sans-serif;
+    font-weight: bold;
+    padding-left: 7px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+
+}
+
+.mono{
+    padding-left: 25px;
+    font-size: 11px;
+    font-family: Monospace, monospace;
+    margin: 5px;
+}
+
+.close-top{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.close-bottom{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.text-area{
+    width: 830px;
+    height: 198px;
+    border: none;
+}
+
+.editor-button:hover{
+    color: black;
+}
+
+.text-button:hover{
+    background-color: #f7f7f7;
+}
+
+

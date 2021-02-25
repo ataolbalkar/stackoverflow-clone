@@ -1,14 +1,12 @@
 from django.db import models
 from django.utils import timezone
 
-from ckeditor.fields import RichTextField
-
 
 # Create your models here.
 
 class Question(models.Model):
     title = models.CharField(max_length=200)
-    body = RichTextField(blank=True, null=True)
+    body = models.TextField()
     # @TODO author eklenecek
     votes = models.IntegerField(default=0)
     answers = models.IntegerField(default=0)
@@ -36,7 +34,7 @@ class Answer(models.Model):
     votes = models.IntegerField(default=0)
     is_best_answer = models.BooleanField(default=False)
 
-    body = RichTextField()
+    body = models.TextField()
 
     answered_date = models.DateTimeField(default=timezone.now)
     # @TODO editleyen author eklenecek.

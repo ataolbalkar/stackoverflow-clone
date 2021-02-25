@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Editor</title>
+    <script src="https://kit.fontawesome.com/b24dcc1587.js" crossorigin="anonymous"></script>
+    <!-- @TODO backend css bağlantısı -->
+    <link rel="stylesheet" href="../../static/questions/css/text_editor.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <!-- @TODO backend js bağlantısı -->
+    <script type="text/javascript" src="../../static/questions/js/text_editor.js"></script>
+</head>
+<body onload="enableEditMode();">
+    <div class="text-editor">
+        <div class="btn-group" role="group">
+        <button class="editor-button" onclick="execCmd('bold');" style="padding-right: 20px"><i class="fas fa-bold"></i></button>
+        <button class="editor-button" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
+
+        <button class="disabled-button" disabled></button>
+
+        <button class="editor-button" onclick="addLink()"><i class="fas fa-link"></i></button>
+        <button class="editor-button" onclick="execCmdWithArg('formatBlock', 'blockquote')"><i class="fas fa-quote-right"></i></button>
+        <button class="editor-button" style="padding-bottom: 3px"  onclick="addCode()"><span class="curly_brackets_icon">{}</span></button>
+        <button class="editor-button" onclick="execCmdWithArg('insertImage', prompt('Enter a image URL', 'http://'))"><i class="fas fa-image"></i></button>
+        <button class="editor-button"><i class="fas fa-code"></i></button>
+
+        <button class="disabled-button" disabled></button>
+
+        <button class="editor-button" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
+        <button class="editor-button" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
+        <button class="editor-button" onclick="addHeading()"><i class="fas fa-heading"></i></button>
+        <button class="editor-button" onclick="execCmd('insertHorizontalRule')"><i class="fas fa-grip-lines"></i></button>
+
+        <button class="disabled-button" disabled></button>
+
+        <button class="editor-button" onclick="execCmd('undo')"><i class="fas fa-undo-alt"></i></button>
+        <button class="editor-button" onclick="execCmd('redo')"><i class="fas fa-redo-alt"></i></button>
+
+        <button class="text-button">Hide formatting tips</button>
+
+    </div><br>
+
+    <div class="btn-group button-descriptions" role="group">
+        <button class="description-button" id="links-button">Links</button>
+        <button class="description-button" id="images-button">Images</button>
+        <button class="description-button" id="styling-button">Styling/Headers</button>
+        <button class="description-button" id="lists-button">Lists</button>
+        <button class="description-button" id="blockquotes-button">Blockquotes</button>
+        <button class="description-button" id="codes-button">Code</button>
+        <button class="description-button" id="HTMLs-button">HTML</button>
+        <button class="description-button" id="tables-button">Tables</button>
+        <button class="description-button" style="color: royalblue">More  <i class="fas fa-external-link-alt"></i></button>
+    </div>
+
+    <div class="description" id="links">
+        <p class="bold">Use angle brackets to force linking</p>
+        <p class="mono">&lt;https://stackoverflow.com&gt;</p>
+        <p class="bold">Create inline text links with Markdown</p>
+        <p class="mono">[Text](https://stackoverflow.com)</p>
+        <p class="bold">Add alt attributes to links by adding a double space and text after the URL</p>
+        <p class="mono">[Text](https://stackoverflow.com  "this text appears on mouseover")</p>
+    </div>
+
+    <div class="description" id="images">
+        <p class="bold">Add inline images</p>
+        <p class="mono">![Text](https://stackoverflow.com/image.jpg)</p>
+    </div>
+    <div class="description" id="styling">
+        <p class="bold">Use some text styling to make your post more readable</p>
+        <p class="mono">Line breaks: double space or &lt;br /&gt; at the end of each line</p>
+        <p class="mono"><em>Italics: *asterisks* or _underscores_</em></p>
+        <p class="mono"><strong>Bold: </strong>**double asterisks** or __double underscores__</p>
+        <p class="bold">Create sections with headers</p>
+        <p class="mono close-bottom">A Large Header</p>
+        <p class="mono close-top">==============</p>
+        <p class="mono close-bottom">Smaller Subheader</p>
+        <p class="mono close-top">-----------------</p>
+        <p class="bold">Use hash marks for multiple levels of headers</p>
+        <p class="mono"># Header 1 #</p>
+        <p class="mono">## Header 2 ##</p>
+        <p class="mono">### Header 3 ###</p>
+    </div>
+
+    <div class="description" id="lists">
+        <p class="bold">Use angle brackets to force linking</p>
+        <p class="mono">- Create bullets with minus sign</p>
+        <p class="mono">+ or plus sign</p>
+        <p class="mono">* or an asterisk</p>
+        <p class="mono">1. or sequential numbers</p>
+        <p class="bold">Use 4 or 8 spaces to create nested lists</p>
+        <p class="mono">1. List item</p>
+        <p class="mono">    - Item A, four spaces</p>
+        <p class="mono">        * Item B, eight spaces</p>
+    </div>
+
+    <div class="description" id="blockquotes">
+        <p class="bold">Add > to the beginning of each line to create a blockquote</p>
+        <p class="mono">> A standard blockquote is indented</p>
+        <p class="mono">> > A nested blockquote is indented more</p>
+        <p class="mono">> > > > You can nest to any depth.</p>
+    </div>
+
+    <div class="description" id="codes">
+        <p class="bold">Create code fences by placing your code between sets of 3 backticks ` or use CTRL + K</p>
+        <p class="mono">```</p>
+        <p class="mono">like so</p>
+        <p class="mono">```</p>
+        <p class="bold">Create inline code spans by placing text between single backticks</p>
+        <p class="mono">`like so`</p>
+        <p class="bold">Add a preformatted block within a list with eight spaces</p>
+        <p class="mono">1. This is normal text</p>
+        <p class="mono">2. This is a list item</p>
+        <br>
+        <p class="mono">        Skip a line and indent eight spaces.</p>
+        <p class="mono">        Eight spaces will trigger the code block.</p>
+    </div>
+
+    <div class="description" id="HTMLs">
+        <p class="bold">Use HTML in combination with Markdown (<a href="#">What's supported? Note: We advise against mixing HTML and Markdown.</a>)</p>
+        <p class="mono">&lt;strike&gt;Markdown works * fine* in here.&lt;/strike&gt;</p>
+        <p class="bold">Block-level HTML elements have restrictions</p>
+        <p class="mono">1. Use blank lines to separate them from surrounding text</p>
+        <p class="mono">2. The opening and closing tags of the outermost block elements must not be indented</p>
+        <br>
+        <p class="mono">&lt;pre&gt;</p>
+        <p class="mono">    You &lt;em&gt;cannot&lt;/em&gt; use Markdown here</p>
+        <p class="mono">&lt;/pre&gt;</p>
+    </div>
+
+    <div class="description" id="tables">
+        <p class="bold">Create tables using the <a href="#">GitHub-flavored markdown format</a></p>
+        <p class="mono">| A header | Another header |</p>
+        <p class="mono">| -------- | -------------- |</p>
+        <p class="mono">| First    | row            |</p>
+        <p class="mono">| Second   | row            |</p>
+        <br>
+        <p class="mono">A header row is required and must be followed by a separator row with the same number of cells. Cells are separated by a pipe (|) symbol.</p>
+        <p class="bold">Set the alignment of a table column by placing a : on the left, right, or both sides of a separator in the separator line</p>
+        <p class="mono">| left | center | right |</p>
+        <p class="mono">|:---- |:------:| -----:|</p>
+        <p class="mono">| One  | Two    | Three |</p>
+    </div>
+        <iframe name="richTextField" class="text-area"></iframe>
+ </div>
+<script type="text/javascript">
+    firstHide('.button-descriptions');
+    firstHide('.description');
+</script>
+</body>
+</html>
