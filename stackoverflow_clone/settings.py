@@ -129,3 +129,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'questions/static')
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'questions/media')
+MEDIA_URL = '/media/'
+
+LOGIN_REDIRECT_URL = '/'

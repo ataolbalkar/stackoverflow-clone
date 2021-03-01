@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Base</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'questions/css/base.css' %}">
+    <script src="https://kit.fontawesome.com/b24dcc1587.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 50px; border-top: solid #f48024 3px;">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLeftContent" aria-controls="navbarLeftContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span></button>
+    <div class="container">
+
+        <a href="#" id="site-logo"><img src="{% static 'questions/images/site_logo.svg' %}" id="site-logo-png"></a>
+
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <div class="dropdown" id="products-button-dropdown">
+                  <button class="nav-link nav-top" id="products-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Products
+                  </button>
+                  <div class="products-menu dropdown-menu dropdown-menu-center" aria-labelledby="dropdownMenuButton">
+                    <a href="#" class="d-block dropdown-item">
+                        <span class="dropdown-text-bold">Stack Overflow</span>
+                        <span class="dropdown-text">Public questions & answers</span>
+                    </a>
+                    <a href="#" class="d-block dropdown-item">
+                        <span class="dropdown-text-bold">Stack Overflow for Teams</span>
+                        <span class="dropdown-text">Where developers &</span>
+                        <span class="dropdown-text">technologists share private</span>
+                        <span class="dropdown-text">knowledge with coworkers</span>
+                    </a>
+                    <a href="#" class="d-block dropdown-item">
+                        <span class="dropdown-text-bold">Jobs</span>
+                        <span class="dropdown-text">Programming & related technical</span>
+                        <span class="dropdown-text">career opportunities</span>
+                    </a>
+                    <a href="#" class="d-block dropdown-item">
+                        <span class="dropdown-text-bold">Talent</span>
+                        <span class="dropdown-text">Recruit tech talent & build your</span>
+                        <span class="dropdown-text">employer brand</span>
+                    </a>
+                    <a href="#" class="d-block dropdown-item">
+                        <span class="dropdown-text-bold">Advertising</span>
+                        <span class="dropdown-text">Reach developers &</span>
+                        <span class="dropdown-text">technologists worldwide</span>
+                    </a>
+                  </div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="search-field">
+            <div class="search-div nav-top" onclick="searchDropdown()">
+                <i class="fas fa-search" style="color: #bbc0c4; padding-left: 7px;"></i>
+                <input class="search" type="search" placeholder="Search...">
+            </div>
+            <div id="searchContent" class="search-content dropdown-menu dropdown-menu-center" style="left: 51.65%;">
+                <div class="flex-container">
+                    <div class="flex-child">
+                        <div class="search-text-div">
+                            <span class="search-text-mono">[tag]</span>
+                            <span class="search-text">Select within a tag</span>
+                        </div>
+                        <div class="search-text-div">
+                            <span class="search-text-mono">user:1234</span>
+                            <span class="search-text">search by author</span>
+                        </div>
+                        <div class="search-text-div">
+                            <span class="search-text-mono">"words here"</span>
+                            <span class="search-text">exact phrase</span>
+                        </div>
+                </div>
+                <div class="flex-child">
+                        <div class="search-text-div">
+                            <span class="search-text-mono">answers:0</span>
+                            <span class="search-text">unanswered questions</span>
+                        </div>
+                        <div class="search-text-div">
+                            <span class="search-text-mono">score:3</span>
+                            <span class="search-text">posts with a 3+ score</span>
+                        </div>
+                        <div class="search-text-div">
+                            <span class="search-text-mono">isaccepted:yes</span>
+                            <span class="search-text">search within status</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="end-search-block">
+                    <a class="search-button" href="#">Ask a question</a>
+                    <a class="search-help" href="#">Search help</a>
+                </div>
+            </div>
+        </div>
+
+
+
+        <ul class="navbar-nav">
+            <li class="nav-item top-nav-icon profile-icon">
+                <a href="#" class="top-nav-button">
+                    <img style="width: 32px; height: 32px; background: #4b4b4b" alt="">
+                    <span class="reputation">1</span>
+                </a>
+            </li>
+            <li class="nav-item top-nav-icon">
+                <a href="#" class="top-nav-button">
+                    <i class="fas fa-inbox fa-lg top-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item top-nav-icon">
+                <a href="#" class="top-nav-button">
+                    <i class="fas fa-trophy top-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item top-nav-icon">
+                <a href="#" class="top-nav-button">
+                    <i class="fas fa-question-circle top-icon"></i>
+                </a>
+            </li>
+            <li class="nav-item top-nav-icon">
+                <a href="#" class="top-nav-button">
+                    <i class="fas fa-comment-alt top-icon"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+
+</nav>
+<div class="container">
+    <nav class="col-md-2 d-none d-md-block sidebar" style="padding-left: 0px; padding-right: 42px;">
+        <div class="sidebar-sticky" style="margin-left: 10px; width: 170px;">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px; padding-bottom: 10px; padding-top: 10px; margin-top: 20px">Home</a></li>
+            </ul>
+            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-2 mb-1 text-muted" style="font-size: 12px;">PUBLIC</h6></div>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-globe-americas"></i> Stack Overflow</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Tags</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
+            </ul>
+            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">FIND A JOB</h6></div>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Companies</a></li>
+            </ul>
+            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">TEAMS <a class="what-is-this" href="#" style="font-size: 11px; color: dimgray;">What is this?</a></h6></div>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-suitcase" style="color: orangered;"></i> Create a Team</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<script>
+    function searchDropdown() {
+        $('.search-content').css('display', 'unset');
+    }
+
+    function closeDropdown(trigger, content) {
+        window.onclick = function (event) {
+            if (!event.target.matches(trigger)) {
+                if ($(content)[0].style.display === 'unset') {
+                    $(content).css('display', 'none')
+                }
+            }
+        }
+    }
+    closeDropdown('.search', '.search-content')
+
+</script>
+
+</body>
+</html>

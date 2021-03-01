@@ -6,7 +6,7 @@ from django.utils import timezone
 
 class Question(models.Model):
     title = models.CharField(max_length=200)
-    body = models.TextField()
+    body = models.TextField(null=True)
     # @TODO author eklenecek
     votes = models.IntegerField(default=0)
     answers = models.IntegerField(default=0)
@@ -34,7 +34,7 @@ class Answer(models.Model):
     votes = models.IntegerField(default=0)
     is_best_answer = models.BooleanField(default=False)
 
-    body = models.TextField()
+    body = models.TextField(null=True)
 
     answered_date = models.DateTimeField(default=timezone.now)
     # @TODO editleyen author eklenecek.
