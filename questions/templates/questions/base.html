@@ -3,12 +3,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Base</title>
+    <title>
+        {% block title %}
+        Base
+        {% endblock %}
+    </title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'questions/css/base.css' %}">
     <script src="https://kit.fontawesome.com/b24dcc1587.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    {% block imports %}
+
+    {% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 50px; border-top: solid #f48024 3px;">
@@ -136,28 +143,34 @@
 
 </nav>
 <div class="container">
-    <nav class="col-md-2 d-none d-md-block sidebar" style="padding-left: 0px; padding-right: 42px;">
-        <div class="sidebar-sticky" style="margin-left: 10px; width: 170px;">
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px; padding-bottom: 10px; padding-top: 10px; margin-top: 20px">Home</a></li>
-            </ul>
-            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-2 mb-1 text-muted" style="font-size: 12px;">PUBLIC</h6></div>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-globe-americas"></i> Stack Overflow</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Tags</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-            </ul>
-            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">FIND A JOB</h6></div>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Companies</a></li>
-            </ul>
-            <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">TEAMS <a class="what-is-this" href="#" style="font-size: 11px; color: dimgray;">What is this?</a></h6></div>
-            <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-suitcase" style="color: orangered;"></i> Create a Team</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="row">
+        <nav class="d-none d-md-block sidebar" style="width: 170px; padding: unset;">
+            <div class="sidebar-sticky" style="margin-left: 10px;">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px; padding-bottom: 10px; padding-top: 10px; margin-top: 20px">Home</a></li>
+                </ul>
+                <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-2 mb-1 text-muted" style="font-size: 12px;">PUBLIC</h6></div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-globe-americas"></i> Stack Overflow</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Tags</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
+                </ul>
+                <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">FIND A JOB</h6></div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Companies</a></li>
+                </ul>
+                <div class="sidebar-text"><h6 class="sidebar-heading d-flex justify-content-between align-items-center px-1 mt-4 mb-1 text-muted" style="font-size: 12px;">TEAMS <a class="what-is-this" href="#" style="font-size: 11px; color: dimgray;">What is this?</a></h6></div>
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link" href="#" style="padding-left: 5px;"><i class="fas fa-suitcase" style="color: orangered;"></i> Create a Team</a></li>
+                </ul>
+            </div>
+        </nav>
+        <main role="main" class="col-md-10 col-lg-10 pt-3" style="padding: unset;">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
 </div>
 
 <script>

@@ -1,0 +1,127 @@
+{% extends 'questions/base.html' %}
+
+{% block title %}
+Questions
+{% endblock %}
+{% load staticfiles %}
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'questions/css/questions_list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-container">
+        <div class="questions-container">
+            <div class="questions-top">
+                <div class="questions-title">
+                    <h3 style="font-weight: 445; margin-left: 30px; margin-top: 10px;">Top Questions</h3>
+                    <a href="#" class="questions-ask-question">Ask Question</a>
+                </div>
+                <div class="sort-by-area">
+                    <div class="btn-group sba-group" role="group">
+                        <a href="#" class="sort-area-button sba-you-are-here">Interesting</a>
+                        <a href="#" class="sort-area-button">Bountied</a>
+                        <a href="#" class="sort-area-button">Hot</a>
+                        <a href="#" class="sort-area-button">Week</a>
+                        <a href="#" class="sort-area-button" style="border: unset;">Month</a>
+                    </div>
+                </div>
+            </div>
+            <div class="questions">
+
+                    <div class="question">
+                        <div class="questions-left">
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">-1</span>
+                                <span class="questions-left-attr">votes</span>
+                            </div>
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">0</span>
+                                <span class="questions-left-attr">answers</span>
+                            </div>
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">6</span>
+                                <span class="questions-left-attr">views</span>
+                            </div>
+                        </div>
+                        <div class="question-content">
+                            <div class="question-title-div">
+                                <a href="#" class="question-title">
+                                    APIM requets query issue filtering
+                                </a>
+                            </div>
+                            <div class="question-bottom">
+                                <div class="question-tags">
+
+                                        <a href="#" class="question-tag" rel="tag">azure</a>
+                                        <a href="#" class="question-tag" rel="tag">logging</a>
+                                        <a href="#" class="question-tag" rel="tag">azure-api-management</a>
+                                        <a href="#" class="question-tag" rel="tag">appinsights</a>
+
+                                </div>
+                                <div class="question-info">
+                                    <a href="#" class="question-date">
+                                        asked 4 mins ago
+                                    </a>
+                                    <a href="#" class="question-author">
+                                        medone
+                                    </a>
+                                    <span class="reputation-score">
+                                        345
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question" style="background: #fdf7e3">
+                        <div class="questions-left">
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">15</span>
+                                <span class="questions-left-attr">votes</span>
+                            </div>
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">7</span>
+                                <span class="questions-left-attr">answers</span>
+                            </div>
+                            <div class="questions-left-attrs">
+                                <span class="questions-left-attr-value">28</span>
+                                <span class="questions-left-attr">views</span>
+                            </div>
+                        </div>
+                        <div class="question-content">
+                            <div class="question-title-div">
+                                <a href="#" class="question-title">
+                                    Dockerised frontend and backend both but frontend is unable to make api calls to backend from browser [closed] Dockerised frontend and backend both but frontend is unable to make api calls to backend from browser [closed
+                                </a>
+                            </div>
+                            <div class="question-bottom">
+                                <div class="question-tags">
+
+                                        <a href="#" class="question-tag" rel="tag">python</a>
+                                        <a href="#" class="question-tag" rel="tag">docker</a>
+                                        <a href="#" class="question-tag" rel="tag">node.js</a>
+                                        <a href="#" class="question-tag" rel="tag">flask</a>
+
+                                </div>
+                                <div class="question-info">
+                                    <a href="#" class="question-date">
+                                        asked 6 mins ago
+                                    </a>
+                                    <a href="#" class="question-author">
+                                        PISELLONE OMEGA
+                                    </a>
+                                    <span class="reputation-score">
+                                        11150
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    <!-- @TODO sağ menü eklenecek -->
+    </div>
+
+{% endblock %}

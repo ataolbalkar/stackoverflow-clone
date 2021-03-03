@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import UserProfile
 from django.utils import timezone
 
 
@@ -7,7 +8,7 @@ from django.utils import timezone
 class Question(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(null=True)
-    # @TODO author eklenecek
+    author = models.ForeignKey(UserProfile)
     votes = models.IntegerField(default=0)
     answers = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
@@ -20,7 +21,7 @@ class Question(models.Model):
 
 class QuestionComment(models.Model):
     question = models.ForeignKey(Question)
-    # @TODO author eklenecek
+    author = models.ForeignKey(UserProfile)
     comment = models.CharField(max_length=555)
 
     votes = models.IntegerField(default=0)
@@ -30,7 +31,7 @@ class QuestionComment(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
-    # @TODO author eklenecek
+    author = models.ForeignKey(UserProfile)
     votes = models.IntegerField(default=0)
     is_best_answer = models.BooleanField(default=False)
 
@@ -43,7 +44,7 @@ class Answer(models.Model):
 
 class AnswerComment(models.Model):
     answer = models.ForeignKey(Answer)
-    # @TODO author eklenecek
+    author = models.ForeignKey(UserProfile)
     votes = models.IntegerField(default=0)
 
     comment = models.CharField(max_length=500)

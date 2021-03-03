@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'questions',
+    'accounts',
+    'tags',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'questions/media')
 MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'accounts.UserProfile'
