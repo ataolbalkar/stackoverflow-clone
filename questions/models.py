@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import UserProfile
+from tags.models import Tag
 from django.utils import timezone
 
 
@@ -8,20 +9,25 @@ from django.utils import timezone
 class Question(models.Model):
     title = models.CharField(max_length=200)
     body = models.TextField(null=True)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(UserProfile, related_name='question_author')
+
     votes = models.IntegerField(default=0)
     answers = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
-    # @TODO tag eklenecek
+
+    tags = models.ManyToManyField(Tag, blank=True)
     asked_date = models.DateTimeField(default=timezone.now)
-    modified_date = models.DateTimeField(default=timezone.now)
+
+    is_modified = models.BooleanField(default=False)
+    modified_date = models.DateTimeField(default=None, null=True)
+    modified_author = models.ForeignKey(UserProfile, related_name='edited_author', null=True)
 
     has_best_answer = models.BooleanField(default=False)
 
 
 class QuestionComment(models.Model):
     question = models.ForeignKey(Question)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(UserProfile, related_name='comment_author')
     comment = models.CharField(max_length=555)
 
     votes = models.IntegerField(default=0)
@@ -31,20 +37,20 @@ class QuestionComment(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(UserProfile, related_name='answered_author')
     votes = models.IntegerField(default=0)
     is_best_answer = models.BooleanField(default=False)
 
     body = models.TextField(null=True)
 
     answered_date = models.DateTimeField(default=timezone.now)
-    # @TODO editleyen author eklenecek.
-    edited_date = models.DateTimeField(default=timezone.now)
+    edited_author = models.ForeignKey(UserProfile, related_name='answered_edited_author', null=True)
+    edited_date = models.DateTimeField(default=timezone.now, null=True)
 
 
 class AnswerComment(models.Model):
     answer = models.ForeignKey(Answer)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(UserProfile, related_name='answered_comment_author')
     votes = models.IntegerField(default=0)
 
     comment = models.CharField(max_length=500)
