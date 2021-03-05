@@ -1,5 +1,6 @@
 function enableEditMode() {
         richTextField.document.designMode = 'On';
+        tagEditor.document.designMode = 'On';
 }
 
 var buttons = ['#links-button', '#images-button', '#styling-button', '#lists-button',

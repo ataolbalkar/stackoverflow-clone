@@ -1,15 +1,15 @@
 .text-editor{
     border: solid #afafaf 1px;
     width: 835px;
+    height: auto;
     border-radius: 5px;
+    display: block;
 }
 
 .btn-group{
     border-bottom: solid #afafaf 1px;
     width: 834px;
     height: 45px;
-    position: absolute;
-
     padding-left: 10px;
 }
 
@@ -94,6 +94,10 @@
     width: 830px;
     height: 198px;
     border: none;
+}
+
+.text-area:focus {
+    outline: solid #6cbbf7 2px;
 }
 
 .editor-button:hover{

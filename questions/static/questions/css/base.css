@@ -181,18 +181,20 @@
 .top-nav-icon{
     width: 40px;
     height: 50px;
-    padding-top: 3px;
+    padding: 10px 1px;
     text-align: center;
+    border-top: solid #f48024 3px;
 }
 
 .profile-icon{
-    padding: 10px;
+    padding: 5px;
     width: 65px;
     height: 50px;
 }
 
 .top-nav-icon:hover{
     background-color: #e4e6e8;
+    border-top: solid #f48024 3px;
 }
 
 .top-nav-button:hover{
@@ -203,7 +205,6 @@
 
 .top-icon{
     color: #848d95;
-    margin-top: 17px;
 }
 
 .products-menu{

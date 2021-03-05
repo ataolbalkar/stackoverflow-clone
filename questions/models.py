@@ -1,10 +1,12 @@
 from django.db import models
-from accounts.models import UserProfile
 from tags.models import Tag
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
 
+UserProfile = get_user_model()
 # Create your models here.
+
 
 class Question(models.Model):
     title = models.CharField(max_length=200)
@@ -56,4 +58,3 @@ class AnswerComment(models.Model):
     comment = models.CharField(max_length=500)
 
     posted_date = models.DateTimeField(default=timezone.now)
-
