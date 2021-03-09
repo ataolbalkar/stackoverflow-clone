@@ -85,15 +85,46 @@ for (let i = 0; i < buttons.length; i++) {
     $(hintFields[i]).slideUp();
 }
 
-// Form
+// FORM
+
+// Title
 
 document.getElementsByClassName('title-form')[0].addEventListener('keydown', function () {
     document.getElementById('id_title').value = this.value;
 });
 
+// Body
+
 richTextField.document.getElementsByTagName('body')[0].addEventListener('keydown', function () {
     document.getElementById('id_body').value = document.getElementsByName('richTextField')[0].contentWindow.document.body.innerHTML;
 });
 
+//Tags
 
+const tags = [];
+
+for (let option of document.getElementById('id_tags').options) {
+    tags.push(option.value)
+}
+
+let tagEditorFrame = tagEditor.document.getElementsByTagName('body')[0];
+tagEditorFrame.addEventListener('keydown', function (event) {
+    if (event.keyCode === 13) {
+        let myTags = [...tagEditor.document.getElementsByTagName('li')];
+        for (let tag of myTags) {
+            if (!(tags.includes(tag.innerText))) {
+                document.getElementsByName('tagEditor')[0].style.borderColor = 'red';
+            } else {
+                document.getElementsByName('tagEditor')[0].style.borderColor = '#ced4da';
+
+                let select = document.getElementById('id_tags').options;
+                for (let option of select) {
+                    if (option.value === tag.innerText) {
+                        option.selected = true;
+                    }
+                }
+            }
+        }
+    }
+});
 

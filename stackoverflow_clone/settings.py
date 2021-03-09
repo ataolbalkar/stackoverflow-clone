@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'stackoverflow_clone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stackoverflow',
+        'NAME': 'stackover',
         'USER': 'admin',
         'PASSWORD': 'Password123',
         'HOST': 'localhost',

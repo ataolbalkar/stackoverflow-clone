@@ -26,6 +26,9 @@ class Question(models.Model):
 
     has_best_answer = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str(self.pk)
+
 
 class QuestionComment(models.Model):
     question = models.ForeignKey(Question)
@@ -35,6 +38,9 @@ class QuestionComment(models.Model):
     votes = models.IntegerField(default=0)
 
     posted_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class Answer(models.Model):
@@ -49,6 +55,9 @@ class Answer(models.Model):
     edited_author = models.ForeignKey(UserProfile, related_name='answered_edited_author', null=True)
     edited_date = models.DateTimeField(default=timezone.now, null=True)
 
+    def __str__(self):
+        return str(self.pk)
+
 
 class AnswerComment(models.Model):
     answer = models.ForeignKey(Answer)
@@ -58,3 +67,6 @@ class AnswerComment(models.Model):
     comment = models.CharField(max_length=500)
 
     posted_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return str(self.pk)

@@ -170,3 +170,22 @@
 .fas {
     margin-top: 5px;
 }
+
+.question-ask-submit-button {
+    height: 35px;
+    width: 144px;
+    margin-top: 30px;
+
+    border: ridge white 1px;
+    border-radius: 5px;
+
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background-color: #0095ff;
+}
+
+.question-ask-submit-button:hover {
+    background-color: #0077cc;
+}
