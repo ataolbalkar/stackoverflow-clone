@@ -168,10 +168,11 @@
     </div>
 </nav>
 
-<main role="main" style="background: #eff0f1; padding: 5px 40px 40px;">
+<div style="background: #eff0f1; padding: 5px 40px 40px;">
             {% block content %}
+
             {% endblock %}
-</main>
+</div>
 
 
 <script>
@@ -183,7 +184,7 @@
         window.onclick = function (event) {
             if (!event.target.matches(trigger)) {
                 if ($(content)[0].style.display === 'unset') {
-                    $(content).css('display', 'none')
+                    $(content).css('display', 'none');
                 }
             }
         }

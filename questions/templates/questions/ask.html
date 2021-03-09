@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{% static 'questions/css/ask.css' %}">
     <link rel="stylesheet" href="{% static 'questions/css/text_editor.css' %}">
     <script type="text/javascript" src="{% static 'questions/js/text_editor.js' %}"></script>
-
 {% endblock %}
 
 {% block content %}
@@ -175,13 +174,143 @@
                 </div>
             </div>
             <div class="ask-question-hint-area">
+                <div class="question-hint-area question-hint-area-active">
+                    <div class="big-hint-title-area">
+                        <p class="big-hint-title">
+                            Step 1: Draft your question
+                        </p>
+                    </div>
+                    <p class="hint-description">
+                        The community is here to help you with specific coding, algorithm, or language problems.
+                    </p>
+                    <p class="hint-description">
+                        Avoid asking opinion-based questions.
+                    </p>
 
+                    <div class="dropdown">
+                        <button id="description-dropdown-button-one" class="description-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <p class="description-dropdown-title">
+                                <span class="description-dropdown-number">1.</span>
+                                Summarize the problem
+                            </p>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="description-dropdown-menu-one" class="description-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <ul style="padding-left: 17px; font-size: 12px;">
+                                <li>
+                                    <p class="description-dropdown-description">
+                                        Include details about your goal
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="description-dropdown-description">
+                                        Describe expected and actual results
+                                    </p>
+                                </li>
+                                <li>
+                                    <p class="description-dropdown-description">
+                                        Include any error messages
+                                    </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button id="description-dropdown-button-two" class="description-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <p class="description-dropdown-title">
+                                <span class="description-dropdown-number">2.</span>
+                                Describe what you've tried
+                            </p>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="description-dropdown-menu-two" class="description-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <p class="description-dropdown-description">
+                                Show what you’ve tried and tell us what you found (on this site or elsewhere) and why it didn’t meet your needs. You can get better answers when you provide research.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button id="description-dropdown-button-three" class="description-dropdown-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <p class="description-dropdown-title">
+                                <span class="description-dropdown-number">3.</span>
+                                Show some code
+                            </p>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="description-dropdown-menu-three" class="description-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <p class="description-dropdown-description">
+                                When appropriate, share the minimum amount of code others need to reproduce your problem (also called a minimum, reproducible example)
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown question-hint-area">
+                    <button id="question-hint-area-button-one" class="question-hint-area-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <p class="big-hint-title">
+                            Have a non-programming question?
+                        </p>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="question-description-area-one" class="question-description-area question-description-area-dropdown" aria-labelledby="dropdownMenuButton">
+                        <p class="description-dropdown-description">
+                            <a class="question-hint-description-link" href="#">
+                                Super user
+                            </a><br>
+                            Troubleshooting hardware and software issues
+                        </p>
+                        <p class="description-dropdown-description">
+                            <a class="question-hint-description-link" href="#">
+                                Software Engineering
+                            </a><br>
+                            For software development methods and process questions
+                        </p>
+                        <p class="description-dropdown-description">
+                            <a class="question-hint-description-link" href="#">
+                                Hardware recommendations
+                            </a>
+                        </p>
+                        <p class="description-dropdown-description">
+                            <a class="question-hint-description-link" href="#">
+                                Software recommendations
+                            </a>
+                        </p>
+                        <p class="description-dropdown-description">
+                            Ask questions about the site on
+                            <a class="question-hint-description-link" href="#">
+                                meta
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <div class="dropdown question-hint-area">
+                    <button id="question-hint-area-button-two" class="question-hint-area-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <p class="big-hint-title">
+                            More helpful links
+                        </p>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="question-description-area-two" class="question-description-area question-description-area-dropdown" aria-labelledby="dropdownMenuButton">
+                        <p class="description-dropdown-description">
+                            Find more information about
+                            <a class="question-hint-description-link" href="#">
+                                how to ask a good question here
+                            </a>
+                        </p>
+                        <p class="description-dropdown-description">
+                            Visit the
+                            <a class="question-hint-description-link" href="#">
+                                help center
+                            </a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
     </div>
-
-
-
 
 
     <script src="{% static 'questions/js/ask.js' %}"></script>
