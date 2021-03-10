@@ -1,0 +1,136 @@
+{% extends 'questions/base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block title %}
+    {{ question.tags.first }} - {{ question.title }}
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'questions/css/question_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="main-content">
+        <div class="top-area-content">
+            <div class="title-area">
+                <h2 class="title">
+                    {{ question.title }}
+                </h2>
+                <div class="top-info-area">
+                    <div class="top-info">
+                        <span class="top-info-title">
+                            Asked
+                        </span>
+                        <span class="top-info-value">
+                            {{ question.asked_date|naturaltime }}
+                        </span>
+                    </div>
+                    <div class="top-info">
+                        <span class="top-info-title">
+                            Active
+                        </span>
+                        <span class="top-info-value">
+                            <!--@TODO Active Ekle-->
+                        </span>
+                    </div>
+                    <div class="top-info">
+                        <span class="top-info-title">
+                            Viewed
+                        </span>
+                        <span class="top-info-value">
+                            {{ question.views }} times
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="top-right-area">
+                <a class="ask-question-button" href="{% url 'ask' %}">Ask Question</a>
+            </div>
+        </div>
+        <div class="question-content">
+            <div class="question-content-left-menu">
+                <button id="question-vote-button-up"><i class="fas fa-caret-up fa-3x"></i></button>
+                <span class="question-votes">{{ question.votes }}</span>
+                <button id="question-vote-button-down"><i class="fas fa-caret-down fa-3x"></i></button>
+
+                <button class="question-left-button"><i class="fas fa-bookmark"></i></button>
+                <!-- @TODO Bookmark -->
+                <button class="question-left-button" style="margin-left: 6px;"><i class="fas fa-history"></i></button>
+            </div>
+            <div class="question-content-content">
+                <div class="question-body">
+                    {{ question.body }}
+                </div>
+                <div class="question-tag-area">
+                    {% for tag in question.tags.values %}
+                        <a href="#" class="question-tag">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+                <div class="question-body-bottom">
+                    <div class="question-body-bottom-options">
+                        <a id="question-body-bottom-option-share" class="question-body-bottom-option" href="#">
+                            Share
+                        </a>
+                        <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="#">
+                            Edit
+                        </a>
+                        <a id="question-body-bottom-option-follow" class="question-body-bottom-option" href="#">
+                            <!-- @TODO follow sistemi ekle -->
+                            Follow
+                        </a>
+                    </div>
+                    <div class="question-body-users">
+                        {% if question.is_modified %}
+                            <div class="question-edited">
+                                <div class="question-edited-info">
+                                    <a href="#" class="question-edited-date">
+                                        edited  {{ question.modified_date }}
+                                    </a>
+                                    <div class="question-user">
+                                        <div class="question-user-profile-image">
+                                            <!-- @TODO profil resmi -->
+                                        </div>
+                                        <div class="question-user-info">
+                                                <a href="#" class="question-username">
+                                                {{ modified_author.username }}
+                                                </a>
+                                            <div class="question-user-scores">
+                                                <span class="user-reputation-score">
+                                                    {{ modified_author.reputation }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="question-asked">
+                            <a class="question-asked-date">
+                                asked {{ question.asked_date }}
+                            </a>
+                            <div class="question-user">
+                                <div class="question-user-profile-image">
+                                    <!-- @TODO Profil resmi -->
+                                </div>
+                                <div class="question-user-info">
+                                    <a href="#" class="question-username">
+                                        {{ author.username }}
+                                    </a>
+                                    <div class="question-user-scores">
+                                        <span class="user-reputation-score">
+                                            {{ author.reputation }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
