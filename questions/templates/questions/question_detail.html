@@ -211,10 +211,10 @@
                         {% endfor %}
                     {% endif %}
                     {% if question.is_active %}
-                        <a class="add-question-comment add-comment" href="#" role="button">
+                        <a id="add-question-comment" class="add-question-comment add-comment" role="button">
                             Add a comment
                         </a>
-                        <div class="add-comment-area">
+                        <div id="add-question-comment-area" class="add-comment-area">
                             <!-- @TODO AJAX Form -->
                             <input type="text" class="form-control add-comment-input">
                             <button class="btn btn-secondary add-comment-button">Add a comment</button>
@@ -397,10 +397,10 @@
                                 {% endfor %}
                             {% endif %}
                             {% if question.is_active %}
-                                <a class="add-question-comment add-comment" href="#" role="button">
+                                <a id="add-answer-comment--{{ answer.pk }}" class="add-question-comment add-comment add-answer-comment" role="button">
                                     Add a comment
                                 </a>
-                                <div class="add-comment-area">
+                                <div id="add-answer-comment-area--{{ answer.pk }}" class="add-comment-area add-answer-comment-area">
                                     <!-- @TODO AJAX Form -->
                                     <input type="text" class="form-control add-comment-input">
                                     <button class="btn btn-secondary add-comment-button">Add a comment</button>
