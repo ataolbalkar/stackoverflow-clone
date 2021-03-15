@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block imports %}
+    <link rel="stylesheet" href="{% static 'questions/css/text_editor.css' %}">
     <link rel="stylesheet" href="{% static 'questions/css/question_detail.css' %}">
+{% endblock %}
+
+{% block body_tag %}
+    onload="enableEditMode();"
 {% endblock %}
 
 {% block content %}
@@ -31,7 +36,7 @@
                             Active
                         </span>
                         <span class="top-info-value">
-                            <!--@TODO Active Ekle-->
+                            {{ last_activity_time|naturaltime }}
                         </span>
                     </div>
                     <div class="top-info">
@@ -48,11 +53,20 @@
                 <a class="ask-question-button" href="{% url 'ask' %}">Ask Question</a>
             </div>
         </div>
-        <div class="question-content">
+        <div class="question-content" id="{{ question.pk }}">
             <div class="question-content-left-menu">
-                <button id="question-vote-button-up"><i class="fas fa-caret-up fa-3x"></i></button>
-                <span class="question-votes">{{ question.votes }}</span>
-                <button id="question-vote-button-down"><i class="fas fa-caret-down fa-3x"></i></button>
+
+                {% if question in user.voted_questions.all %}
+                    <button class="question-vote-button-up question-vote-up" id="question-vote-up--{{ question.pk }}" disabled style="color: #50c37b;"><i class="fas fa-caret-up fa-3x" ></i></button>
+                {% else %}
+                    <button class="question-vote-button-up question-vote-up" id="question-vote-up--{{ question.pk }}"><i class="fas fa-caret-up fa-3x"></i></button>
+                {% endif %}
+                <span class="question-votes" id="question-votes">{{ question.votes }}</span>
+                {% if question in user.voted_down_questions.all %}
+                    <button class="question-vote-button-down question-vote-down" id="question-vote-down--{{ question.pk }}" disabled style="color: #c3212a"><i class="fas fa-caret-down fa-3x"></i></button>
+                {% else %}
+                    <button class="question-vote-button-down question-vote-down" id="question-vote-down--{{ question.pk }}"><i class="fas fa-caret-down fa-3x"></i></button>
+                {% endif %}
 
                 <button class="question-left-button"><i class="fas fa-bookmark"></i></button>
                 <!-- @TODO Bookmark -->
@@ -127,10 +141,426 @@
                         </div>
                     </div>
                 </div>
+                <div class="question-comments">
+                    {% if question_comments %}
+                        {% for comment in question_comments %}
+                            <div class="question-comment">
+                                <div class="question-comment-votes">
+                                    <div style="width: 25px;" class="question-comment-votes-text" id="question-comment-votes-text--{{ comment.pk }}">
+                                        {% if comment.votes != 0 %}
+                                            {{ comment.votes }}
+                                        {% endif %}
+                                    </div>
+                                    {% if comment in user.voted_question_comments.all %}
+                                        <style>
+                                            #question-comment-votes-text--{{ comment.pk }} {
+                                                color: #32a246;
+                                            }
+                                        </style>
+                                    {% elif comment in user.voted_down_question_comments.all %}
+                                        <style>
+                                            #question-comment-votes-text--{{ comment.pk }} {
+                                                color: #c3212a;
+                                            }
+                                        </style>
+                                    {% else %}
+                                        <style>
+                                            #question-comment-votes-text--{{ comment.pk }} {
+                                                color: #bbc0c4;
+                                            }
+                                        </style>
+                                    {% endif %}
+                                    <div class="question-comment-votes-buttons">
+                                        <button class="question-comment-vote-button question-comment-vote-button-up" id="question-comment-vote-button-up--{{ comment.pk }}">
+                                            <i class="fas fa-caret-up" style="color: #32a246;"></i>
+                                        </button>
+                                        <button class="question-comment-vote-button question-comment-vote-button-down" id="question-comment-vote-button-down--{{ comment.pk }}">
+                                            <i class="fas fa-caret-down" style="color: #c3212a;"></i>
+                                        </button>
+                                        {% if comment in user.voted_question_comments.all %}
+                                            <script>
+                                                $('#question-comment-vote-button-up--{{ comment.pk }}').attr('disabled', 'true')
+                                            </script>
+                                        {% elif comment in user.voted_down_question_comments.all %}
+                                            <script>
+                                                $('#question-comment-vote-button-down--{{ comment.pk }}').attr('disabled', 'true')
+                                            </script>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="question-comment-body">
+                                    <span class="question-comment-text">
+                                        {{ comment.comment }}
+                                    </span>
+                                    –&nbsp;
+                                    <a href="#" class="question-comment-author">
+                                        {{ comment.author }}
+                                    </a>
+                                    {% if comment.author != question.author %}
+                                        <style>
+                                            .question-comment-author {
+                                                background-color: white;
+                                            }
+                                        </style>
+                                    {% endif %}
+                                    <span class="question-comment-date">
+                                        {{ comment.posted_date }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    {% if question.is_active %}
+                        <a class="add-question-comment add-comment" href="#" role="button">
+                            Add a comment
+                        </a>
+                        <div class="add-comment-area">
+                            <!-- @TODO AJAX Form -->
+                            <input type="text" class="form-control add-comment-input">
+                            <button class="btn btn-secondary add-comment-button">Add a comment</button>
+                        </div>
+                    {% endif %}
+
+                </div>
             </div>
         </div>
+        {% if answers %}
+            <div class="order-answers">
+                <h5 class="answer-count">
+                    {{ answers.count }}
+                    {% if answers.count > 1 %}
+                        Answers
+                    {% else %}
+                        Answer
+                    {% endif %}
+                </h5>
+                <div class="btn-group order-button-group" role="group">
+                    <button type="button" class="btn btn-light order-button" style="border: none;">Active</button>
+                    <button type="button" class="btn btn-light order-button">Oldest</button>
+                    <button type="button" class="btn btn-light order-button active" style="border-left: solid #848d95 1px;">Votes</button>
+                </div>
+            </div>
+            {% for answer in answers %}
+                <div class="question-content answer-content" id="{{ answer.pk }}">
+                    <div class="question-content-left-menu">
+                        <button class="question-vote-button-up question-answer-vote-button-up" id="question-answer-vote-button-up--{{ answer.pk }}"><i class="fas fa-caret-up fa-3x"></i></button>
+                        <span class="question-votes question-answer-votes" id="question-answer-votes--{{ answer.pk }}">{{ answer.votes }}</span>
+                        <button class="question-vote-button-down question-answer-vote-button-down" id="question-answer-vote-button-down--{{ answer.pk }}"><i class="fas fa-caret-down fa-3x"></i></button>
 
+                        {% if answer in user.voted_answers.all %}
+                            <script>
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').css('color', '#32a246');
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').attr('disabled', true);
+                            </script>
+                        {% elif answer in user.voted_down_answers.all %}
+                            <script>
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').css('color', '#c3212a');
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').attr('disabled', true);
+                            </script>
+                        {% else %}
+                            <script>
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').css('color', '#bbc0c4');
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').css('color', '#bbc0c4');
+
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').attr('disabled', false);
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').attr('disabled', false);
+                            </script>
+                        {% endif %}
+
+                        {% if answer.is_best_answer %}
+                            <i class="fas fa-check fa-2x" style="color: #48a868; padding-bottom: 15px;"></i>
+                        {% endif %}
+                        <button class="question-left-button" style="margin-left: 6px;"><i class="fas fa-history"></i></button>
+                    </div>
+                    <div class="question-content-content">
+                        <div class="question-body">
+                            {{ answer.body }}
+                        </div>
+                        <div class="question-body-bottom">
+                            <div class="question-body-bottom-options">
+                                <a id="question-body-bottom-option-share" class="question-body-bottom-option" href="#">
+                                    Share
+                                </a>
+                                <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="#">
+                                    Edit
+                                </a>
+                                <a id="question-body-bottom-option-follow" class="question-body-bottom-option" href="#">
+                                    <!-- @TODO follow sistemi ekle -->
+                                    Follow
+                                </a>
+                            </div>
+                            <div class="question-body-users">
+                                {% if answer.is_edited %}
+                                    <div class="question-edited">
+                                        <div class="question-edited-info">
+                                            <a href="#" class="question-edited-date">
+                                                edited  {{ answer.edited_date }}
+                                            </a>
+                                            <div class="question-user">
+                                                <div class="question-user-profile-image">
+                                                    <!-- @TODO profil resmi -->
+                                                </div>
+                                                <div class="question-user-info">
+                                                        <a href="#" class="question-username">
+                                                        {{ answer.edited_author }}
+                                                        </a>
+                                                    <div class="question-user-scores">
+                                                        <span class="user-reputation-score">
+                                                            {{ answer.edited_author.reputation }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="question-asked">
+                                    <a class="question-asked-date">
+                                        answered {{ answer.answered_date }}
+                                    </a>
+                                    <div class="question-user">
+                                        <div class="question-user-profile-image">
+                                            <!-- @TODO Profil resmi -->
+                                        </div>
+                                        <div class="question-user-info">
+                                            <a href="#" class="question-username">
+                                                {{ answer.author }}
+                                            </a>
+                                            <div class="question-user-scores">
+                                                <span class="user-reputation-score">
+                                                    {{ answer.author.reputation }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question-comments">
+                            {% if answer_comments %}
+                                {% for comment in answer_comments %}
+                                    {% if comment.answer == answer %}
+                                        <div class="question-comment">
+                                            <div class="question-comment-votes">
+                                                <div id="question-answer-comment-votes--{{ comment.pk }}" style="width: 25px;">
+                                                    {% if comment.votes != 0 %}
+                                                        {{ comment.votes }}
+                                                    {% endif %}
+                                                </div>
+                                            <div class="question-comment-votes-buttons">
+                                                <button class="question-comment-vote-button question-answer-comment-vote-button-up" id="question-answer-comment-vote-button-up--{{ comment.pk }}">
+                                                    <i class="fas fa-caret-up" style="color: #32a246;"></i>
+                                                </button>
+                                                <button class="question-comment-vote-button question-answer-comment-vote-button-down" id="question-answer-comment-vote-button-down--{{ comment.pk }}">
+                                                    <i class="fas fa-caret-down" style="color: #c3212a;"></i>
+                                                </button>
+                                            </div>
+                                            {% if comment in user.voted_answer_comments.all %}
+                                                <script>
+                                                    $('#question-answer-comment-votes--{{ comment.pk }}').css('color', '#32a246');
+                                                    $('#question-answer-comment-vote-button-up--{{ comment.pk }}').attr('disabled', true);
+                                                </script>
+                                            {% elif comment in user.voted_down_answer_comments.all %}
+                                                <script>
+                                                    $('#question-answer-comment-votes--{{ comment.pk }}').css('color', '#c3212a');
+                                                    $('#question-answer-comment-vote-button-down--{{ comment.pk }}').attr('disabled', true);
+                                                </script>
+                                            {% else %}
+                                                <script>
+                                                    $('#question-answer-comment-votes--{{ comment.pk }}').css('color', '#bbc0c4');
+                                                    $('#question-answer-comment-vote-button-up--{{ comment.pk }}').attr('disabled', true);
+                                                    $('#question-answer-comment-vote-button-down--{{ comment.pk }}').attr('disabled', true);
+                                                </script>
+                                            {% endif %}
+                                            </div>
+                                            <div class="question-comment-body">
+                                                <span class="question-comment-text">
+                                                    {{ comment.comment }}
+                                                </span>
+                                                –&nbsp;
+                                                <a href="#" class="question-comment-author">
+                                                    {{ comment.author }}
+                                                </a>
+                                                {% if comment.author != question.author %}
+                                                    <style>
+                                                        .question-comment-author {
+                                                            background-color: white;
+                                                        }
+                                                    </style>
+                                                {% endif %}
+                                                <span class="question-comment-date">
+                                                    {{ comment.posted_date }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if question.is_active %}
+                                <a class="add-question-comment add-comment" href="#" role="button">
+                                    Add a comment
+                                </a>
+                                <div class="add-comment-area">
+                                    <!-- @TODO AJAX Form -->
+                                    <input type="text" class="form-control add-comment-input">
+                                    <button class="btn btn-secondary add-comment-button">Add a comment</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        {% else %}
+            <p>Know someone who can answer? Share a link to this question via email, Twitter, or Facebook.</p>
+        {% endif %}
+
+        {% if question.is_active %}
+            <h5 class="answer-count" style="margin-top: 20px;">
+                Your Answer
+            </h5>
+            <div class="text-editor">
+                <div class="btn-group text-editor-button-group" role="group">
+                    <button class="editor-button" onclick="execCmd('bold');" style="padding-right: 20px"><i class="fas fa-bold"></i></button>
+                    <button class="editor-button" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
+
+                    <button class="disabled-button" disabled></button>
+
+                    <button class="editor-button" onclick="addLink()"><i class="fas fa-link"></i></button>
+                    <button class="editor-button" onclick="execCmdWithArg('formatBlock', 'blockquote')"><i class="fas fa-quote-right"></i></button>
+                    <button class="editor-button" style="padding-bottom: 3px"  onclick="addCode()"><span class="curly_brackets_icon">{}</span></button>
+                    <button class="editor-button" onclick="execCmdWithArg('insertImage', prompt('Enter a image URL', 'http://'))"><i class="fas fa-image"></i></button>
+                    <button class="editor-button"><i class="fas fa-code"></i></button>
+
+                    <button class="disabled-button" disabled></button>
+
+                    <button class="editor-button" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
+                    <button class="editor-button" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
+                    <button class="editor-button" onclick="addHeading()"><i class="fas fa-heading"></i></button>
+                    <button class="editor-button" onclick="execCmd('insertHorizontalRule')"><i class="fas fa-grip-lines"></i></button>
+
+                    <button class="disabled-button" disabled></button>
+
+                    <button class="editor-button" onclick="execCmd('undo')"><i class="fas fa-undo-alt"></i></button>
+                    <button class="editor-button" onclick="execCmd('redo')"><i class="fas fa-redo-alt"></i></button>
+
+                    <button class="text-button">Hide formatting tips</button>
+
+                </div><br>
+
+                <div class="btn-group text-editor-button-group button-descriptions" role="group">
+                    <button class="description-button" id="links-button">Links</button>
+                    <button class="description-button" id="images-button">Images</button>
+                    <button class="description-button" id="styling-button">Styling/Headers</button>
+                    <button class="description-button" id="lists-button">Lists</button>
+                    <button class="description-button" id="blockquotes-button">Blockquotes</button>
+                    <button class="description-button" id="codes-button">Code</button>
+                    <button class="description-button" id="HTMLs-button">HTML</button>
+                    <button class="description-button" id="tables-button">Tables</button>
+                    <button class="description-button" style="color: royalblue">More  <i class="fas fa-external-link-alt"></i></button>
+                </div>
+
+                <div class="description" id="links">
+                    <p class="bold">Use angle brackets to force linking</p>
+                    <p class="mono">&lt;https://stackoverflow.com&gt;</p>
+                    <p class="bold">Create inline text links with Markdown</p>
+                    <p class="mono">[Text](https://stackoverflow.com)</p>
+                    <p class="bold">Add alt attributes to links by adding a double space and text after the URL</p>
+                    <p class="mono">[Text](https://stackoverflow.com  "this text appears on mouseover")</p>
+                </div>
+
+                <div class="description" id="images">
+                    <p class="bold">Add inline images</p>
+                    <p class="mono">![Text](https://stackoverflow.com/image.jpg)</p>
+                </div>
+                <div class="description" id="styling">
+                    <p class="bold">Use some text styling to make your post more readable</p>
+                    <p class="mono">Line breaks: double space or &lt;br /&gt; at the end of each line</p>
+                    <p class="mono"><em>Italics: *asterisks* or _underscores_</em></p>
+                    <p class="mono"><strong>Bold: </strong>**double asterisks** or __double underscores__</p>
+                    <p class="bold">Create sections with headers</p>
+                    <p class="mono close-bottom">A Large Header</p>
+                    <p class="mono close-top">==============</p>
+                    <p class="mono close-bottom">Smaller Subheader</p>
+                    <p class="mono close-top">-----------------</p>
+                    <p class="bold">Use hash marks for multiple levels of headers</p>
+                    <p class="mono"># Header 1 #</p>
+                    <p class="mono">## Header 2 ##</p>
+                    <p class="mono">### Header 3 ###</p>
+                </div>
+
+                <div class="description" id="lists">
+                    <p class="bold">Use angle brackets to force linking</p>
+                    <p class="mono">- Create bullets with minus sign</p>
+                    <p class="mono">+ or plus sign</p>
+                    <p class="mono">* or an asterisk</p>
+                    <p class="mono">1. or sequential numbers</p>
+                    <p class="bold">Use 4 or 8 spaces to create nested lists</p>
+                    <p class="mono">1. List item</p>
+                    <p class="mono">    - Item A, four spaces</p>
+                    <p class="mono">        * Item B, eight spaces</p>
+                </div>
+
+                <div class="description" id="blockquotes">
+                    <p class="bold">Add > to the beginning of each line to create a blockquote</p>
+                    <p class="mono">> A standard blockquote is indented</p>
+                    <p class="mono">> > A nested blockquote is indented more</p>
+                    <p class="mono">> > > > You can nest to any depth.</p>
+                </div>
+
+                <div class="description" id="codes">
+                    <p class="bold">Create code fences by placing your code between sets of 3 backticks ` or use CTRL + K</p>
+                    <p class="mono">```</p>
+                    <p class="mono">like so</p>
+                    <p class="mono">```</p>
+                    <p class="bold">Create inline code spans by placing text between single backticks</p>
+                    <p class="mono">`like so`</p>
+                    <p class="bold">Add a preformatted block within a list with eight spaces</p>
+                    <p class="mono">1. This is normal text</p>
+                    <p class="mono">2. This is a list item</p>
+                    <br>
+                    <p class="mono">        Skip a line and indent eight spaces.</p>
+                    <p class="mono">        Eight spaces will trigger the code block.</p>
+                </div>
+
+                <div class="description" id="HTMLs">
+                    <p class="bold">Use HTML in combination with Markdown (<a href="#">What's supported? Note: We advise against mixing HTML and Markdown.</a>)</p>
+                    <p class="mono">&lt;strike&gt;Markdown works * fine* in here.&lt;/strike&gt;</p>
+                    <p class="bold">Block-level HTML elements have restrictions</p>
+                    <p class="mono">1. Use blank lines to separate them from surrounding text</p>
+                    <p class="mono">2. The opening and closing tags of the outermost block elements must not be indented</p>
+                    <br>
+                    <p class="mono">&lt;pre&gt;</p>
+                    <p class="mono">    You &lt;em&gt;cannot&lt;/em&gt; use Markdown here</p>
+                    <p class="mono">&lt;/pre&gt;</p>
+                </div>
+
+                <div class="description" id="tables">
+                    <p class="bold">Create tables using the <a href="#">GitHub-flavored markdown format</a></p>
+                    <p class="mono">| A header | Another header |</p>
+                    <p class="mono">| -------- | -------------- |</p>
+                    <p class="mono">| First    | row            |</p>
+                    <p class="mono">| Second   | row            |</p>
+                    <br>
+                    <p class="mono">A header row is required and must be followed by a separator row with the same number of cells. Cells are separated by a pipe (|) symbol.</p>
+                    <p class="bold">Set the alignment of a table column by placing a : on the left, right, or both sides of a separator in the separator line</p>
+                    <p class="mono">| left | center | right |</p>
+                    <p class="mono">|:---- |:------:| -----:|</p>
+                    <p class="mono">| One  | Two    | Three |</p>
+                </div>
+                    <iframe name="richTextField" class="text-area"></iframe>
+             </div>
+            <script src="{% static 'questions/js/text_editor.js' %}"></script>
+            <script type="text/javascript">
+                firstHide('.button-descriptions');
+                firstHide('.description');
+            </script>
+
+        {% endif %}
     </div>
+    <script src="{% static 'questions/js/question_detail.js' %}"></script>
+    {% csrf_token %}
 {% endblock %}
 
 

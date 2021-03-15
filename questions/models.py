@@ -25,6 +25,7 @@ class Question(models.Model):
     modified_author = models.ForeignKey(UserProfile, related_name='edited_author', null=True)
 
     has_best_answer = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.pk)
@@ -52,8 +53,10 @@ class Answer(models.Model):
     body = models.TextField(null=True)
 
     answered_date = models.DateTimeField(default=timezone.now)
-    edited_author = models.ForeignKey(UserProfile, related_name='answered_edited_author', null=True)
-    edited_date = models.DateTimeField(default=timezone.now, null=True)
+
+    is_edited = models.BooleanField(default=False)
+    edited_author = models.ForeignKey(UserProfile, related_name='answered_edited_author', null=True, blank=True)
+    edited_date = models.DateTimeField(default=None, null=True, blank=True)
 
     def __str__(self):
         return str(self.pk)

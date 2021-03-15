@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from tags.models import Tag
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 
@@ -30,7 +29,6 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True, blank=False, null=False)
     email = models.EmailField(max_length=255, unique=True, blank=False, null=False)
-    password = models.CharField(max_length=255, blank=False, null=False)
 
     location = models.CharField(max_length=255, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -49,7 +47,22 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
 
-    interested_tags = models.ManyToManyField(Tag, blank=True)
+    interested_tags = models.ManyToManyField('tags.Tag', blank=True, related_name='interested_tags')
+
+    followed_questions = models.ManyToManyField('questions.Question', blank=True, related_name='followed_questions')
+    followed_answers = models.ManyToManyField('questions.Answer', blank=True, related_name='followed_answers')
+
+    voted_questions = models.ManyToManyField('questions.Question', blank=True, related_name='voted_questions')
+    voted_down_questions = models.ManyToManyField('questions.Question', blank=True, related_name='voted_down_questions')
+
+    voted_answers = models.ManyToManyField('questions.Answer', blank=True, related_name='voted_answers')
+    voted_down_answers = models.ManyToManyField('questions.Answer', blank=True, related_name='voted_down_answers')
+
+    voted_question_comments = models.ManyToManyField('questions.QuestionComment', blank=True, related_name='voted_question_comments')
+    voted_down_question_comments = models.ManyToManyField('questions.QuestionComment', blank=True, related_name='voted_down_question_comments')
+
+    voted_answer_comments = models.ManyToManyField('questions.AnswerComment', blank=True, related_name='voted_answer_comments')
+    voted_down_answer_comments = models.ManyToManyField('questions.AnswerComment', blank=True, related_name='voted_down_answer_comments')
 
     registered_date = models.DateTimeField(default=timezone.now)
 

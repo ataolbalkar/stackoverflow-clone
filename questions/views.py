@@ -1,16 +1,20 @@
 from django.shortcuts import render
-from questions.models import Question
+from questions.models import Question, QuestionComment, Answer, AnswerComment
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
 
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 from questions.forms import QuestionForm
 
+from questions.data_processes import find_last_activity
 
 # Create your views here.
 
 User = get_user_model()
+
 
 def baseView(request):
     return render(request, 'questions/base_without_sidebar.html')
@@ -28,7 +32,6 @@ class AskQuestionView(CreateView):
     template_name = 'questions/ask.html'
     form_class = QuestionForm
 
-
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
@@ -45,6 +48,25 @@ class QuestionDetailView(DetailView):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['modified_author'] = self.object.modified_author
         context['author'] = self.object.author
+
+        question_comments = QuestionComment.objects.filter(question=self.object)
+        context['question_comments'] = question_comments.order_by('votes')
+
+        answers = Answer.objects.filter(question=self.object)
+        context['answers'] = answers.order_by('-is_best_answer', 'votes')
+
+        answer_comments = AnswerComment.objects.filter(answer__question=self.object)
+        context['answer_comments'] = answer_comments.order_by('votes')
+
+        # @TODO Burası!
+        activities = (self.object.asked_date, self.object.modified_date,
+                      question_comments.order_by('-posted_date').first().posted_date,
+                      answers.order_by('-answered_date').first().answered_date,
+                      answers.order_by('-edited_date').first().edited_date,
+                      answer_comments.order_by('-posted_date').first().posted_date)
+
+        context['last_activity_time'] = find_last_activity(activities)
+
         return context
 
     def get_object(self, queryset=None):
@@ -54,12 +76,99 @@ class QuestionDetailView(DetailView):
 
         return object
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(QuestionDetailView, self).get_context_data(**kwargs)
-    #     context['form'] = AnswerForm
-    #     return context
+    def post(self, request, pk):
+        if request.is_ajax():
+            user = get_object_or_404(User, pk=request.user.pk)
 
+            if request.POST.get('type') == 'vote_up':
+                if request.POST.get('object') == 'question':
+                    question = get_object_or_404(Question, pk=pk)
+                    question.votes += 1
+                    question.save()
 
-# class AnswerQuestionView(FormView):
-#     form_class = AnswerForm
-#     success_url = ''
+                    if question in user.voted_down_questions.all():
+                        user.voted_down_questions.remove(question)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_questions.add(question)
+
+                elif request.POST.get('object') == 'question_comment':
+                    question_comment = get_object_or_404(QuestionComment, pk=request.POST.get('pk'))
+                    question_comment.votes += 1
+                    question_comment.save()
+
+                    if question_comment in user.voted_down_question_comments.all():
+                        user.voted_down_question_comments.remove(question_comment)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_question_comments.add(question_comment)
+
+                elif request.POST.get('object') == 'answer':
+                    answer = get_object_or_404(Answer, pk=request.POST.get('pk'))
+                    answer.votes += 1
+                    answer.save()
+
+                    if answer in request.user.voted_down_answers.all():
+                        user.voted_down_answers.remove(answer)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_answers.add(answer)
+
+                elif request.POST.get('object') == 'answer_comment':
+                    answer_comment = get_object_or_404(AnswerComment, pk=request.POST.get('pk'))
+                    answer_comment.votes += 1
+                    answer_comment.save()
+
+                    if answer_comment in user.voted_down_answer_comments.all():
+                        user.voted_down_answer_comments.remove(answer_comment)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_answer_comments.add(answer_comment)
+
+            elif request.POST.get('type') == 'vote_down':
+                if request.POST.get('object') == 'question':
+                    question = get_object_or_404(Question, pk=pk)
+                    question.votes -= 1
+                    question.save()
+
+                    if question in user.voted_questions.all():
+                        user.voted_questions.remove(question)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_down_questions.add(question)
+
+                elif request.POST.get('object') == 'question_comment':
+                    question_comment = get_object_or_404(QuestionComment, pk=request.POST.get('pk'))
+                    question_comment.votes -= 1
+                    question_comment.save()
+
+                    if question_comment in user.voted_question_comments.all():
+                        user.voted_question_comments.remove(question_comment)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_down_question_comments.add(question_comment)
+
+                elif request.POST.get('object') == 'answer':
+                    answer = get_object_or_404(Answer, pk=request.POST.get('pk'))
+                    answer.votes -= 1
+                    answer.save()
+
+                    if answer in request.user.voted_answers.all():
+                        user.voted_answers.remove(answer)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_down_answers.add(answer)
+
+                elif request.POST.get('object') == 'answer_comment':
+                    answer_comment = get_object_or_404(AnswerComment, pk=request.POST.get('pk'))
+                    answer_comment.votes -= 1
+                    answer_comment.save()
+
+                    if answer_comment in user.voted_answer_comments.all():
+                        user.voted_answer_comments.remove(answer_comment)
+
+                    if request.POST.get('voted_before') == 'false':
+                        user.voted_down_answer_comments.add(answer_comment)
+
+        return JsonResponse({'status': 'voted'}, status=200)
+
