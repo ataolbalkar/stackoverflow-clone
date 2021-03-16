@@ -43,9 +43,7 @@ class AskQuestionView(CreateView):
 class QuestionDetailView(DetailView):
     model = Question
     template_name = 'questions/question_detail.html'
-
-    def control_control(self):
-        self.sort_type = 'vote'
+    sort_type = 'vote'
 
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
@@ -57,13 +55,13 @@ class QuestionDetailView(DetailView):
 
         answers = Answer.objects.filter(question=self.object)
 
+        context['sort_type'] = self.sort_type
         if self.sort_type == 'active':
-            context['answers'] = answers.order_by('-is_best_answer', '--answered_date')
+            context['answers'] = answers.order_by('-answered_date')
         elif self.sort_type == 'date':
-            context['answers'] = answers.order_by('-is_best_answer', '-answered_date')
+            context['answers'] = answers.order_by('answered_date')
         else:
             context['answers'] = answers.order_by('-is_best_answer', '-votes')
-
 
         answer_comments = AnswerComment.objects.filter(answer__question=self.object)
         context['answer_comments'] = answer_comments.order_by('-votes')
@@ -239,10 +237,8 @@ class QuestionDetailView(DetailView):
 
 
 class QuestionDetailViewSortOldest(QuestionDetailView):
-    def sort_control(self):
-        self.sort_type = 'date'
+    sort_type = 'date'
 
 
 class QuestionDetailViewSortActive(QuestionDetailView):
-    def sort_control(self):
-        self.sort_type = 'active'
+    sort_type = 'active'

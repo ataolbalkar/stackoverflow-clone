@@ -241,9 +241,25 @@
                     {% endif %}
                 </h5>
                 <div class="btn-group order-button-group" role="group">
-                    <button type="button" class="btn btn-light order-button" style="border: none;">Active</button>
-                    <button type="button" class="btn btn-light order-button">Oldest</button>
-                    <button type="button" class="btn btn-light order-button active" style="border-left: solid #848d95 1px;">Votes</button>
+
+                    {% if sort_type == 'active' %}
+                        <a href="{% url 'question_detail_sort_active' question.pk %}" type="button" class="btn btn-light order-button active" style="border: none;">Active</a>
+                    {% else %}
+                        <a href="{% url 'question_detail_sort_active' question.pk %}" type="button" class="btn btn-light order-button" style="border: none;">Active</a>
+                    {% endif %}
+
+                    {% if sort_type == 'date' %}
+                        <a href="{% url 'question_detail_sort_oldest' question.pk %}" type="button" class="btn btn-light order-button active">Oldest</a>
+                    {% else %}
+                        <a href="{% url 'question_detail_sort_oldest' question.pk %}" type="button" class="btn btn-light order-button">Oldest</a>
+                    {% endif %}
+
+                    {% if sort_type == 'vote' %}
+                        <a href="{% url 'question_detail' question.pk %}" type="button" class="btn btn-light order-button active" style="border-left: solid #848d95 1px;">Votes</a>
+                    {% else %}
+                        <a href="{% url 'question_detail' question.pk %}" type="button" class="btn btn-light order-button" style="border-left: solid #848d95 1px;">Votes</a>
+                    {% endif %}
+
                 </div>
             </div>
             {% for answer in answers %}
