@@ -4,6 +4,7 @@
 Questions
 {% endblock %}
 {% load staticfiles %}
+{% load humanize %}
 {% block imports %}
     <link rel="stylesheet" href="{% static 'questions/css/questions_list.css' %}">
 {% endblock %}
@@ -19,109 +20,103 @@ Questions
                 </div>
                 <div class="sort-by-area">
                     <div class="btn-group sba-group" role="group">
-                        <a href="#" class="sort-area-button sba-you-are-here">Interesting</a>
-                        <a href="#" class="sort-area-button">Bountied</a>
-                        <a href="#" class="sort-area-button">Hot</a>
-                        <a href="#" class="sort-area-button">Week</a>
-                        <a href="#" class="sort-area-button" style="border: unset;">Month</a>
+                        {% if order_by == 'interesting' %}
+                            <a id="order-by-interesting" href="{% url 'question_list' %}" class="sort-area-button sba-you-are-here">Interesting</a>
+                        {% else %}
+                            <a id="order-by-interesting" href="{% url 'question_list' %}" class="sort-area-button">Interesting</a>
+                        {% endif %}
+                        <a id="order-by-bountied" href="{% url 'question_list' %}" class="sort-area-button" disabled="">Bountied</a>
+                        {% if order_by == 'hot' %}
+                            <a id="order-by-hot" href="{% url 'question_list_hot' %}" class="sort-area-button sba-you-are-here">Hot</a>
+                        {% else %}
+                            <a id="order-by-hot" href="{% url 'question_list_hot' %}" class="sort-area-button">Hot</a>
+                        {% endif %}
+                        {% if order_by == 'week' %}
+                            <a id="order-by-week" href="{% url 'question_list_week' %}" class="sort-area-button sba-you-are-here">Week</a>
+                        {% else %}
+                            <a id="order-by-week" href="{% url 'question_list_week' %}" class="sort-area-button">Week</a>
+                        {% endif %}
+                        {% if order_by == 'month' %}
+                            <a id="order-by-month" href="{% url 'question_list_month' %}" class="sort-area-button sba-you-are-here" style="border: unset;">Month</a>
+                        {% else %}
+                            <a id="order-by-month" href="{% url 'question_list_month' %}" class="sort-area-button" style="border: unset;">Month</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="questions">
-
-                    <div class="question">
+                {% for question in question_list %}
+                    <div class="question" id="question--{{ question.pk }}">
                         <div class="questions-left">
                             <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">-1</span>
+                                <span class="questions-left-attr-value">{{ question.votes }}</span>
                                 <span class="questions-left-attr">votes</span>
                             </div>
-                            <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">0</span>
+                            <div class="questions-left-attrs" id="question-votes--{{ question.pk }}">
+                                <span class="questions-left-attr-value">{{ question.answer_set.all|length }}</span>
                                 <span class="questions-left-attr">answers</span>
                             </div>
                             <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">6</span>
+                                <span class="questions-left-attr-value">{{ question.views }}</span>
                                 <span class="questions-left-attr">views</span>
                             </div>
                         </div>
+                        <style>
+                            {% if question.answer_set.all|length > 0 %}
+                                #question-votes--{{ question.pk }} {
+                                    border: solid #5eba7d 1px;
+                                }
+                            {% endif %}
+                            {% if question.has_best_answer %}
+                                #question-votes--{{ question.pk }} {
+                                    color: white;
+                                    background-color: #5eba7d;
+                                }
+                            {% endif %}
+
+                        </style>
                         <div class="question-content">
                             <div class="question-title-div">
-                                <a href="#" class="question-title">
-                                    APIM requets query issue filtering
+                                <a href="{% url 'question_detail' question.pk %}" class="question-title">
+                                    {{ question.title }}
                                 </a>
                             </div>
                             <div class="question-bottom">
-                                <div class="question-tags">
-
-                                        <a href="#" class="question-tag" rel="tag">azure</a>
-                                        <a href="#" class="question-tag" rel="tag">logging</a>
-                                        <a href="#" class="question-tag" rel="tag">azure-api-management</a>
-                                        <a href="#" class="question-tag" rel="tag">appinsights</a>
-
-                                </div>
+                                {% if question.tags %}
+                                    <div class="question-tags">
+                                        {% for tag in question.tags.all %}
+                                            <!-- @TODO Question Tag list -->
+                                            <a href="#" class="question-tag" rel="tag">{{ tag }}</a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
                                 <div class="question-info">
                                     <a href="#" class="question-date">
-                                        asked 4 mins ago
+                                        asked {{ question.asked_date|naturaltime }}
                                     </a>
+                                    <!-- @TODO user links -->
                                     <a href="#" class="question-author">
-                                        medone
+                                        {{ question.author }}
                                     </a>
                                     <span class="reputation-score">
-                                        345
+                                        {{ question.author.reputation }}
                                     </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="question" style="background: #fdf7e3">
-                        <div class="questions-left">
-                            <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">15</span>
-                                <span class="questions-left-attr">votes</span>
-                            </div>
-                            <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">7</span>
-                                <span class="questions-left-attr">answers</span>
-                            </div>
-                            <div class="questions-left-attrs">
-                                <span class="questions-left-attr-value">28</span>
-                                <span class="questions-left-attr">views</span>
-                            </div>
-                        </div>
-                        <div class="question-content">
-                            <div class="question-title-div">
-                                <a href="#" class="question-title">
-                                    Dockerised frontend and backend both but frontend is unable to make api calls to backend from browser [closed] Dockerised frontend and backend both but frontend is unable to make api calls to backend from browser [closed
-                                </a>
-                            </div>
-                            <div class="question-bottom">
-                                <div class="question-tags">
-
-                                        <a href="#" class="question-tag" rel="tag">python</a>
-                                        <a href="#" class="question-tag" rel="tag">docker</a>
-                                        <a href="#" class="question-tag" rel="tag">node.js</a>
-                                        <a href="#" class="question-tag" rel="tag">flask</a>
-
-                                </div>
-                                <div class="question-info">
-                                    <a href="#" class="question-date">
-                                        asked 6 mins ago
-                                    </a>
-                                    <a href="#" class="question-author">
-                                        PISELLONE OMEGA
-                                    </a>
-                                    <span class="reputation-score">
-                                        11150
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    {% for tag in qustion.tags %}
+                        {% if tag in user.interested_tags.all %}
+                            <style>
+                                #question--{{ question.pk }} {
+                                    background: #fdf7e3
+                                }
+                            </style>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
             </div>
         </div>
-    <!-- @TODO sağ menü eklenecek -->
     </div>
 
 {% endblock %}

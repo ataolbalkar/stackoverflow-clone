@@ -101,9 +101,11 @@
     font-size: 11px;
     color: #39739d;
 
+    margin-right: 5px;
     padding: 4px 6px;
     background-color: #e1ecf4;
     border-radius: 3px;
+
 }
 
 .question-tag:hover {

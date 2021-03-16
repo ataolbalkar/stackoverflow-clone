@@ -14,7 +14,6 @@ class Question(models.Model):
     author = models.ForeignKey(UserProfile, related_name='question_author')
 
     votes = models.IntegerField(default=0)
-    answers = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
 
     tags = models.ManyToManyField(Tag, blank=True)

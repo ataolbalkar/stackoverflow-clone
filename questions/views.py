@@ -1,15 +1,20 @@
 from django.shortcuts import render
-from questions.models import Question, QuestionComment, Answer, AnswerComment
-from django.utils import timezone
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
-
-from django.contrib.auth import get_user_model
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+
+from questions.models import Question, QuestionComment, Answer, AnswerComment
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
 
 from questions.forms import QuestionForm
 
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+
+from django.db.models import Count
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 from questions.data_processes import find_last_activity
+
 
 # Create your views here.
 
@@ -23,9 +28,42 @@ def baseView(request):
 class QuestionsListView(ListView):
     model = Question
     template_name = 'questions/questions_list.html'
+    order_by = 'interesting'
 
     def get_queryset(self):
-        return Question.objects.filter(asked_date__lte=timezone.now()).order_by('asked_date')[:50]
+        return Question.objects.filter(asked_date__lte=timezone.now())\
+                   .annotate(answer_count=Count('answer'))\
+                   .order_by('answer_count', '-asked_date')[:100]
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionsListView, self).get_context_data(**kwargs)
+
+        context['order_by'] = self.order_by
+
+        return context
+
+
+class QuestionListViewOrderHot(QuestionsListView):
+    order_by = 'hot'
+
+    def get_queryset(self):
+        return Question.objects.filter(asked_date__lte=timezone.now()).order_by('-asked_date')[:100]
+
+
+class QuestionListViewOrderWeek(QuestionsListView):
+    order_by = 'week'
+
+    def get_queryset(self):
+        this_week = datetime.today() - timedelta(days=7)
+        return Question.objects.filter(asked_date__gte=this_week).order_by('-views', '-votes')[:100]
+
+
+class QuestionListViewOrderMonth(QuestionsListView):
+    order_by = 'month'
+
+    def get_queryset(self):
+        this_month = datetime.today() - timedelta(days=30)
+        return Question.objects.filter(asked_date__gte=this_month).order_by('-views', '-votes')[:100]
 
 
 class AskQuestionView(CreateView):
@@ -65,8 +103,6 @@ class QuestionDetailView(DetailView):
 
         answer_comments = AnswerComment.objects.filter(answer__question=self.object)
         context['answer_comments'] = answer_comments.order_by('-votes')
-
-        # @TODO Burası!
 
         activities = [self.object.asked_date]
 
