@@ -255,6 +255,10 @@
     color: #848c95;
 }
 
+.add-question-comment-add {
+    padding: 10px 0;
+}
+
 .add-comment {
     font-family: Arial, sans-serif;
     font-size: 13px;
@@ -282,6 +286,14 @@
     font-size: 13px;
     width: 150px;
     height: 38px;
+}
+
+.add-question-comment-error-message {
+    margin-top: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+
+    color: #d55346;
 }
 
 .order-answers {

@@ -44,29 +44,60 @@ class QuestionDetailView(DetailView):
     model = Question
     template_name = 'questions/question_detail.html'
 
+    def control_control(self):
+        self.sort_type = 'vote'
+
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
         context['modified_author'] = self.object.modified_author
         context['author'] = self.object.author
 
         question_comments = QuestionComment.objects.filter(question=self.object)
-        context['question_comments'] = question_comments.order_by('votes')
+        context['question_comments'] = question_comments.order_by('-votes')
 
         answers = Answer.objects.filter(question=self.object)
-        context['answers'] = answers.order_by('-is_best_answer', 'votes')
+
+        if self.sort_type == 'active':
+            context['answers'] = answers.order_by('-is_best_answer', '--answered_date')
+        elif self.sort_type == 'date':
+            context['answers'] = answers.order_by('-is_best_answer', '-answered_date')
+        else:
+            context['answers'] = answers.order_by('-is_best_answer', '-votes')
+
 
         answer_comments = AnswerComment.objects.filter(answer__question=self.object)
-        context['answer_comments'] = answer_comments.order_by('votes')
+        context['answer_comments'] = answer_comments.order_by('-votes')
 
         # @TODO Burası!
-        activities = (self.object.asked_date, self.object.modified_date,
-                      question_comments.order_by('-posted_date').first().posted_date,
-                      answers.order_by('-answered_date').first().answered_date,
-                      answers.order_by('-edited_date').first().edited_date,
-                      answer_comments.order_by('-posted_date').first().posted_date)
+
+        activities = [self.object.asked_date]
+
+        try:
+            activities.append(self.object.modified_date)
+        except AttributeError:
+            pass
+
+        try:
+            activities.append(question_comments.order_by('-posted_date').first().posted_date)
+        except AttributeError:
+            pass
+
+        try:
+            activities.append(answers.order_by('-answered_date').first().answered_date)
+        except AttributeError:
+            pass
+
+        try:
+            activities.append(answers.order_by('-edited_date').first().edited_date)
+        except AttributeError:
+            pass
+
+        try:
+            activities.append(answer_comments.order_by('-posted_date').first().posted_date)
+        except AttributeError:
+            pass
 
         context['last_activity_time'] = find_last_activity(activities)
-
         return context
 
     def get_object(self, queryset=None):
@@ -77,9 +108,8 @@ class QuestionDetailView(DetailView):
         return object
 
     def post(self, request, pk):
+        user = get_object_or_404(User, pk=request.user.pk)
         if request.is_ajax():
-            user = get_object_or_404(User, pk=request.user.pk)
-
             if request.POST.get('type') == 'vote_up':
                 if request.POST.get('object') == 'question':
                     question = get_object_or_404(Question, pk=pk)
@@ -170,5 +200,49 @@ class QuestionDetailView(DetailView):
                     if request.POST.get('voted_before') == 'false':
                         user.voted_down_answer_comments.add(answer_comment)
 
-        return JsonResponse({'status': 'voted'}, status=200)
+            elif request.POST.get('type') == 'comment':
+                if request.POST.get('object') == 'question_comment':
+                    comment = QuestionComment(
+                        question=get_object_or_404(Question, pk=pk),
+                        author=user,
+                        comment=request.POST.get('content')
+                    )
+                    comment.save()
 
+                    return JsonResponse({'user': comment.author.username,
+                                         'comment': comment.comment,
+                                         'date': 'now'},
+                                        status=200)
+
+                if request.POST.get('object') == 'answer_comment':
+                    comment = AnswerComment(
+                        answer=get_object_or_404(Answer, pk=request.POST.get('pk')),
+                        author=user,
+                        comment=request.POST.get('content')
+                    )
+                    comment.save()
+
+                    return JsonResponse({'user': comment.author.username,
+                                         'comment': comment.comment,
+                                         'date': 'now'},
+                                        status=200)
+
+            elif request.POST.get('type') == 'answer':
+                answer = Answer(
+                    question=get_object_or_404(Question, pk=pk),
+                    author=user,
+                    body=request.POST.get('content')
+                )
+                answer.save()
+
+        return JsonResponse({'status': 'success'}, status=200)
+
+
+class QuestionDetailViewSortOldest(QuestionDetailView):
+    def sort_control(self):
+        self.sort_type = 'date'
+
+
+class QuestionDetailViewSortActive(QuestionDetailView):
+    def sort_control(self):
+        self.sort_type = 'active'

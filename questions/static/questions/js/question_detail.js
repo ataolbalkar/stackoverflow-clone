@@ -395,22 +395,149 @@ $(document).ready(function () {
         }
     }
 
-    $('#add-question-comment').click(function () {
-        $(this).slideUp('fast');
-        $('#add-question-comment-area').slideDown();
+    // Slide for question comment section:
+    $('#add-question-comment').click(function () {  // When clicked 'Add a comment' button,
+        $(this).slideUp('fast');  // Slide up the 'Add a comment' button,
+        $('#add-question-comment-area').slideDown();  // Slide down the 'comment' input.
+        $('#add-question-comment-input').focus();  // Focus to the input.
     });
 
-    let addAnswerCommentButtons = $('.add-answer-comment');
+    // Slide for answer comment sections:
+    let addAnswerCommentButtons = $('.add-answer-comment');  // Get all 'answer comment' buttons.
 
     for (let addAnswerCommentButton of addAnswerCommentButtons) {
-        let pk = addAnswerCommentButton.id.split('--')[1];
+        let pk = addAnswerCommentButton.id.split('--')[1];  // Get 'primary key' of the button.
 
-        $('#add-answer-comment--' + pk).click(function () {
-            $(this).slideUp('fast');
-            $('#add-answer-comment-area--' + pk).slideDown();
+        $('#add-answer-comment--' + pk).click(function () {  // When clicked 'Add a comment' button with specified 'pk',
+            $(this).slideUp('fast');  // Slide up the 'Add a comment' button,
+            $('#add-answer-comment-area--' + pk).slideDown();  // Slide down the 'comment' input with specified 'pk'.
         });
     }
 
+    // ADD QUESTION COMMENT
+    $('#add-question-comment-submit').click(function () {
+        let commentBody = $('#add-question-comment-input')[0].value;  // Get the inputs content.
+
+        if (commentBody.length < 3) {
+            // If comment is less than 3 characters, create error message:
+            let errorMessage = document.createElement('i');
+            errorMessage.innerText = 'Comment must be at least 3 characters.';
+            errorMessage.className = 'add-question-comment-error-message'
+
+            $('#add-question-comment-add')[0].appendChild(errorMessage);  // Display the error message.
+            // Change the inputs border color to red:
+            $('#add-question-comment-input').css('border-color', 'red');
+            $('#add-question-comment-input').focus();  // Focus to the input:
+        } else {
+            if ($('.add-question-comment-error-message').length > 0) {
+                // If there is error message:
+                $('.add-question-comment-error-message').remove();  // Remove the error message,
+                // Change the inputs border color to the origin:
+                $('#add-question-comment-input').css('border-color', '#bdc3c9');
+            }
+
+            // AJAX POST
+            $.ajax({
+                url: '',
+                type: 'post',
+                data: {
+                    type: 'comment',
+                    object: 'question_comment',
+                    content: commentBody,
+                    csrfmiddlewaretoken: csrf
+                },
+                success: function (response) {
+                    // Clone the first comment element to display:
+                    let newComment = $('.question-comment')[0].cloneNode(true);
+                    newComment.children[0].children[0].innerText = '';  // It has 0 votes.
+                    newComment.children[1].children[0].innerText = response.comment;  // Comment body.
+                    newComment.children[1].children[1].innerText = response.user;  // Username of the user.
+                    newComment.children[1].children[2].innerText = response.date;  // Post date which is now.
+
+                    // Append modified element to bottom:
+                    $('#question-comments-area')[0].appendChild(newComment);
+                    // Slide the input area up:
+                    $('#add-question-comment-area').slideUp();
+                    // Slide the 'add a comment' button down:
+                    $('#add-question-comment').slideDown();
+                }
+            });
+        }
+
+    });
+
+    // ADD ANSWER COMMENT
+
+    let answerCommentButtons = $('.add-answer-comment-submit');
+
+    for (let answerCommentButton of answerCommentButtons) {
+        let pk = answerCommentButton.id.split('--')[1];
+
+        $('#add-answer-comment-submit--' + pk).click(function () {
+            let commentBody = $('#add-answer-comment-input--' + pk)[0].value;  // Get the inputs content.
+
+            if (commentBody.length < 3) {
+                // If comment is less than 3 characters, create error message:
+                let errorMessage = document.createElement('i');
+                errorMessage.innerText = 'Comment must be at least 3 characters.';
+                errorMessage.className = 'add-question-comment-error-message'
+
+                $('#add-answer-comment-add--' + pk)[0].appendChild(errorMessage);  // Display the error message.
+                // Change the inputs border color to red:
+                $('#add-answer-comment-input--' + pk).css('border-color', 'red');
+                $('#add-answer-comment-input--' + pk).focus();  // Focus to the input:
+            } else {
+                if ($('.add-question-comment-error-message').length > 0) {
+                    // If there is error message:
+                    $('.add-question-comment-error-message').remove();  // Remove the error message,
+                    // Change the inputs border color to the origin:
+                    $('#add-answer-comment-input--' + pk).css('border-color', '#bdc3c9');
+                }
+
+                // AJAX POST
+                $.ajax({
+                    url: '',
+                    type: 'post',
+                    data: {
+                        type: 'comment',
+                        object: 'answer_comment',
+                        pk: pk,
+                        content: commentBody,
+                        csrfmiddlewaretoken: csrf
+                    },
+                    success: function (response) {
+                        // Clone the first comment element to display:
+                        let newComment = $('.question-comment')[0].cloneNode(true);
+                        newComment.children[0].children[0].innerText = '';  // It has 0 votes.
+                        newComment.children[1].children[0].innerText = response.comment;  // Comment body.
+                        newComment.children[1].children[1].innerText = response.user;  // Username of the user.
+                        newComment.children[1].children[2].innerText = response.date;  // Post date which is now.
+
+                        // Append modified element to bottom:
+                        $('#answer-comments-area--' + pk)[0].appendChild(newComment);
+                        // Slide the input area up:
+                        $('#add-answer-comment-area--' + pk).slideUp();
+                        // Slide the 'add a comment' button down:
+                        $('#add-answer-comment--' + pk).slideDown();
+                    }
+                });
+            }
+        });
+    }
+
+    $('#add-answer-button').click(function () {
+        $.post({
+            url: '',
+            type: 'POST',
+            data: {
+                type: 'answer',
+                content: richTextField.document.body.innerHTML,
+                csrfmiddlewaretoken: csrf
+            },
+            success: location.reload()
+        });
+    });
 });
 
-$('.add-comment-area').slideUp('fast');
+$('.add-comment-area').slideUp('fast');  // Slide all comment inputs up at start.
+
