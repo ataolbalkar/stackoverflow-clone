@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from questions.models import Question, QuestionComment, Answer, AnswerComment
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, UpdateView
@@ -7,7 +8,6 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView,
 from questions.forms import QuestionForm, QuestionUpdateForm, AnswerUpdateForm
 
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 
 from django.db.models import Count
 from datetime import datetime, timedelta
@@ -304,4 +304,9 @@ class AnswerUpdateView(UpdateView):
     model = Answer
     form_class = AnswerUpdateForm
     template_name = 'questions/answer_update.html'
-    success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(AnswerUpdateView, self).get_context_data(**kwargs)
+        context['question'] = self.get_object().question
+
+        return context

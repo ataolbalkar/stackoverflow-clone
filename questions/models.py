@@ -57,6 +57,9 @@ class Answer(models.Model):
     edited_author = models.ForeignKey(UserProfile, related_name='answered_edited_author', null=True, blank=True)
     edited_date = models.DateTimeField(default=None, null=True, blank=True)
 
+    def get_absolute_url(self):
+        return f'/questions/question/{self.question.pk}#answer-content--{self.pk}'
+
     def __str__(self):
         return str(self.pk)
 

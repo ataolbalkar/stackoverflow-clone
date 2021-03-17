@@ -1,6 +1,10 @@
 {% extends 'questions/ask.html' %}
 {% load staticfiles %}
 
+{% block title %}
+    Update Question - {{ question.title }}
+{% endblock %}
+
 {% block ask_question %}
     <style>
         div.tags-area {
