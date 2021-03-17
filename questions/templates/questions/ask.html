@@ -187,6 +187,9 @@
 
                     <button type="submit" class="question-ask-submit-button">Review your question</button>
                 </form>
+                {% block ask_question %}
+
+                {% endblock %}
             </div>
             <div class="ask-question-hint-area">
                 <div class="question-hint-area question-hint-area-active">
@@ -324,6 +327,8 @@
 
     </div>
 
-
     <script src="{% static 'questions/js/ask.js' %}"></script>
+    {% block scripts %}
+
+    {% endblock %}
 {% endblock %}

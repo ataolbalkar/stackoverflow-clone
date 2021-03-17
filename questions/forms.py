@@ -1,13 +1,20 @@
 from django import forms
-from questions.models import Question
+from questions.models import Question, Answer
 
 
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ('title', 'body', 'tags')
-        widgets = {
-            'title': forms.TextInput(
 
-            ),
-        }
+
+class QuestionUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ('title', 'body')
+
+
+class AnswerUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Answer
+        fields = ('body',)

@@ -86,7 +86,7 @@
                         <a id="question-body-bottom-option-share" class="question-body-bottom-option" href="#">
                             Share
                         </a>
-                        <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="#">
+                        <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="{% url 'question_update' question.pk %}">
                             Edit
                         </a>
                         <a id="question-body-bottom-option-follow" class="question-body-bottom-option" href="#">
@@ -263,7 +263,7 @@
                 </div>
             </div>
             {% for answer in answers %}
-                <div class="question-content answer-content" id="{{ answer.pk }}">
+                <div class="question-content answer-content" id="answer-content--{{ answer.pk }}">
                     <div class="question-content-left-menu">
                         <button class="question-vote-button-up question-answer-vote-button-up" id="question-answer-vote-button-up--{{ answer.pk }}"><i class="fas fa-caret-up fa-3x"></i></button>
                         <span class="question-votes question-answer-votes" id="question-answer-votes--{{ answer.pk }}">{{ answer.votes }}</span>

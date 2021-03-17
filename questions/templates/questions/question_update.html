@@ -1,0 +1,14 @@
+{% extends 'questions/ask.html' %}
+{% load staticfiles %}
+
+{% block ask_question %}
+    <style>
+        div.tags-area {
+            display: none;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'questions/js/question_update.js' %}"></script>
+{% endblock %}

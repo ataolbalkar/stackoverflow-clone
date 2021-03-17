@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 
 from questions.models import Question, QuestionComment, Answer, AnswerComment
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, UpdateView
 
-from questions.forms import QuestionForm
+from questions.forms import QuestionForm, QuestionUpdateForm, AnswerUpdateForm
 
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -278,3 +278,30 @@ class QuestionDetailViewSortOldest(QuestionDetailView):
 
 class QuestionDetailViewSortActive(QuestionDetailView):
     sort_type = 'active'
+
+
+class QuestionUpdateView(UpdateView):
+    model = Question
+    form_class = QuestionUpdateForm
+    template_name = 'questions/question_update.html'
+    success_url = '.'
+    # @TODO Edit Queue
+
+    def post(self, request, *args, **kwargs):
+        question = self.get_object()
+        question.is_modified = True
+        question.modified_date = timezone.now()
+        question.modified_author = get_object_or_404(User, pk=request.user.pk)
+
+        question.body = request.POST.get('body')
+        question.title = request.POST.get('title')
+        question.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+
+class AnswerUpdateView(UpdateView):
+    model = Answer
+    form_class = AnswerUpdateForm
+    template_name = 'questions/answer_update.html'
+    success_url = '/'
