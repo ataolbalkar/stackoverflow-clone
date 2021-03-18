@@ -1,0 +1,67 @@
+{% extends 'questions/base_without_sidebar.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Create Tag
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'tags/css/tag_create.css' %}">
+{% endblock %}
+
+{% block body_attrs %}
+    onload="enableEditModeTag();"
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h5 class="create-tag-title">
+            Create Tag
+        </h5>
+        <form method="post">
+            <div class="create-tag-form-area">
+                {% csrf_token %}
+                <div class="create-tag-form">
+                    <span class="create-tag-form-label">Tag name:</span>
+                    {{ form.name }}
+                    <span class="create-tag-form-label">Related tags:</span>
+                    <iframe name="tagEditor" class="tag-editor" scrolling="no"></iframe>
+                    {{ form.related_tags }}
+                </div>
+                <div class="create-tag-form">
+                    <span class="create-tag-form-label">Tag information:</span>
+                    {{ form.info }}
+                </div>
+                <button type="submit" class="btn btn-primary create-tag-button">Create Tag</button>
+            </div>
+        </form>
+
+        <h5 class="create-tag-title">
+            Tags
+        </h5>
+
+        <div class="tag-browser">
+            {% for tag in tag_list %}
+                <div class="tag">
+                    <div class="tag-name-area">
+                        <a href="#" class="tag-name">
+                            {{ tag.name }}
+                        </a>
+                    </div>
+                    <div class="tag-info-area">
+                        <span class="tag-info">
+                            {{ tag.info }}
+                        </span>
+                    </div>
+                    <div class="tag-statistics-area">
+                        <span class="tag-statistics">
+                            {{ tag.question_set|length }} Questions
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'tags/js/tag_create.js' %}"></script>
+{% endblock %}

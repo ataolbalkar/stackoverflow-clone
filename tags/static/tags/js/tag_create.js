@@ -1,5 +1,3 @@
-/* TAG EDITOR */
-
 tagEditor.document.body.style.margin = '4px 0'; // Resetting margin of body to prevent overflow.
 
 function addList() {
@@ -64,43 +62,6 @@ frame.addEventListener('keydown', function (event) {
     }
 });
 
-// Dropdowns
-
-const hintButtons = ['#question-hint-area-button-one', '#question-hint-area-button-two',
-    '#description-dropdown-button-one', '#description-dropdown-button-two', '#description-dropdown-button-three'];
-
-const hintFields = ['#question-description-area-one', '#question-description-area-two',
-    '#description-dropdown-menu-one', '#description-dropdown-menu-two', '#description-dropdown-menu-three'];
-
-function addSlide(button, field) {
-    $(document).ready(function () {
-        $(button).click(function () {
-            $(field).slideToggle();
-        });
-    });
-}
-
-for (let i = 0; i < hintButtons.length; i++) {
-    addSlide(hintButtons[i], hintFields[i]);
-    $(hintFields[i]).slideUp();
-}
-
-// FORM
-
-// Title
-
-document.getElementsByClassName('title-form')[0].addEventListener('keydown', function () {
-    document.getElementById('id_title').value = this.value;
-});
-
-// Body
-
-richTextField.document.getElementsByTagName('body')[0].addEventListener('keydown', function () {
-    document.getElementById('id_body').value = document.getElementsByName('richTextField')[0].contentWindow.document.body.innerHTML;
-});
-
-//Tags
-
 const tags = [];
 
 for (let option of document.getElementById('id_tags').options) {
@@ -127,4 +88,3 @@ tagEditorFrame.addEventListener('keydown', function (event) {
         }
     }
 });
-

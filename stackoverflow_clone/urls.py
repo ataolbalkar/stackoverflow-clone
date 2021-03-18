@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^base/$', views.baseView, name='base'),
     url(r'questions/', include('questions.urls')),
+    url(r'tags/', include('tags.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

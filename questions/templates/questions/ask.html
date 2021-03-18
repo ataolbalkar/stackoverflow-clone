@@ -8,7 +8,10 @@
 {% block imports %}
     <link rel="stylesheet" href="{% static 'questions/css/ask.css' %}">
     <link rel="stylesheet" href="{% static 'questions/css/text_editor.css' %}">
-    <script type="text/javascript" src="{% static 'questions/js/text_editor.js' %}"></script>
+{% endblock %}
+
+{% block body_attrs %}
+    onload="enableEditMode();"
 {% endblock %}
 
 {% block content %}

@@ -1,0 +1,105 @@
+.tag-editor {
+    border: solid #ced4da 1px;
+    border-radius: 3px;
+
+    height: 38px;
+    max-width: 835px;
+    width: 100%;
+    padding: 1px 5px;
+
+    overflow: hidden;
+    background-color: white;
+}
+
+.tag-list {
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+
+.tag-list-item {
+    list-style-type: none;
+    margin: 1px 1px 1px 3px;
+    padding: 5px;
+
+    background-color: #e1ecf4;
+    color: #39739d;
+    border-radius: 3px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.create-tag-form-area {
+    display: flex;
+}
+
+.create-tag-form {
+    width: 100%;
+    padding-right: 20px;
+}
+
+.create-tag-form-label {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #776d89;
+}
+
+#id_name {
+    margin-bottom: 9px;
+}
+
+.create-tag-button {
+    height: 110px;
+    margin-top: 24px;
+}
+
+.tag-browser {
+    display: grid;
+    grid-gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.tag {
+    width: 100%;
+    height: 175px;
+    padding: 10px;
+
+    border: solid #d6d9dc 1px;
+    border-radius: 5px;
+
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.tag-name-area{
+    height: 30px;
+}
+
+.tag-name {
+    padding: 4px 6px;
+    background-color: #d0dbe3;
+    color: #5b639b;
+    border-radius: 4px;
+}
+
+.tag-name:hover {
+    text-decoration: none;
+    background-color: #c2d6e2;
+}
+
+.tag-info-area {
+    height: 90px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tag-statistics-area{
+    padding: 5px 0;
+    color: #7c84a8;
+}
+

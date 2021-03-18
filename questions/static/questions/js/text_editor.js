@@ -3,6 +3,14 @@ function enableEditMode() {
         tagEditor.document.designMode = 'On';
 }
 
+function enableEditModeText() {
+        richTextField.document.designMode = 'On';
+}
+
+function enableEditModeTag() {
+        tagEditor.document.designMode = 'On';
+}
+
 var buttons = ['#links-button', '#images-button', '#styling-button', '#lists-button',
 '#blockquotes-button', '#codes-button', '#HTMLs-button', '#tables-button'];
 
