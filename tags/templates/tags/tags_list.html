@@ -1,2 +1,62 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'tags/css/tags_list.css' %}">
+{% endblock %}
+
+{% block title %}
+    Tags
+{% endblock %}
+
+{% block content %}
+    <div class="tags-list">
+        <h5 class="create-tag-title">
+            Tags
+        </h5>
+        <p class="tags-list-description">
+            A tag is a keyword or label that categorizes your question with other, similar questions. Using the right tags makes it easier for others to find and answer your question.
+        </p>
+        <div class="tags-list-order-area">
+            <div class="tags-list-search-area" onclick="$('.tags-list-search-input')[0].focus();">
+                <i class="fas fa-search tags-list-search-icon"></i>
+                {% csrf_token %}
+                <input type="search" class="form-control tags-list-search-input" placeholder="Filter by tag name">
+            </div>
+            <div class="btn-group tags-list-order-group">
+                <a class="tags-list-order-button" href="#">
+                    Popular
+                </a>
+                <a class="tags-list-order-button" href="#">
+                    Name
+                </a>
+                <a class="tags-list-order-button" style="border: unset;" href="#">
+                    New
+                </a>
+            </div>
+        </div>
+        <div class="tag-browser" id="tag-browser-search"></div>
+        <div class="tag-browser" id="tag-browser">
+            {% for tag in tag_list %}
+                <div class="tag">
+                    <div class="tag-name-area">
+                        <a href="{{ tag.get_absolute_url }}" class="tag-name">
+                            {{ tag.name }}
+                        </a>
+                    </div>
+                    <div class="tag-info-area">
+                        <span class="tag-info">
+                            {{ tag.info }}
+                        </span>
+                    </div>
+                    <div class="tag-statistics-area">
+                        <span class="tag-statistics">
+                            {{ tag.count }} Questions
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{% static 'tags/js/tags_list.js' %}"></script>
+{% endblock %}

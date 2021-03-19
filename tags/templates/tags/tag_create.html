@@ -18,7 +18,7 @@
         <h5 class="create-tag-title">
             Create Tag
         </h5>
-        <form method="post">
+        <form method="post" style="padding-bottom: 30px; border-bottom: solid #c2c4c8 1px;">
             <div class="create-tag-form-area">
                 {% csrf_token %}
                 <div class="create-tag-form">
@@ -55,7 +55,7 @@
                     </div>
                     <div class="tag-statistics-area">
                         <span class="tag-statistics">
-                            {{ tag.question_set|length }} Questions
+                            {{ tag.count }} Questions
                         </span>
                     </div>
                 </div>

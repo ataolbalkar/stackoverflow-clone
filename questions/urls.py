@@ -18,5 +18,5 @@ urlpatterns = [
         name='question_detail_sort_active'),
 
     url(r'^question/(?P<pk>\d+)/update$', views.QuestionUpdateView.as_view(), name='question_update'),
-    url(r'^answer/(?P<pk>\d+)/update$', views.AnswerUpdateView.as_view(), name='answer_update')
+    url(r'^answer/(?P<pk>\d+)/update$', views.AnswerUpdateView.as_view(), name='answer_update'),
 ]

@@ -1,0 +1,111 @@
+.tags-list {
+    padding: 0 0 20px 20px;
+}
+
+.create-tag-title {
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+
+    margin: 10px 0 20px;
+}
+
+.tag-browser {
+    display: grid;
+    grid-gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.tag {
+    width: 100%;
+    height: 175px;
+    padding: 10px;
+
+    border: solid #d6d9dc 1px;
+    border-radius: 5px;
+
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+.tag-name-area{
+    height: 30px;
+}
+
+.tag-name {
+    padding: 4px 6px;
+    background-color: #d0dbe3;
+    color: #5b639b;
+    border-radius: 4px;
+}
+
+.tag-name:hover {
+    text-decoration: none;
+    background-color: #c2d6e2;
+}
+
+.tag-info-area {
+    height: 90px;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tag-statistics-area{
+    padding: 5px 0;
+    color: #7c84a8;
+}
+
+.tags-list-description {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    padding-right: 500px;
+}
+
+.tags-list-order-area {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.tags-list-search-input {
+    height: 36px;
+    position: relative;
+
+    padding: 0 0 1px 30px;
+
+    font-size: 14px;
+}
+
+.tags-list-search-input::placeholder {
+    color: #bbc0c4;
+}
+
+.tags-list-search-icon {
+    padding: 10px 0 0 10px;
+    position: absolute;
+    z-index: 1;
+    color: #bbc0c4;
+
+    cursor: text;
+}
+
+.tags-list-order-group {
+    border-radius: 3px;
+    border: solid #9ba2a9 1px;
+}
+
+.tags-list-order-button {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #6a3b40;
+
+    border-right: solid #9ba2a9 1px;
+    padding: 8px 10px;
+}
+
+.tags-list-order-button:hover {
+    text-decoration: none;
+    background-color: #fafafa;
+    color: unset;
+}

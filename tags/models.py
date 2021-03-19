@@ -8,5 +8,8 @@ class Tag(models.Model):
     info = models.TextField(blank=True, null=True)
     related_tags = models.ManyToManyField('self', blank=True)
 
+    def get_absolute_url(self):
+        return f'/{self.pk}'
+
     def __str__(self):
         return self.name
