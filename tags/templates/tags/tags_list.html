@@ -24,15 +24,37 @@
                 <input type="search" class="form-control tags-list-search-input" placeholder="Filter by tag name">
             </div>
             <div class="btn-group tags-list-order-group">
-                <a class="tags-list-order-button" href="#">
+                <a id="order-by-votes" class="tags-list-order-button" href="{% url 'tags_list' %}">
                     Popular
                 </a>
-                <a class="tags-list-order-button" href="#">
+                <a id="order-by-name" class="tags-list-order-button" href="{% url 'tag_list_ordered_by_name' %}">
                     Name
                 </a>
-                <a class="tags-list-order-button" style="border: unset;" href="#">
+                <a id="order-by-date" class="tags-list-order-button" href="{% url 'tag_list_ordered_by_date' %}">
                     New
                 </a>
+                <style>
+                    {% if order_by == 'vote' %}
+                        #order-by-votes {
+                            background-color: #e0e2e4;
+                            color: black;
+                        }
+                    {% elif order_by == 'name' %}
+                        #order-by-name {
+                            background-color: #e0e2e4;
+                            color: black;
+                        }
+                    {% elif order_by == 'date' %}
+                        #order-by-date {
+                            background-color: #e0e2e4;
+                            color: black;
+                        }
+                    {% endif %}
+
+                    #order-by-date {
+                            border: unset;
+                        }
+                </style>
             </div>
         </div>
         <div class="tag-browser" id="tag-browser-search"></div>
@@ -57,6 +79,25 @@
                 </div>
             {% endfor %}
         </div>
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a class="page" href="?page={{ page_obj.previous_page_number }}">Prev</a>
+            {% endif %}
+
+            {% for page in paginator.page_range %}
+                {% if page_obj.number == page %}
+                    <span class="current-page">{{ page }}</span>
+                {% else %}
+                    <a class="page" href="?page={{ page }}">{{ page }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="page" href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
     </div>
     <script src="{% static 'tags/js/tags_list.js' %}"></script>
 {% endblock %}

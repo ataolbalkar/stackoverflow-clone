@@ -43,7 +43,7 @@ $(document).ready(function () {
                             let tag_name = document.createElement('a');
                             tag_name.className = 'tag-name';
                             tag_name.innerText = data.pk;
-                            // @TODO TAG LINK
+                            tag_name.href = '/tags/' + data.pk;
 
                             tag_name_area.appendChild(tag_name);
                             tag.appendChild(tag_name_area);

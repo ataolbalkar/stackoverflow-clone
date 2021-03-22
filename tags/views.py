@@ -30,15 +30,63 @@ class TagCreateView(CreateView):
 class TagsListView(ListView):
     model = Tag
     template_name = 'tags/tags_list.html'
+    paginate_by = 45
+    order_by = 'vote'
 
     def get_queryset(self):
         return self.model.objects.annotate(count=Count('question')).order_by('-count')
+
+    def get_context_data(self, **kwargs):
+        context = super(TagsListView, self).get_context_data(**kwargs)
+        context['order_by'] = self.order_by
+
+        return context
 
     def post(self, request):
         if request.is_ajax:
             value = request.POST.get('value')
             data = self.model.objects.filter(name__icontains=value).\
                 annotate(count=Count('question')).order_by('-count')[:45]
+
+            counts = [_.count for _ in data]
+            serialized_data = serializers.serialize('json', data)
+
+            return JsonResponse({'data': serialized_data,
+                                 'counts': counts},
+                                status=200, safe=False)
+
+
+class TagsListViewOrderName(TagsListView):
+    order_by = 'name'
+
+    def get_queryset(self):
+        return self.model.objects.annotate(count=Count('question')).order_by('pk')
+
+    def post(self, request):
+        if request.is_ajax:
+            value = request.POST.get('value')
+            data = self.model.objects.filter(name__icontains=value).\
+                annotate(count=Count('question')).order_by('pk')[:45]
+
+            counts = [_.count for _ in data]
+            serialized_data = serializers.serialize('json', data)
+
+            return JsonResponse({'data': serialized_data,
+                                 'counts': counts},
+                                status=200, safe=False)
+
+
+class TagsListViewOrderNew(TagsListView):
+    order_by = 'date'
+
+    def get_queryset(self):
+        return self.model.objects.annotate(count=Count('question')).order_by('created_date')
+
+    def post(self, request):
+        if request.is_ajax:
+            value = request.POST.get('value')
+            data = self.model.objects.filter(name__icontains=value).\
+                annotate(count=Count('question')).order_by('created_date')[:45]
 
             counts = [_.count for _ in data]
             serialized_data = serializers.serialize('json', data)

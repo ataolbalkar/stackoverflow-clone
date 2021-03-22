@@ -109,3 +109,38 @@
     background-color: #fafafa;
     color: unset;
 }
+
+.pagination {
+    margin-top: 20px;
+    float: right;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.page {
+    border: solid #d6d9dc 1px;
+    border-radius: 3px;
+
+    padding: 0 8px;
+    margin-left: 4px;
+    color: #62325c;
+}
+
+.page:hover {
+    text-decoration: none;
+    background-color: #cccfd2;
+    color: #62325c;
+}
+
+.current-page {
+    border: solid #e37424 1px;
+    border-radius: 3px;
+
+    padding: 0 8px;
+    margin-left: 4px;
+
+    color: white;
+    background-color: #e37424;
+}
+
+
