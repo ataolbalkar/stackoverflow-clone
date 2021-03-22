@@ -1,5 +1,201 @@
 {% extends 'questions/base.html' %}
+{% load staticfiles %}
+{% load humanize %}
 
 {% block title %}
-    {{ tag.name }}
+    {{ tag.name }} Questions
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'tags/css/tag_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="tag-detail-main">
+        <div class="tag-detail-main-left">
+            <div class="tag-detail">
+                <div class="tag-title-block">
+                    <h5 class="tag-title">
+                        Questions tagged [{{ tag.name }}]
+                    </h5>
+                    <a href="{% url 'ask' %}" class="ask-question-button">
+                        Ask Question
+                    </a>
+                </div>
+                <div class="tag-info">
+                    {{ tag.info }}
+                </div>
+                <div class="tag-detail-bottom">
+                    <div class="watch-ignore-buttons">
+                        <button class="watch-tag-button">
+                            <i class="far fa-eye"></i>
+                            Watch tag
+                        </button>
+                        <button class="unwatch-tag-button">
+                            <i class="far fa-eye-slash"></i>
+                            Unwatch tag
+                        </button>
+                        <button class="ignore-tag-button">
+                            <i class="fas fa-ban"></i>
+                            Ignore Tag
+                        </button>
+                        <button class="unignore-tag-button">
+                            <i class="fas fa-ban"></i>
+                            Unignore Tag
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% if question_list %}
+                <div class="tag-question-area">
+                    <div class="tag-question-top-area">
+                        <span class="tag-question-count">
+                            {{ question_list|length }} questions
+                        </span>
+                        <div class="tag-question-order-area">
+                            <div>
+                                <div class="btn-group tag-question-order-buttons">
+                                    <a href="#" class="tag-question-order-button" style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
+                                        Newest
+                                    </a>
+                                    <a href="#" class="tag-question-order-button">
+                                        Active
+                                    </a>
+                                    <a href="#" class="tag-question-order-button">
+                                        Bountied
+                                    </a>
+                                    <a href="#" class="tag-question-order-button">
+                                        Unanswered
+                                    </a>
+                                    <button class="tag-question-order-button" style="border: none; border-radius: 5px">
+                                        More
+                                        <i class="fas fa-sort-down" style="margin-left: 5px"></i>
+                                    </button>
+                                </div>
+                                <button class="tag-question-order-filter-button">
+                                    <i class="fas fa-cog"></i>
+                                    Filter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tag-questions">
+                        {% for question in question_list %}
+                            <div class="tag-question">
+                                <div class="tag-question-left">
+                                    <div class="tag-question-left-element">
+                                        <span class="tag-question-left-element-value">
+                                            {{ question.votes }}
+                                        </span>
+                                        <span class="tag-question-left-element-key">
+                                            votes
+                                        </span>
+                                    </div>
+                                    <div class="tag-question-left-element">
+                                        <span class="tag-question-left-element-value">
+                                            {{ question.answer.all|length }}
+                                        </span>
+                                        <span class="tag-question-left-element-key">
+                                            answers
+                                        </span>
+                                    </div>
+                                    <div class="tag-question-left-element">
+                                        <span class="tag-question-left-element-value">
+                                            {{ question.views }}
+                                        </span>
+                                        <span class="tag-question-left-element-key">
+                                            views
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="tag-question-right">
+                                    <div class="tag-question-top">
+                                        <a href="{% url 'question_detail' question.pk %}" class="tag-question-title">
+                                            {{ question.title }}
+                                        </a>
+                                        <div class="tag-question-body">
+                                            {{ question.body }}
+                                        </div>
+                                    </div>
+                                    <div class="tag-question-bottom">
+                                        <div class="tag-question-tags">
+                                            {% for question_tag in question.tags.all %}
+                                                <a href="{% url 'tag_detail' question_tag %}" class="tag-question-tag">
+                                                    {{ question_tag }}
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="tag-question-author-area">
+                                            <span class="tag-question-last-activity">
+                                                Asked {{ question.asked_date|naturaltime }}
+                                            </span>
+                                            <div class="tag-question-author">
+                                                <div class="tag-question-author-image">
+                                                    <!-- @TODO Profile image -->
+                                                </div>
+                                                <div class="tag-question-author-info">
+                                                    <!-- @TODO author link -->
+                                                    <a href="" class="tag-question-author-profile">
+                                                        {{ question.author.username }}
+                                                    </a>
+                                                    <span class="reputation-score">
+                                                        {{ question.author.reputation }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <!-- @TODO PAGINATION -->
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="tag-detail-main-right">
+            <div class="tag-right-menu">
+                <div class="tag-right-menu-head">
+                    <div class="tag-right-menu-title">
+                        Custom Filters
+                    </div>
+                </div>
+                <div class="tag-right-menu-body">
+                    <a href="" class="create-custom-filter-button">
+                        Create a custom filter
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tag-detail-main-right">
+            <div class="tag-right-menu">
+                <div class="tag-right-menu-head">
+                    <div class="tag-right-menu-title">
+                        Watched Tags
+                    </div>
+                </div>
+                <div class="tag-right-menu-body">
+                    {% for tag in user.interested_tags.all %}
+                        <a href="{% url 'tag_detail' tag.pk %}" class="tag-question-tag">
+                            {{ tag.pk }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="tag-detail-main-right">
+            <div class="tag-right-menu">
+                <div class="tag-right-menu-head">
+                    <div class="tag-right-menu-title">
+                        Custom Filters
+                    </div>
+                </div>
+                <div class="tag-right-menu-body">
+                    <a href="" class="create-custom-filter-button">
+                        Create a custom filter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

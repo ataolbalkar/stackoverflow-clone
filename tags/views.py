@@ -1,5 +1,8 @@
 from django.shortcuts import render
+
 from tags.models import Tag
+from questions.models import Question
+
 from tags.forms import CreateTagForm
 from django.db.models import Count
 
@@ -99,3 +102,9 @@ class TagsListViewOrderNew(TagsListView):
 class TagDetailView(DetailView):
     model = Tag
     template_name = 'tags/tag_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailView, self).get_context_data(**kwargs)
+        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name).order_by('-asked_date')
+
+        return context

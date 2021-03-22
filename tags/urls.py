@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^$', TagsListView.as_view(), name='tags_list'),
     url(r'^order=name/$', TagsListViewOrderName.as_view(), name='tag_list_ordered_by_name'),
     url(r'^order=new/$', TagsListViewOrderNew.as_view(), name='tag_list_ordered_by_date'),
-    url(r'^(?P<pk>[\w\.\-]+)/$', TagDetailView.as_view(), name='tag_detail')
+    url(r'^(?P<pk>[\w\.\-\+\#]+)/$', TagDetailView.as_view(), name='tag_detail')
 ]
