@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse_lazy
 from tags.models import Tag
 from django.utils import timezone
 from django.contrib.auth import get_user_model
@@ -25,6 +26,9 @@ class Question(models.Model):
 
     has_best_answer = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy('question_detail', args=[self.pk])
 
     def __str__(self):
         return str(self.pk)

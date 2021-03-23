@@ -48,6 +48,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_manager = models.BooleanField(default=False)
 
     interested_tags = models.ManyToManyField('tags.Tag', blank=True, related_name='interested_tags')
+    ignored_tags = models.ManyToManyField('tags.Tag', blank=True, related_name='ignored_tags')
 
     followed_questions = models.ManyToManyField('questions.Question', blank=True, related_name='followed_questions')
     followed_answers = models.ManyToManyField('questions.Answer', blank=True, related_name='followed_answers')

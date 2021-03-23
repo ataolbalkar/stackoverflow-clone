@@ -15,7 +15,7 @@
         <div class="tag-detail-main-left">
             <div class="tag-detail">
                 <div class="tag-title-block">
-                    <h5 class="tag-title">
+                    <h5 class="tag-title" id="{{ tag.pk }}">
                         Questions tagged [{{ tag.name }}]
                     </h5>
                     <a href="{% url 'ask' %}" class="ask-question-button">
@@ -27,6 +27,7 @@
                 </div>
                 <div class="tag-detail-bottom">
                     <div class="watch-ignore-buttons">
+                        {% csrf_token %}
                         <button class="watch-tag-button">
                             <i class="far fa-eye"></i>
                             Watch tag
@@ -43,6 +44,38 @@
                             <i class="fas fa-ban"></i>
                             Unignore Tag
                         </button>
+                        <style>
+                            {% if tag in user.interested_tags.all %}
+                                .watch-tag-button {
+                                    display: none;
+                                }
+                                .unwatch-tag-button {
+                                    display: block;
+                                }
+                            {% else %}
+                                .watch-tag-button {
+                                    display: block;
+                                }
+                                .unwatch-tag-button {
+                                    display: none;
+                                }
+                            {% endif %}
+                            {% if tag in user.ignored_tags.all %}
+                                .ignore-tag-button {
+                                    display: none;
+                                }
+                                .unignore-tag-button {
+                                    display: block;
+                                }
+                            {% else %}
+                                .ignore-tag-button {
+                                    display: block;
+                                }
+                                .unignore-tag-button {
+                                    display: none;
+                                }
+                            {% endif %}
+                        </style>
                     </div>
                 </div>
             </div>
@@ -55,24 +88,42 @@
                         <div class="tag-question-order-area">
                             <div>
                                 <div class="btn-group tag-question-order-buttons">
-                                    <a href="#" class="tag-question-order-button" style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
+                                    <a id="tag-question-order-by-newest-button" href="{% url 'tag_detail' tag.pk %}" class="tag-question-order-button" style="border-bottom-left-radius: 5px; border-top-left-radius: 5px;">
                                         Newest
                                     </a>
-                                    <a href="#" class="tag-question-order-button">
+                                    <a id="tag-question-order-by-active-button" href="{% url 'tag_detail_order_active' tag.pk %}" class="tag-question-order-button">
                                         Active
                                     </a>
-                                    <a href="#" class="tag-question-order-button">
+                                    <a id="tag-question-order-by-bountied-button" href="{% url 'tag_detail_order_bountied' tag.pk %}" class="tag-question-order-button">
                                         Bountied
                                     </a>
-                                    <a href="#" class="tag-question-order-button">
+                                    <a id="tag-question-order-by-unanswered-button" href="{% url 'tag_detail_order_unanswered' tag.pk %}" class="tag-question-order-button">
                                         Unanswered
                                     </a>
-                                    <button class="tag-question-order-button" style="border: none; border-radius: 5px">
-                                        More
-                                        <i class="fas fa-sort-down" style="margin-left: 5px"></i>
-                                    </button>
+                                    <div class="dropdown">
+                                        <button class="tag-question-order-button" style="border: none; border-radius: 5px"  id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            More
+                                            <i class="fas fa-sort-down" style="margin-left: 5px"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a id="tag-question-order-by-frequent-button" href="{% url 'tag_detail_order_frequent' tag.pk %}" class="tag-question-order-button" style="border: none;">
+                                                Frequent
+                                            </a>
+                                            <a id="tag-question-order-by-votes-button" href="{% url 'tag_detail_order_votes' tag.pk %}" class="tag-question-order-button" style="border: none;">
+                                                Votes
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <style>
+                                        {% if order_by == 'newest' %}
+                                            .tag-question-order-by-newest-button {
+
+                                            }
+                                        {% endif %}
+                                    </style>
                                 </div>
-                                <button class="tag-question-order-filter-button">
+
+                                <button class="tag-question-order-filter-button dropdown-toggle">
                                     <i class="fas fa-cog"></i>
                                     Filter
                                 </button>
@@ -93,7 +144,7 @@
                                     </div>
                                     <div class="tag-question-left-element">
                                         <span class="tag-question-left-element-value">
-                                            {{ question.answer.all|length }}
+                                            {{ question.answer_count }}
                                         </span>
                                         <span class="tag-question-left-element-key">
                                             answers
@@ -166,36 +217,35 @@
                     </a>
                 </div>
             </div>
-        </div>
-        <div class="tag-detail-main-right">
             <div class="tag-right-menu">
                 <div class="tag-right-menu-head">
                     <div class="tag-right-menu-title">
                         Watched Tags
                     </div>
                 </div>
-                <div class="tag-right-menu-body">
+                <div class="tag-right-menu-body" id="watched-tags">
                     {% for tag in user.interested_tags.all %}
-                        <a href="{% url 'tag_detail' tag.pk %}" class="tag-question-tag">
+                        <a href="{% url 'tag_detail' tag.pk %}" class="tag-question-tag watched-tags">
+                            {{ tag.pk }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tag-right-menu">
+                <div class="tag-right-menu-head">
+                    <div class="tag-right-menu-title">
+                        Ignored Tags
+                    </div>
+                </div>
+                <div class="tag-right-menu-body" id="ignored-tags">
+                    {% for tag in user.ignored_tags.all %}
+                        <a href="{% url 'tag_detail' tag.pk %}" class="tag-question-tag ignored-tags">
                             {{ tag.pk }}
                         </a>
                     {% endfor %}
                 </div>
             </div>
         </div>
-        <div class="tag-detail-main-right">
-            <div class="tag-right-menu">
-                <div class="tag-right-menu-head">
-                    <div class="tag-right-menu-title">
-                        Custom Filters
-                    </div>
-                </div>
-                <div class="tag-right-menu-body">
-                    <a href="" class="create-custom-filter-button">
-                        Create a custom filter
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
+    <script src="{% static 'tags/js/tag_detail.js' %}"></script>
 {% endblock %}

@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from tags.models import Tag
 from questions.models import Question
+from django.contrib.auth import get_user_model
 
 from tags.forms import CreateTagForm
 from django.db.models import Count
@@ -9,13 +10,13 @@ from django.db.models import Count
 from django.http import JsonResponse
 
 from django.core import serializers
-from django.utils.encoding import force_text
-from django.core.serializers.json import DjangoJSONEncoder
 
 from django.views.generic import ListView, CreateView, DetailView
 
 
 # Create your views here.
+
+User = get_user_model()
 
 class TagCreateView(CreateView):
     model = Tag
@@ -102,9 +103,108 @@ class TagsListViewOrderNew(TagsListView):
 class TagDetailView(DetailView):
     model = Tag
     template_name = 'tags/tag_detail.html'
+    order_by = 'newest'
 
     def get_context_data(self, **kwargs):
         context = super(TagDetailView, self).get_context_data(**kwargs)
-        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name).order_by('-asked_date')
+        context['order_by'] = self.order_by
+        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name).\
+            annotate(answer_count=Count('answer')).order_by('-asked_date')
+
+        return context
+
+    def post(self, request, pk):
+        user = get_object_or_404(User, pk=request.user.pk)
+        tag = get_object_or_404(Tag, pk=pk)
+        process_type = request.POST.get('type')
+
+        if request.is_ajax:
+            if process_type == 'watch_tag':
+                if tag in user.ignored_tags.all():
+                    user.ignored_tags.remove(tag)
+
+                user.interested_tags.add(tag)
+
+                return JsonResponse(
+                    {
+                        'data': f"'{pk}', successfully added to '{user.username}'s interested tags.",
+                    },
+                    status=200
+                )
+
+            elif process_type == 'unwatch_tag':
+                user.interested_tags.remove(tag)
+
+                return JsonResponse(
+                    {
+                        'data': f"'{pk}', successfully removed from '{user.username}'s interested tags.",
+                    },
+                    status=200
+                )
+
+            elif process_type == 'ignore_tag':
+                if tag in user.interested_tags.all():
+                    user.interested_tags.remove(tag)
+
+                user.ignored_tags.add(tag)
+
+                return JsonResponse(
+                    {
+                        'data': f"'{pk}', successfully added to '{user.username}'s ignored tags.",
+                    },
+                    status=200
+                )
+
+            elif process_type == 'unignore_tag':
+                user.ignored_tags.remove(tag)
+
+                return JsonResponse(
+                    {
+                        'data': f"'{pk}', successfully removed from '{user.username}'s ignored tags.",
+                    },
+                    status=200
+                )
+
+
+class TagDetailViewOrderActive(TagDetailView):
+    order_by = 'active'
+
+
+class TagDetailViewOrderBountied(TagDetailView):
+    order_by = 'bountied'
+
+
+class TagDetailViewOrderUnanswered(TagDetailView):
+    order_by = 'unanswered'
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailViewOrderUnanswered, self).get_context_data(**kwargs)
+        context['order_by'] = self.order_by
+        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name).\
+            annotate(answer_count=Count('answer')).filter(answer_count=0).order_by('-asked_date')
+
+        return context
+
+
+class TagDetailViewOrderFrequent(TagDetailView):
+    order_by = 'frequent'
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailViewOrderFrequent, self).get_context_data(**kwargs)
+        context['order_by'] = self.order_by
+        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name). \
+            annotate(answer_count=Count('answer')).order_by('-views')
+
+        return context
+
+
+class TagDetailViewOrderVotes(TagDetailView):
+    order_by = 'votes'
+
+    def get_context_data(self, **kwargs):
+        context = super(TagDetailViewOrderVotes, self).get_context_data(**kwargs)
+        context['order_by'] = self.order_by
+        context['question_list'] = Question.objects.filter(tags__name__iexact=self.object.name). \
+            annotate(answer_count=Count('answer')).order_by('-votes')
 
         return context

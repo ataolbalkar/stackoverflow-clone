@@ -56,6 +56,10 @@
     border-radius: 4px;
 }
 
+.watch-ignore-buttons {
+    display: flex;
+}
+
 .watch-tag-button {
     background-color: #d9e4ec;
     border: solid #6a96b6 1px;
@@ -127,6 +131,9 @@
     display: flex;
     background-color: #ffffff;
     color: #656e77;
+
+    font-family: Arial, sans-serif;
+    font-size: 13px;
 }
 
 .tag-question-order-button:hover {
@@ -222,7 +229,7 @@
     font-size: 12px;
 
     padding: 4px 6px;
-    margin-right: 5px;
+    margin: 5px 5px 0 0;
 
     background-color: #d0dbe3;
     color: #5b639b;
@@ -241,6 +248,11 @@
 
 .tag-question-last-activity {
     color: #768bb1;
+}
+
+.tag-question-author-area {
+    width: 185px;
+    padding: 10px 30px 10px 0;
 }
 
 .tag-question-author {
@@ -273,3 +285,35 @@
     font-weight: 1000;
 }
 
+.tag-detail-main-right {
+    display: block;
+    margin-left: 20px;
+
+    font-family: Arial, sans-serif;
+}
+
+.tag-right-menu {
+    border: solid #ced1d4 1px;
+    border-radius: 5px;
+    box-shadow: 1px 5px 10px 1px #c8cccf;
+
+    margin-bottom: 15px;
+    width: 300px;
+    min-height: 100px;
+}
+
+.tag-right-menu-head {
+    background-color: #f7f7f8;
+    border-bottom: solid #e0e2e4 1px;
+
+    padding: 10px 13px;
+    font-size: 15px;
+}
+
+.tag-right-menu-body {
+    margin: 15px 13px;
+    font-size: 13px;
+
+    display: flex;
+    flex-wrap: wrap;
+}
