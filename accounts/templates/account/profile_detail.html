@@ -1,0 +1,132 @@
+{% extends 'questions/base.html' %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block title %}
+    User {{ userprofile.username }}
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'account/css/user_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="account-user-profile">
+        <div class="user-profile-menu">
+            <a href="#" class="user-profile-button">
+                Profile
+            </a>
+            <a href="#" class="user-profile-button">
+                Edit profile and settings
+            </a>
+        </div>
+        <div class="user-profile-top">
+            <div class="user-profile-top-left">
+                <div class="user-profile-avatar-field">
+                    <div class="user-profile-avatar"></div>
+                    <div class="user-profile-reputation-field">
+                        <span class="user-profile-reputation">
+                            {{ userprofile.reputation }}
+                        </span>
+                        REPUTATION
+                    </div>
+                </div>
+                <div class="user-profile-information">
+                    <h2 class="user-profile-username">
+                        {{ userprofile.username }}
+                    </h2>
+                    <div class="user-profile-bio-field">
+                            {{ userprofile.about }}
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile-top-right">
+                <div class="user-profile-questions-scores">
+                    <div class="user-profile-question-score-element">
+                        <span class="user-profile-question-score-element-value">
+                            <!-- @TODO Soru sayısı -->
+                        </span>
+                        <span class="user-profile-question-score-element-key">
+                            answers
+                        </span>
+                    </div>
+                    <div class="user-profile-question-score-element">
+                        <span class="user-profile-question-score-element-value">
+                            <!-- @TODO Cevap sayısı -->
+                        </span>
+                        <span class="user-profile-question-score-element-key">
+                            questions
+                        </span>
+                    </div>
+                    <div class="user-profile-question-score-element">
+                        <span class="user-profile-question-score-element-value">
+                            ~<!-- @TODO Reached sayısı -->
+                        </span>
+                        <span class="user-profile-question-score-element-key">
+                            people reached
+                        </span>
+                    </div>
+                </div>
+                <div class="user-profile-user-general-informations">
+                    <div class="user-profile-general-information">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ userprofile.location }}
+                    </div>
+                    <div class="user-profile-general-information">
+                        <i class="fas fa-history"></i>
+                        Joined {{ userprofile.registered_date|naturaltime }}
+                    </div>
+                    <div class="user-profile-general-information">
+                        <i class="fas fa-eye"></i>
+                        <!-- @TODO Profile views -->
+                        profile views
+                    </div>
+                    <div class="user-profile-general-information">
+                        <i class="far fa-clock"></i>
+                        Last seen
+                        <!-- @TODO last seen -->
+                    </div>
+                    <div class="user-profile-general-information">
+                        <i class="far fa-calendar-alt"></i>
+                        <!-- @TODO visited days -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-profile-bottom">
+            <div class="user-profile-bottom-left">
+                <div class="user-profile-bottom-left-item">
+                    <div class="user-profile-bottom-item-key">
+                        <i class="fas fa-comment-alt"></i>
+                        Communities
+                    </div>
+                    <div class="user-profile-bottom-left-item-value"></div>
+                </div>
+                <div class="user-profile-bottom-left-item">
+                    <div class="user-profile-bottom-item-key">
+                        Top network posts
+                    </div>
+                    <div class="user-profile-bottom-left-item-value"></div>
+                </div>
+            </div>
+            <div class="user-profile-bottom-right">
+                <div class="user-profile-bottom-left-item">
+                    <div class="user-profile-bottom-item-key">
+                        Top tags <!-- @TODO TAGS -->
+                    </div>
+                    <div class="user-profile-bottom-right-item-value">
+                        <!-- @TODO TAGS -->
+                    </div>
+                </div>
+                <div class="user-profile-bottom-left-item">
+                    <div class="user-profile-bottom-item-key">
+                        Top posts
+                    </div>
+                    <div class="user-profile-bottom-right-item-value">
+                        <!-- @TODO POSTS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

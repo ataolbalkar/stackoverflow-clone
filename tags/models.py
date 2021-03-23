@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse_lazy
 
 
 # Create your models here.
@@ -11,7 +12,7 @@ class Tag(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
 
     def get_absolute_url(self):
-        return self.pk
+        return reverse_lazy('tag_detail', args=[self.pk])
 
     def __str__(self):
         return self.name
