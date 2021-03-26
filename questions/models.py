@@ -31,7 +31,7 @@ class Question(models.Model):
         return reverse_lazy('question_detail', args=[self.pk])
 
     def __str__(self):
-        return str(self.pk)
+        return f'Question-{self.pk}'
 
 
 class QuestionComment(models.Model):
@@ -44,7 +44,7 @@ class QuestionComment(models.Model):
     posted_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.pk)
+        return f'QuestionComment-{self.pk}'
 
 
 class Answer(models.Model):
@@ -65,7 +65,7 @@ class Answer(models.Model):
         return f'/questions/question/{self.question.pk}#answer-content--{self.pk}'
 
     def __str__(self):
-        return str(self.pk)
+        return f'Answer-{self.pk}'
 
 
 class AnswerComment(models.Model):
@@ -78,4 +78,4 @@ class AnswerComment(models.Model):
     posted_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.pk)
+        return f'AnswerComment-{self.pk}'

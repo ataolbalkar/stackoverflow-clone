@@ -1,6 +1,7 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
 {% load humanize %}
+{% load question_templatetags %}
 
 {% block title %}
     User {{ userprofile.username }}
@@ -13,7 +14,7 @@
 {% block content %}
     <div class="account-user-profile">
         <div class="user-profile-menu">
-            <a href="#" class="user-profile-button">
+            <a href="#" class="user-profile-button user-profile-button-active">
                 Profile
             </a>
             <a href="#" class="user-profile-button">
@@ -37,6 +38,7 @@
                     </h2>
                     <div class="user-profile-bio-field">
                             {{ userprofile.about }}
+                        (Your about me is currently blank.)
                     </div>
                 </div>
             </div>
@@ -44,7 +46,7 @@
                 <div class="user-profile-questions-scores">
                     <div class="user-profile-question-score-element">
                         <span class="user-profile-question-score-element-value">
-                            <!-- @TODO Soru sayısı -->
+                            {{ answer_count }}
                         </span>
                         <span class="user-profile-question-score-element-key">
                             answers
@@ -52,7 +54,7 @@
                     </div>
                     <div class="user-profile-question-score-element">
                         <span class="user-profile-question-score-element-value">
-                            <!-- @TODO Cevap sayısı -->
+                            {{ question_count }}
                         </span>
                         <span class="user-profile-question-score-element-key">
                             questions
@@ -60,7 +62,7 @@
                     </div>
                     <div class="user-profile-question-score-element">
                         <span class="user-profile-question-score-element-value">
-                            ~<!-- @TODO Reached sayısı -->
+                            ~{{ reached_people|intword }}
                         </span>
                         <span class="user-profile-question-score-element-key">
                             people reached
@@ -78,7 +80,7 @@
                     </div>
                     <div class="user-profile-general-information">
                         <i class="fas fa-eye"></i>
-                        <!-- @TODO Profile views -->
+                        {{ userprofile.profile_views }}
                         profile views
                     </div>
                     <div class="user-profile-general-information">
@@ -88,7 +90,7 @@
                     </div>
                     <div class="user-profile-general-information">
                         <i class="far fa-calendar-alt"></i>
-                        <!-- @TODO visited days -->
+                        Visited <!-- @TODO visited days -->
                     </div>
                 </div>
             </div>
@@ -110,23 +112,587 @@
                 </div>
             </div>
             <div class="user-profile-bottom-right">
-                <div class="user-profile-bottom-left-item">
+                <div class="user-profile-bottom-right-item">
                     <div class="user-profile-bottom-item-key">
-                        Top tags <!-- @TODO TAGS -->
+                        Top tags
+                        <span class="user-profile-item-count">
+                            ({{ users_tag_count|intcomma }})
+                        </span>
                     </div>
                     <div class="user-profile-bottom-right-item-value">
-                        <!-- @TODO TAGS -->
+                        {% if top_tags|length > 0 %}
+                            <div class="user-profile-top-tags-block">
+                                <div class="user-profile-top-tag-field top-tag-field-first">
+                                    <a href="{{ top_tags.0.get_absolute_url }}" class="user-profile-top-tag top-tag-first">
+                                        {{ top_tags.0.name }}
+                                    </a>
+                                    <div class="user-profile-top-tags-statistics">
+                                        <span class="user-profile-top-tags-key">
+                                            POSTS
+                                        </span>
+                                        <span class="user-profile-top-tags-value">
+                                            {{ top_tags.0.posts|intcomma }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if top_tags|length > 1 %}
+                                <div class="user-profile-top-tags-block">
+                                    <div class="user-profile-top-tag-field top-tag-field-second" style="margin-right: 10px;">
+                                        <a href="{{ top_tags.1.get_absolute_url }}" class="user-profile-top-tag top-tag-second">
+                                            {{ top_tags.1.name }}
+                                        </a>
+                                        <div class="user-profile-top-tags-statistics">
+                                            <span class="user-profile-top-tags-key">
+                                                POSTS
+                                            </span>
+                                            <span class="user-profile-top-tags-value">
+                                                {{ top_tags.1.posts|intcomma }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="user-profile-top-tag-field top-tag-field-second">
+                                        <a href="{{ top_tags.2.get_absolute_url }}" class="user-profile-top-tag top-tag-second">
+                                            {{ top_tags.2.name }}
+                                        </a>
+                                        <div class="user-profile-top-tags-statistics">
+                                            <span class="user-profile-top-tags-key">
+                                                POSTS
+                                            </span>
+                                            <span class="user-profile-top-tags-value">
+                                                {{ top_tags.2.posts|intcomma }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if top_tags|length > 3 %}
+                                    <div class="user-profile-top-tags-block">
+                                        <div class="user-profile-top-tag-field top-tag-field-third" style="margin-right: 10px;">
+                                            <a href="{{ top_tags.3.get_absolute_url }}" class="user-profile-top-tag top-tag-third">
+                                                {{ top_tags.3.name }}
+                                            </a>
+                                            <div class="user-profile-top-tags-statistics">
+                                                <span class="user-profile-top-tags-key">
+                                                    POSTS
+                                                </span>
+                                                <span class="user-profile-top-tags-value">
+                                                    {{ top_tags.3.posts|intcomma }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-top-tag-field top-tag-field-third" style="margin-right: 10px;">
+                                            <a href="{{ top_tags.4.get_absolute_url }}" class="user-profile-top-tag top-tag-third">
+                                                {{ top_tags.4.name }}
+                                            </a>
+                                            <div class="user-profile-top-tags-statistics">
+                                                <span class="user-profile-top-tags-key">
+                                                    POSTS
+                                                </span>
+                                                <span class="user-profile-top-tags-value">
+                                                    {{ top_tags.4.posts|intcomma }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="user-profile-top-tag-field top-tag-field-third">
+                                            <a href="{{ top_tags.5.get_absolute_url }}" class="user-profile-top-tag top-tag-third">
+                                                {{ top_tags.5.name }}
+                                            </a>
+                                            <div class="user-profile-top-tags-statistics">
+                                                <span class="user-profile-top-tags-key">
+                                                    POSTS
+                                                </span>
+                                                <span class="user-profile-top-tags-value">
+                                                    {{ top_tags.5.posts|intcomma }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </div>
-                <div class="user-profile-bottom-left-item">
-                    <div class="user-profile-bottom-item-key">
-                        Top posts
+                <div class="user-profile-bottom-right-item">
+                    <div class="user-profile-bottom-item-key" style="display: flex; justify-content: space-between;">
+                        <div>
+                            Top posts
+                            <span class="user-profile-item-count">
+                                ({{ users_post_count|intcomma }})
+                            </span>
+                        </div>
+                        <div class="user-profile-sort-field">
+                            <div class="btn-group sort-field-group">
+                                <button id="top-posts-all" class="btn btn-light sort-field-button btn-active">
+                                    All
+                                </button>
+                                <button id="top-posts-questions" class="btn btn-light sort-field-button">
+                                    Questions
+                                </button>
+                                <button id="top-posts-answers" class="btn btn-light sort-field-button">
+                                    Answers
+                                </button>
+                            </div>
+                            <div class="btn-group sort-field-group">
+                                <button id="top-posts-votes" class="btn btn-light sort-field-button btn-active">
+                                    Votes
+                                </button>
+                                <button id="top-posts-newest" class="btn btn-light sort-field-button">
+                                    Newest
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="user-profile-bottom-right-item-value">
-                        <!-- @TODO POSTS -->
+                        {% if top_posts %}
+                            <div id="top-posts-post-all">
+                                {% for post in top_posts %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="top-posts-post-questions">
+                                {% for post in top_questions %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="top-posts-post-answers">
+                                {% for post in top_answers %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="top-posts-post-all-sorted">
+                                {% for post in top_posts_sorted %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="top-posts-post-questions-sorted">
+                                {% for post in top_questions_sorted %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div id="top-posts-post-answers-sorted">
+                                {% for post in top_answers_sorted %}
+                                    <div class="top-posts-post">
+                                        <div class="top-posts-post-content">
+                                            {% if post|get_model_name == 'Question' %}
+                                                <i id="question-icon--{{ post }}" class="fas fa-question-circle"></i>
+                                                <style>
+                                                    {% if post.has_best_answer %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #question-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <i id="answer-icon--{{ post }}" class="fas fa-comment-dots"></i>
+                                                <style>
+                                                    {% if post.is_best_answer %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #5eba7d;
+                                                        }
+                                                    {% else %}
+                                                        #answer-icon--{{ post }} {
+                                                            color: #9fa6ad;
+                                                        }
+                                                    {% endif %}
+                                                </style>
+                                            {% endif %}
+                                            <div id="top-posts-post-votes-field--{{ post }}" class="top-posts-post-votes-field">
+                                                <div class="top-posts-post-votes">
+                                                    {{ post.votes }}
+                                                </div>
+                                            </div>
+                                            <style>
+                                                {% if post|get_model_name == 'Question' %}
+                                                    {% if post.has_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% elif post|get_model_name == 'Answer' %}
+                                                    {% if post.is_best_answer %}
+                                                        #top-posts-post-votes-field--{{ post }} {
+                                                            background-color: #59b076;
+                                                            color: white;
+                                                        }
+                                                    {% endif %}
+                                                {% endif %}
+                                            </style>
+
+                                            {% if post|get_model_name == 'Question' %}
+                                                <a href="{% url 'question_detail' post.pk %}" class="top-question-title">
+                                                    {{ post.title }}
+                                                </a>
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                <a href="{% url 'question_detail' post.question.pk %}" class="top-question-title">
+                                                    {{ post.question.title }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                        <span class="top-posts-post-date">
+                                            {% if post|get_model_name == 'Question' %}
+                                                {{ post.asked_date|date }}
+                                            {% elif post|get_model_name == 'Answer' %}
+                                                {{ post.answered_date|date }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="{% static 'account/js/profile_detail.js' %}"></script>
 {% endblock %}
