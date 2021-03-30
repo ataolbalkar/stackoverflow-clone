@@ -1,0 +1,111 @@
+{% extends 'account/settings_base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    User - {{ userprofile.username }} - Edit
+{% endblock %}
+
+{% block settings_import %}
+    <link rel="stylesheet" href="{% static 'account/css/profile_settings.css' %}">
+{% endblock %}
+
+{% block settings_content %}
+    <div class="user-profile-settings-title-block">
+        <h2 class="user-profile-settings-title">
+            Edit your profile
+        </h2>
+    </div>
+    <div class="user-profile-setting-content-block">
+        <div class="user-profile-setting-content-title">
+            Public information
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="user-profile-setting-content">
+                <div class="user-profile-setting-image-block">
+                    <div class="user-profile-setting-image"></div>
+                    <a class="user-profile-setting-change-image-button">
+                        Change picture
+                    </a>
+                </div>
+                <div class="user-profile-setting-general-settings">
+                    <div class="user-profile-setting-general-setting">
+                        <label for="id_username" class="user-profile-setting-general-setting-label">
+                            Display name
+                        </label>
+                        {{ form.username }}
+                    </div>
+                    <div class="user-profile-setting-general-setting">
+                        <label for="id_username" class="user-profile-setting-general-setting-label">
+                            Location
+                        </label>
+                        {{ form.location }}
+                    </div>
+                    <div class="user-profile-setting-general-setting">
+                        <label for="id_username" class="user-profile-setting-general-setting-label">
+                            Title
+                        </label>
+                        {{ form.title }}
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile-setting-about-field">
+                <label for="id_about" class="user-profile-setting-general-setting-label">
+                    About me
+                </label>
+                {{ form.about }}
+            </div>
+            <div class="user-profile-setting-web-presence-field">
+                <div class="user-profile-setting-content-title">
+                    Web presence
+                </div>
+                <div class="user-profile-setting-web-presence">
+                    <div class="user-profile-setting-web-presence-content">
+                        <label for="id_about" class="user-profile-setting-general-setting-label">
+                            Website link
+                        </label>
+                        <div class="user-profile-web-presence-input" onclick="$('#id_website').focus();">
+                            <i class="fas fa-link input-icon"></i>
+                            {{ form.website }}
+                        </div>
+                    </div>
+                    <div class="user-profile-setting-web-presence-content">
+                        <label for="id_about" class="user-profile-setting-general-setting-label">
+                            Twitter link or username
+                        </label>
+                        <div class="user-profile-web-presence-input" onclick="$('#id_twitter').focus();">
+                            <i class="fab fa-twitter input-icon"></i>
+                            {{ form.twitter }}
+                        </div>
+                    </div>
+                    <div class="user-profile-setting-web-presence-content">
+                        <label for="id_about" class="user-profile-setting-general-setting-label">
+                            Github link or username
+                        </label>
+                        <div class="user-profile-web-presence-input" onclick="$('#id_github').focus();">
+                            <i class="fab fa-github input-icon"></i>
+                            {{ form.github }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile-setting-private-field">
+                <div class="user-profile-setting-content-title">
+                    Private Information
+                </div>
+                <label for="id_about" class="user-profile-setting-general-setting-label">
+                    Full name
+                </label>
+                {{ form.full_name }}
+            </div>
+            <div class="user-profile-setting-buttons">
+                <button type="submit" class="user-profile-setting-save">
+                    Save profile
+                </button>
+                <a href="{% url 'profile_detail' userprofile.pk %}" class="user-profile-setting-cancel">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

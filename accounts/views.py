@@ -5,9 +5,11 @@ from django.views.generic import DetailView, UpdateView
 from accounts.models import UserProfile
 from questions import models
 from tags.models import Tag
+from accounts.forms import ProfileSettingsForm
 
 from itertools import chain
 from django.db.models import Count
+from django.urls import reverse
 
 
 # Create your views here.
@@ -123,3 +125,13 @@ class ProfileDetail(DetailView):
         context['top_posts_sorted'] = posts_sorted
 
         return context
+
+
+class ProfileSettings(UpdateView):
+    model = user
+    template_name = 'account/profile_settings.html'
+    form_class = ProfileSettingsForm
+
+class EmailSettings(UpdateView):
+    model = user
+    template_name =

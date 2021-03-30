@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from django.urls import reverse_lazy
+
 
 # Create your models here.
 
@@ -71,6 +73,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'password']
+
+    def get_absolute_url(self):
+        return reverse_lazy('profile_detail', args=[self.pk])
 
     def get_full_name(self):
         return self.full_name

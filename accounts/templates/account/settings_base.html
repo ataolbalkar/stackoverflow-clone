@@ -1,0 +1,84 @@
+{% extends 'questions/base.html' %}
+{% load staticfiles %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'account/css/settings_base.css' %}">
+    {% block settings_import %}
+
+    {% endblock %}
+{% endblock %}
+
+{% block content %}
+    <div class="user-profile-settings">
+        <div class="user-profile-menu">
+            <a href="{% url 'profile_detail' userprofile.pk %}" class="user-profile-button">
+                Profile
+            </a>
+            <a href="{% url 'profile_settings' userprofile.pk %}" class="user-profile-button user-profile-button-active">
+                Edit profile and settings
+            </a>
+        </div>
+        <div class="user-profile-settings-content">
+            <div class="user-profile-settings-sidebar">
+                {% with request.resolver_match.view_name as view_name %}
+                    <div class="user-profile-settings-sidebar-section">
+                        <h6 class="user-profile-settings-sidebar-section-title">
+                            PERSONAL INFORMATION
+                        </h6>
+                        {% if view_name == 'profile_settings' %}
+                            <a href="{% url 'profile_settings' userprofile.pk %}" class="user-profile-setting user-profile-setting-active">
+                                Edit profile
+                            </a>
+                        {% else %}
+                            <a href="" class="user-profile-setting">
+                                Edit profile
+                            </a>
+                        {% endif %} 
+                    </div>
+                    <div class="user-profile-settings-sidebar-section">
+                        <h6 class="user-profile-settings-sidebar-section-title">
+                            EMAIL SETTINGS
+                        </h6>
+                        {% if view_name == 'profile_email_settings' %}
+                            <a href="" class="user-profile-setting user-profile-setting-active">
+                                Edit email settings
+                            </a>
+                        {% else %}
+                            <a href="" class="user-profile-setting">
+                                Edit email settings
+                            </a>
+                        {% endif %}
+                        {% if view_name == 'profile_tag_settings' %}
+                            <a href="" class="user-profile-setting user-profile-setting-active">
+                                Tag watching & ignoring
+                            </a>
+                        {% else %}
+                            <a href="" class="user-profile-setting">
+                                Tag watching & ignoring
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="user-profile-settings-sidebar-section">
+                        <h6 class="user-profile-settings-sidebar-section-title">
+                            SITE SETTINGS
+                        </h6>
+                        {% if view_name == 'profile_settings_delete_profile' %}
+                            <a href="" class="user-profile-setting user-profile-setting-active">
+                                Delete profile
+                            </a>
+                        {% else %}
+                            <a href="" class="user-profile-setting">
+                                Delete profile
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endwith %}
+            </div>
+            <div class="user-profile-settings-settings-content">
+                {% block settings_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

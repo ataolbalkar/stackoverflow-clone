@@ -1,0 +1,72 @@
+.user-profile-settings {
+    margin-left: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.user-profile-menu {
+    display: flex;
+    margin: 10px 0;
+}
+
+.user-profile-button {
+    padding: 5px 10px;
+    margin-right: 10px;
+
+    border-radius: 20px;
+    font-size: 13px;
+    color: #664c67;
+}
+
+.user-profile-button:hover {
+    text-decoration: none;
+    background-color: #dddfe1;
+    color: #664c67;
+}
+
+.user-profile-button-active {
+    background-color: #f27f24;
+    color: white;
+}
+
+.user-profile-button-active:hover {
+    text-decoration: none;
+    background-color: #f27f24;
+    color: white;
+}
+
+.user-profile-settings-content {
+    display: flex;
+    margin-top: 30px;
+}
+
+.user-profile-settings-sidebar {
+    display: block;
+}
+
+.user-profile-settings-sidebar-section {
+    margin-bottom: 30px;
+}
+
+.user-profile-settings-sidebar-section-title {
+    font-size: 12px;
+    font-weight: 400;
+    color: #ed7b60;
+    margin-bottom: 15px;
+}
+
+.user-profile-setting {
+    font-size: 13px;
+    color: #8d869b;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.user-profile-setting:hover {
+    text-decoration: none;
+    color: #242729;
+}
+
+.user-profile-setting-active {
+    color: #242729;
+    font-weight: bold;
+}
