@@ -7,12 +7,6 @@
     font-size: 24px;
 }
 
-.user-profile-settings-settings-content {
-    margin-left: 100px;
-    font-family: Arial, sans-serif;
-    width: 100%;
-}
-
 .user-profile-setting-content-title {
     margin: 20px 0;
     font-size: 18px;
@@ -87,7 +81,7 @@
 }
 
 .user-setting-web-presence {
-    width: 270px;
+    width: 260px;
     position: relative;
     padding-left: 32px;
 }

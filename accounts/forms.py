@@ -39,3 +39,15 @@ class ProfileSettingsForm(forms.ModelForm):
                 'placeholder': 'Shown to employers only if opt-in'
             })
         }
+
+
+class EmailSettingsForm(forms.ModelForm):
+    class Meta:
+        model = user
+        fields = ('email', )
+
+        widgets = {
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control user-profile-email-input'
+            })
+        }

@@ -1,0 +1,29 @@
+{% extends 'account/settings_base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Email Settings for {{ userprofile.username }}
+{% endblock %}
+
+{% block settings_import %}
+    <link rel="stylesheet" href="{% static 'account/css/email_settings.css' %}">
+{% endblock %}
+
+{% block settings_content %}
+    <div class="user-profile-settings-title-block">
+        <h2 class="user-profile-settings-title">
+            Edit Email Settings
+        </h2>
+    </div>
+    <div class="user-profile-settings-content-block">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="user-profile-setting-email-field">
+                {{ form.email }}
+                <button type="submit" class="user-profile-setting-email-save">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

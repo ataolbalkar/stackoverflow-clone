@@ -1,0 +1,44 @@
+.user-profile-settings-title-block {
+    padding-bottom: 15px;
+    border-bottom: solid #e2e3e4 1px;
+}
+
+.user-profile-settings-title {
+    font-size: 24px;
+}
+
+.user-profile-setting-general-setting-label {
+    display: block;
+    margin: unset;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.user-profile-setting-email-field {
+    padding: 20px 15px;
+    background-color: #fafafb;
+    display: flex;
+    border-bottom: solid #e2e3e4 1px;
+}
+
+.user-profile-email-input {
+    width: 400px;
+    margin-right: 5px;
+}
+
+.user-profile-setting-email-save {
+    font-size: 13px;
+    padding: 6px 10px;
+    background-color: #fafafb;
+
+    color: #0072c4;
+    border: solid #359ae7 1px;
+    border-radius: 3px;
+}
+
+.user-profile-setting-email-save:hover {
+    color: #005fb4;
+    border-color: #3498e4;
+    background-color: #f2f9ff;
+}

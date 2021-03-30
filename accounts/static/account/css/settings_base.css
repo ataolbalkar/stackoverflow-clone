@@ -70,3 +70,9 @@
     color: #242729;
     font-weight: bold;
 }
+
+.user-profile-settings-settings-content {
+    margin-left: 100px;
+    font-family: Arial, sans-serif;
+    width: 76%;
+}

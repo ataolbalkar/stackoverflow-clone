@@ -30,7 +30,7 @@
                                 Edit profile
                             </a>
                         {% else %}
-                            <a href="" class="user-profile-setting">
+                            <a href="{% url 'profile_settings' userprofile.pk %}" class="user-profile-setting">
                                 Edit profile
                             </a>
                         {% endif %} 
@@ -39,12 +39,12 @@
                         <h6 class="user-profile-settings-sidebar-section-title">
                             EMAIL SETTINGS
                         </h6>
-                        {% if view_name == 'profile_email_settings' %}
-                            <a href="" class="user-profile-setting user-profile-setting-active">
+                        {% if view_name == 'email_settings' %}
+                            <a href="{% url 'email_settings' userprofile.pk %}" class="user-profile-setting user-profile-setting-active">
                                 Edit email settings
                             </a>
                         {% else %}
-                            <a href="" class="user-profile-setting">
+                            <a href="{% url 'email_settings' userprofile.pk %}" class="user-profile-setting">
                                 Edit email settings
                             </a>
                         {% endif %}
