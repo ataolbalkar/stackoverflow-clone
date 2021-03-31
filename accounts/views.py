@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from accounts.models import UserProfile
 from questions import models
 from tags.models import Tag
@@ -171,4 +171,8 @@ class TagSettings(UpdateView):
 
                 return JsonResponse({'status': 'success'}, status=200)
 
+
+class DeleteAccount(DeleteView):
+    model = user
+    template_name = 'account/delete_account.html'
 

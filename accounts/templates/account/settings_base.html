@@ -62,12 +62,12 @@
                         <h6 class="user-profile-settings-sidebar-section-title">
                             SITE SETTINGS
                         </h6>
-                        {% if view_name == 'profile_settings_delete_profile' %}
-                            <a href="" class="user-profile-setting user-profile-setting-active">
+                        {% if view_name == 'delete_account' %}
+                            <a href="{% url 'delete_account' userprofile.pk %}" class="user-profile-setting user-profile-setting-active">
                                 Delete profile
                             </a>
                         {% else %}
-                            <a href="" class="user-profile-setting">
+                            <a href="{% url 'delete_account' userprofile.pk %}" class="user-profile-setting">
                                 Delete profile
                             </a>
                         {% endif %}

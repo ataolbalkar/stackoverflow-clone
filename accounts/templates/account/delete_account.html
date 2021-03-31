@@ -1,0 +1,41 @@
+{% extends 'account/settings_base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Delete Profile - {{ userprofile.username }}
+{% endblock %}
+
+{% block settings_import %}
+    <link rel="stylesheet" href="{% static 'account/css/delete_account.css' %}">
+{% endblock %}
+
+{% block settings_content %}
+    <div class="user-profile-settings-title-block">
+        <h2 class="user-profile-settings-title">
+            Delete Profile
+        </h2>
+    </div>
+    <div class="user-profile-settings-delete-account">
+        <p>Before confirming that you would like your profile deleted, we'd like to take a moment to explain the implications of deletion:</p>
+        <ul>
+            <li>Deletion is irreversible, and you will have no way to regain any of your original content, should this deletion be carried out and you change your mind later on.</li>
+            <li>Your questions and answers will remain on the site, but will be disassociated and anonymized (the author will be listed as "user{{ userprofile.pk }}") and will not indicate your authorship even if you later return to the site.</li>
+        </ul>
+        <p>Confirming deletion will only delete your profile on Stack Overflow - it will not affect any of your other profiles on the Stack Exchange network. If you want to delete multiple profiles, you'll need to visit each site separately and request deletion of those individual profiles.</p>
+        <div style="display: flex;">
+            <input id="confirm-delete" type="checkbox" onclick="enableDeleteButton();">
+            <label class="confirm-delete-label" for="confirm-delete">
+                I have read the information stated above and understand the implications of having my profile deleted. I wish to proceed with the deletion of my profile.
+            </label>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <button id="delete-account-button" class="btn btn-danger" disabled>
+                Delete Profile
+            </button>
+        </form>
+    </div>
+
+    <script src="{% static 'account/js/delete_account.js' %}"></script>
+{% endblock %}

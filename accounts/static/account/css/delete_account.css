@@ -1,0 +1,26 @@
+.user-profile-settings-title-block {
+    padding-bottom: 15px;
+    border-bottom: solid #e2e3e4 1px;
+}
+
+.user-profile-settings-title {
+    font-size: 24px;
+}
+
+.user-profile-settings-delete-account {
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+.user-profile-settings-delete-account ul {
+    padding-left: 11px;
+}
+
+#confirm-delete {
+    margin: 3px 8px 0 0;
+}
+
+#delete-account-button {
+    font-size: 14px;
+    margin-top: 5px;
+}

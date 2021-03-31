@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from accounts.views import ProfileDetail, ProfileSettings, EmailSettings, TagSettings
+from accounts.views import ProfileDetail, ProfileSettings, EmailSettings, TagSettings, DeleteAccount
 
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/profile-settings/$', ProfileSettings.as_view(), name='profile_settings'),
     url(r'^(?P<pk>\d+)/email-settings/$', EmailSettings.as_view(), name='email_settings'),
     url(r'^(?P<pk>\d+)/tag-settings/$', TagSettings.as_view(), name='tag_settings'),
+    url(r'^(?P<pk>\d+)/delete-account/$', DeleteAccount.as_view(), name='delete_account')
 ]
