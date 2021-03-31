@@ -1,0 +1,93 @@
+.user-profile-settings-title-block {
+    padding-bottom: 15px;
+}
+
+.user-profile-settings-title {
+    font-size: 24px;
+}
+
+.user-profile-setting-tag-settings-title-block {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+
+    background-color: #eff0f1;
+    font-size: 12px;
+    color: #6a737c;
+
+}
+
+.user-profile-setting-tag-settings-add-tag {
+    color: #606894;
+    cursor: pointer;
+}
+
+.user-profile-setting-tag-settings-add-tag:hover {
+    text-decoration: none;
+    color: #606894;
+}
+
+.user-profile-setting-add-tag {
+    display: flex;
+    background-color: #fafafb;
+    padding: 15px;
+}
+
+.user-profile-setting-add-tag-input {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.user-profile-setting-add-tag-input::placeholder {
+    color: #b5babe;
+}
+
+.user-profile-setting-add-tag-button {
+    font-size: 12px;
+    padding: 8px 10px;
+    margin-right: 10px;
+    width: 90px;
+
+    background-color: #0095ff;
+    color: white;
+
+    border: ridge #64cceb 1px;
+    border-radius: 3px;
+}
+
+.user-profile-setting-add-tag-button:hover {
+    background-color: #0077cc;
+}
+
+.user-profile-setting-tags {
+    display: block;
+}
+
+.user-profile-setting-tag-field {
+    display: flex;
+    padding: 15px;
+    border-top: solid #eff0f1 1px;
+}
+
+.delete-tag-button {
+    background-color: inherit;
+    border: none;
+    margin-right: 10px;
+}
+
+.user-profile-setting-tag {
+    font-size: 12px;
+    padding: 4px 6px;
+    background-color: #e1ecf4;
+    color: #6973b3;
+    border-radius: 4px;
+}
+
+.user-profile-setting-tag:hover {
+    text-decoration: none;
+    background-color: #c2d6e2;
+}
+
+#id_interested_tags, #id_ignored_tags {
+    display: none;
+}

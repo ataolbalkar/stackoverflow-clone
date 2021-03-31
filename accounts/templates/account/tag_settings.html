@@ -1,0 +1,96 @@
+{% extends 'account/settings_base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Tag Watching for {{ userprofile.username }}
+{% endblock %}
+
+{% block settings_import %}
+    <link rel="stylesheet" href="{% static 'account/css/tag_settings.css' %}">
+{% endblock %}
+
+{% block settings_content %}
+    <div class="user-profile-settings-title-block">
+        <h2 class="user-profile-settings-title">
+            Tag Watching
+        </h2>
+    </div>
+    <div>
+        {% csrf_token %}
+        {{ form.interested_tags }}
+    </div>
+    <div class="user-profile-setting-tag-settings">
+        <div class="user-profile-setting-tag-settings-top">
+            <div class="user-profile-setting-tag-settings-title-block">
+                <div class="user-profile-setting-tag-settings-title">
+                    STACK OVERFLOW
+                </div>
+                <a id="add-tag-button-watch" class="user-profile-setting-tag-settings-add-tag">
+                    Add a tag
+                </a>
+            </div>
+            <div id="user-profile-setting-add-tag-watch" class="user-profile-setting-add-tag">
+                <input type="search" class="form-control user-profile-setting-add-tag-input" id="add-tag-input-watch" placeholder="Find a tag by name...">
+                <button id="watch-tag-button" type="button" class="user-profile-setting-add-tag-button">
+                    Watch tag
+                </button>
+            </div>
+        </div>
+        <div id="watching-tags" class="user-profile-setting-tags">
+            {% for tag in userprofile.interested_tags.all %}
+                <div id="watching-tag-field--{{ tag.pk }}" class="user-profile-setting-tag-field watching-tag-field">
+                    <button id="unwatch-tag--{{ tag.pk }}" class="delete-tag-button unwatch-button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <a href="{% url 'tag_detail' tag.pk %}" class="user-profile-setting-tag">
+                        {{ tag.name }}
+                    </a>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="user-profile-settings-title-block">
+        <h2 class="user-profile-settings-title">
+            Ignored Tags
+        </h2>
+    </div>
+    <div>
+        {% csrf_token %}
+        {{ form.ignored_tags }}
+    </div>
+    <div class="user-profile-setting-tag-settings">
+        <div class="user-profile-setting-tag-settings-top">
+            <div class="user-profile-setting-tag-settings-title-block">
+                <div class="user-profile-setting-tag-settings-title">
+                    STACK OVERFLOW
+                </div>
+                <a id="add-tag-button-ignore" class="user-profile-setting-tag-settings-add-tag">
+                    Add a tag
+                </a>
+            </div>
+            <div id="user-profile-setting-add-tag-ignore" class="user-profile-setting-add-tag">
+                <input type="search" class="form-control user-profile-setting-add-tag-input" id="add-tag-input-ignore" placeholder="Find a tag by name...">
+                <button id="ignore-tag-button" type="button" class="user-profile-setting-add-tag-button">
+                    Ignore tag
+                </button>
+            </div>
+        </div>
+        <div id="ignored-tags" class="user-profile-setting-tags">
+            {% for tag in userprofile.ignored_tags.all %}
+                <div id="ignored-tag-field--{{ tag.pk }}" class="user-profile-setting-tag-field ignored-tag-field">
+                    <button id="unignore-tag--{{ tag.pk }}" class="delete-tag-button unignore-button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <a href="{% url 'tag_detail' tag.pk %}" class="user-profile-setting-tag">
+                        {{ tag.name }}
+                    </a>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <script src="{% static 'account/js/tag_settings.js' %}"></script>
+{% endblock %}

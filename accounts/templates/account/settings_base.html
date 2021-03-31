@@ -48,12 +48,12 @@
                                 Edit email settings
                             </a>
                         {% endif %}
-                        {% if view_name == 'profile_tag_settings' %}
-                            <a href="" class="user-profile-setting user-profile-setting-active">
+                        {% if view_name == 'tag_settings' %}
+                            <a href="{% url 'tag_settings' userprofile.pk %}" class="user-profile-setting user-profile-setting-active">
                                 Tag watching & ignoring
                             </a>
                         {% else %}
-                            <a href="" class="user-profile-setting">
+                            <a href="{% url 'tag_settings' userprofile.pk %}" class="user-profile-setting">
                                 Tag watching & ignoring
                             </a>
                         {% endif %}

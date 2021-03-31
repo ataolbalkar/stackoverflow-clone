@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 
 from django.views.generic import DetailView, UpdateView
 from accounts.models import UserProfile
@@ -137,4 +138,37 @@ class EmailSettings(UpdateView):
     model = user
     template_name = 'account/email_settings.html'
     form_class = EmailSettingsForm
+
+
+class TagSettings(UpdateView):
+    model = user
+    template_name = 'account/tag_settings.html'
+    fields = ('interested_tags', 'ignored_tags')
+
+    def post(self, request, *args, **kwargs):
+        this_user = get_object_or_404(user, pk=request.user.pk)
+
+        if request.is_ajax:
+            tag = get_object_or_404(Tag, pk=request.POST.get('tag'))
+
+            if request.POST.get('type') == 'watch_tag':
+                this_user.interested_tags.add(tag)
+
+                return JsonResponse({'tag_url': tag.get_absolute_url()}, status=200)
+
+            elif request.POST.get('type') == 'unwatch_tag':
+                this_user.interested_tags.remove(tag)
+
+                return JsonResponse({'status': 'success'}, status=200)
+
+            elif request.POST.get('type') == 'ignore_tag':
+                this_user.ignored_tags.add(tag)
+
+                return JsonResponse({'tag_url': tag.get_absolute_url()}, status=200)
+
+            elif request.POST.get('type') == 'unignore_tag':
+                this_user.ignored_tags.remove(tag)
+
+                return JsonResponse({'status': 'success'}, status=200)
+
 
