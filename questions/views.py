@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from questions.models import Question, QuestionComment, Answer, AnswerComment
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, FormView, UpdateView
@@ -8,13 +8,13 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView,
 from questions.forms import QuestionForm, QuestionUpdateForm, AnswerUpdateForm
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.db.models import Count
 from datetime import datetime, timedelta
 from django.utils import timezone
 
 from questions.data_processes import find_last_activity
-
 
 # Create your views here.
 
@@ -27,9 +27,28 @@ class QuestionsListView(ListView):
     order_by = 'interesting'
 
     def get_queryset(self):
-        return Question.objects.filter(asked_date__lte=timezone.now())\
-                   .annotate(answer_count=Count('answer'))\
-                   .order_by('answer_count', '-asked_date')[:100]
+        if self.request.user.is_authenticated():
+            user = get_object_or_404(User, pk=self.request.user.pk)
+            interested_tags = [tag.name for tag in user.interested_tags.all()]
+            ignored_tags = [tag.name for tag in user.ignored_tags.all()]
+
+            if len(interested_tags) > 0:
+                first_set = Question.objects.filter(tags__name__in=interested_tags)
+            else:
+                first_set = Question.objects.all()
+
+            if len(ignored_tags) > 0:
+                second_set = Question.objects.exclude(tags__name__in=ignored_tags)
+            else:
+                second_set = Question.objects.all()
+
+            final_set = first_set | second_set
+            return final_set.exclude(tags__name__in=ignored_tags).annotate(answer_count=Count('answer')).order_by(
+                'answer_count', '-asked_date')[:100]
+
+        else:
+            return Question.objects.annotate(answer_count=Count('answer')) \
+                       .order_by('answer_count', '-asked_date')[:100]
 
     def get_context_data(self, **kwargs):
         context = super(QuestionsListView, self).get_context_data(**kwargs)
@@ -43,7 +62,14 @@ class QuestionListViewOrderHot(QuestionsListView):
     order_by = 'hot'
 
     def get_queryset(self):
-        return Question.objects.filter(asked_date__lte=timezone.now()).order_by('-asked_date')[:100]
+        user = get_object_or_404(User, pk=self.request.user.pk)
+        ignored_tags = [tag.name for tag in user.ignored_tags.all()]
+
+        if self.request.user.is_authenticated():
+            return Question.objects.exclude(tags__name__in=ignored_tags) \
+                       .filter(asked_date__lte=timezone.now()).order_by('-asked_date')[:100]
+        else:
+            return Question.objects.filter(asked_date__lte=timezone.now()).order_by('-asked_date')[:100]
 
 
 class QuestionListViewOrderWeek(QuestionsListView):
@@ -51,7 +77,16 @@ class QuestionListViewOrderWeek(QuestionsListView):
 
     def get_queryset(self):
         this_week = datetime.today() - timedelta(days=7)
-        return Question.objects.filter(asked_date__gte=this_week).order_by('-views', '-votes')[:100]
+
+        if self.request.user.is_authenticated():
+            user = get_object_or_404(User, pk=self.request.user.pk)
+            ignored_tags = [tag.name for tag in user.ignored_tags.all()]
+
+            return Question.objects.exclude(tags__name__in=ignored_tags) \
+                       .filter(asked_date__gte=this_week).order_by('-views', '-votes')[:100]
+
+        else:
+            return Question.objects.filter(asked_date__gte=this_week).order_by('-views', '-votes')[:100]
 
 
 class QuestionListViewOrderMonth(QuestionsListView):
@@ -59,11 +94,21 @@ class QuestionListViewOrderMonth(QuestionsListView):
 
     def get_queryset(self):
         this_month = datetime.today() - timedelta(days=30)
-        return Question.objects.filter(asked_date__gte=this_month).order_by('-views', '-votes')[:100]
+
+        if self.request.user.is_authenticated():
+            user = get_object_or_404(User, pk=self.request.user.pk)
+            ignored_tags = [tag.name for tag in user.ignored_tags.all()]
+
+            return Question.objects.exclude(tags__name__in=ignored_tags) \
+                       .filter(asked_date__gte=this_month).order_by('-views', '-votes')[:100]
+
+        else:
+            return Question.objects.filter(asked_date__gte=this_month).order_by('-views', '-votes')[:100]
 
 
-class AskQuestionView(CreateView):
+class AskQuestionView(LoginRequiredMixin, CreateView):
     template_name = 'questions/ask.html'
+    login_url = reverse_lazy('login')
     form_class = QuestionForm
 
     def form_valid(self, form):
@@ -276,11 +321,18 @@ class QuestionDetailViewSortActive(QuestionDetailView):
     sort_type = 'active'
 
 
-class QuestionUpdateView(UpdateView):
+class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     model = Question
     form_class = QuestionUpdateForm
     template_name = 'questions/question_update.html'
+    login_url = reverse_lazy('login')
     success_url = '.'
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object().author:
+            return super(QuestionUpdateView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
     def post(self, request, *args, **kwargs):
         question = self.get_object()
@@ -295,10 +347,17 @@ class QuestionUpdateView(UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class AnswerUpdateView(UpdateView):
+class AnswerUpdateView(LoginRequiredMixin, UpdateView):
     model = Answer
     form_class = AnswerUpdateForm
     template_name = 'questions/answer_update.html'
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object().author:
+            return super(AnswerUpdateView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
     def get_context_data(self, **kwargs):
         context = super(AnswerUpdateView, self).get_context_data(**kwargs)

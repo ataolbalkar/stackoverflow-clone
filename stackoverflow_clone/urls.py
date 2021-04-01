@@ -30,7 +30,6 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/setup/$', SetUserUp.as_view(), name='setup'),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
-    url(r'^base/$', views.baseView, name='base'),
     url(r'questions/', include('questions.urls')),
     url(r'tags/', include('tags.urls')),
     url(r'account/', include('accounts.urls')),

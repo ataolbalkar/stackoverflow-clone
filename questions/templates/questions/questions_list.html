@@ -16,7 +16,11 @@ Questions
             <div class="questions-top">
                 <div class="questions-title">
                     <h3 style="font-weight: 445; margin-left: 30px; margin-top: 10px;">Top Questions</h3>
-                    <a href="#" class="questions-ask-question">Ask Question</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'ask' %}" class="questions-ask-question">Ask Question</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="questions-ask-question">Ask Question</a>
+                    {% endif %}
                 </div>
                 <div class="sort-by-area">
                     <div class="btn-group sba-group" role="group">
@@ -85,17 +89,24 @@ Questions
                                 {% if question.tags %}
                                     <div class="question-tags">
                                         {% for tag in question.tags.all %}
-                                            <!-- @TODO Question Tag list -->
-                                            <a href="#" class="question-tag" rel="tag">{{ tag }}</a>
+                                            <a href="{% url 'tag_detail' tag.pk %}" class="question-tag" rel="tag">{{ tag }}</a>
+                                            {% if user.is_authenticated %}
+                                                {% if tag in user.interested_tags.all %}
+                                                    <style>
+                                                        #question--{{ question.pk }} {
+                                                            background-color: #fdf7e3;
+                                                        }
+                                                    </style>
+                                                {% endif %}
+                                            {% endif %}
                                         {% endfor %}
                                     </div>
                                 {% endif %}
                                 <div class="question-info">
-                                    <a href="#" class="question-date">
+                                    <a href="{% url 'question_detail' question.pk %}" class="question-date">
                                         asked {{ question.asked_date|naturaltime }}
                                     </a>
-                                    <!-- @TODO user links -->
-                                    <a href="#" class="question-author">
+                                    <a href="{% url 'profile_detail' question.author.pk %}" class="question-author">
                                         {{ question.author }}
                                     </a>
                                     <span class="reputation-score">
