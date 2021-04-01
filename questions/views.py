@@ -21,10 +21,6 @@ from questions.data_processes import find_last_activity
 User = get_user_model()
 
 
-def baseView(request):
-    return render(request, 'questions/base_without_sidebar.html')
-
-
 class QuestionsListView(ListView):
     model = Question
     template_name = 'questions/questions_list.html'
@@ -285,7 +281,6 @@ class QuestionUpdateView(UpdateView):
     form_class = QuestionUpdateForm
     template_name = 'questions/question_update.html'
     success_url = '.'
-    # @TODO Edit Queue
 
     def post(self, request, *args, **kwargs):
         question = self.get_object()

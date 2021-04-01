@@ -242,3 +242,40 @@
     color: #6d6d6d;
     display: block;
 }
+
+.login-button {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #608fb1;
+
+    padding: 4px 8px;
+    margin-right: 10px;
+    background-color: #e1ecf4;
+
+    border: solid #7aa7c7 1px;
+    border-radius: 3px;
+}
+
+.login-button:hover {
+    text-decoration: none;
+    color: #6389a5;
+    background-color: #b3d3ea;
+}
+
+.sign-up-button {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: white;
+
+    padding: 4px 8px;
+    background-color: #0095ff;
+
+    border: ridge #66beff 1px;
+    border-radius: 3px;
+}
+
+.sign-up-button:hover {
+    text-decoration: none;
+    color: white;
+    background-color: #0077cc;
+}

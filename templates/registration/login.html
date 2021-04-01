@@ -1,0 +1,36 @@
+{% extends 'questions/base_without_sidebar.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'account/css/registration.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="registration-page">
+        <div class="registration-contents">
+            <form method="post"> {% csrf_token %}
+                <div class="registration-form">
+                    <label for="{{ form.username.id }}" class="registration-label">
+                        Username
+                    </label>
+                    {{ form.username }}
+                    <label for="{{ form.password1.id }}" class="registration-label">
+                        Password
+                    </label>
+                    {{ form.password }}
+                    <button type="submit" class="btn btn-primary btn-block sign-up-button">
+                        Log in
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('id_username').className = 'form-control';
+        document.getElementById('id_password').className = 'form-control';
+    </script>
+{% endblock %}

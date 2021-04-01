@@ -19,13 +19,17 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 
+from django.contrib.auth import views as auth_views
 from questions import views
 from accounts.views import Registration, SetUserUp
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.QuestionsListView.as_view(), name='index'),
     url(r'^register/$', Registration.as_view(), name='registration'),
     url(r'^(?P<pk>\d+)/setup/$', SetUserUp.as_view(), name='setup'),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^base/$', views.baseView, name='base'),
     url(r'questions/', include('questions.urls')),
     url(r'tags/', include('tags.urls')),

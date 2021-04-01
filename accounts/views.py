@@ -8,7 +8,6 @@ from questions import models
 from tags.models import Tag
 from accounts.forms import RegistrationForm, SetUserUpForm, ProfileSettingsForm, EmailSettingsForm
 
-from itertools import chain
 from django.db.models import Count
 from django.urls import reverse_lazy
 
