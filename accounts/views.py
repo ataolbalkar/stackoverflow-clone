@@ -1,21 +1,44 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import get_user_model
-from django.http import JsonResponse
+from django.contrib.auth import get_user_model, authenticate, login
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 
-from django.views.generic import DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from accounts.models import UserProfile
 from questions import models
 from tags.models import Tag
-from accounts.forms import ProfileSettingsForm, EmailSettingsForm
+from accounts.forms import RegistrationForm, SetUserUpForm, ProfileSettingsForm, EmailSettingsForm
 
 from itertools import chain
 from django.db.models import Count
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 
 # Create your views here.
 
 user = get_user_model()
+
+
+class Registration(CreateView):
+    model = user
+    form_class = RegistrationForm
+    template_name = 'account/registration.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.save()
+        username = self.request.POST.get('username')
+        password = self.request.POST.get('password1')
+
+        account = authenticate(username=username, password=password)
+        login(self.request, account)
+
+        return HttpResponseRedirect(reverse_lazy('setup', args=[self.request.user.pk]))
+
+
+class SetUserUp(UpdateView):
+    model = user
+    form_class = SetUserUpForm
+    template_name = 'account/set_user_up.html'
 
 
 class ProfileDetail(DetailView):
@@ -175,4 +198,5 @@ class TagSettings(UpdateView):
 class DeleteAccount(DeleteView):
     model = user
     template_name = 'account/delete_account.html'
+    success_url = '/'
 

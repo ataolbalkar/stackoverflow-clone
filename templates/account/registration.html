@@ -1,0 +1,50 @@
+{% extends 'questions/base_without_sidebar.html' %}
+{% load staticfiles %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'account/css/registration.css' %}">
+{% endblock %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block content %}
+    <div class="registration-page">
+        <div class="registration-contents">
+            <form method="post"> {% csrf_token %}
+                <div class="registration-form">
+                    <label for="{{ form.username.id }}" class="registration-label">
+                        Display name
+                    </label>
+                    {{ form.username }}
+                    <label for="{{ form.email.id }}" class="registration-label">
+                        Email
+                    </label>
+                    {{ form.email }}
+                    <label for="{{ form.password1.id }}" class="registration-label">
+                        Password
+                    </label>
+                    {{ form.password1 }}
+                    <p class="registration-form-info">
+                        Passwords must contain at least eight characters, including at least 1 letter and 1 number.
+                    </p>
+                    <label for="{{ form.password2.id }}" class="registration-label">
+                        Confirm password
+                    </label>
+                    {{ form.password2 }}
+                    <p class="registration-form-info">
+                        Enter the same password as before, for verification.
+                    </p>
+                    <button type="submit" class="btn btn-primary btn-block sign-up-button">
+                        Sign up
+                    </button>
+                    <p class="registration-form-info">
+                        By clicking “Sign up”, you agree to our terms of service, privacy policy and cookie policy
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div class=""
+    </div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'questions/base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Setup for {{ userprofile.username }}
+{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'account/css/set_user_up.css' %}">
+    <link rel="stylesheet" href="{% static 'account/css/registration.css' %}">
+    <link rel="stylesheet" href="{% static 'tags/css/tag_create.css' %}">
+{% endblock %}
+
+{% block body_tag %}
+    onload="enableEditModeTag();"
+{% endblock %}
+
+{% block content %}
+    <div class="registration-page">
+        <div class="registration-contents">
+            <form method="post"> {% csrf_token %}
+                <div class="registration-form">
+                    <label for="{{ form.username.id }}" class="registration-label">
+                        Display name
+                    </label>
+                    <label for="{{ form.username.id }}" class="registration-label-info">
+                        Your display name will be shown on your posts and comments.
+                    </label>
+                    {{ form.username }}
+
+                    <label for="{{ form.interested_tags.id }}" class="registration-label">
+                        Technology tags that interest you
+                    </label>
+                    <label for="{{ form.interested_tags.id }}" class="registration-label-info">
+                        Picking tags will help us show you much more relevant questions and answers.
+                    </label>
+                    {{ form.interested_tags }}
+                    <iframe name="tagEditor" class="tag-editor" scrolling="no"></iframe>
+
+                    <label for="{{ form.full_name.id }}" class="registration-label">
+                        Name
+                    </label>
+                    <label for="{{ form.full_name.id }}" class="registration-label-info">
+                        How you appear to employers, your private Teams, and to other users when you share your Developer Story.
+                    </label>
+                    {{ form.full_name }}
+
+                    <label for="{{ form.location.id }}" class="registration-label">
+                        Current location
+                    </label>
+                    {{ form.location }}
+
+                    <label for="{{ form.title.id }}" class="registration-label">
+                        Current title
+                    </label>
+                    {{ form.title }}
+
+                    <button type="submit" class="btn btn-primary btn-block sign-up-button">
+                        Create your account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <style>
+        main {
+            background-color: #f6f6f6;
+        }
+    </style>
+
+    <script src="{% static 'account/js/set_user_up.js' %}"></script>
+{% endblock %}

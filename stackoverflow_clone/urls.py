@@ -20,9 +20,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from questions import views
+from accounts.views import Registration, SetUserUp
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^register/$', Registration.as_view(), name='registration'),
+    url(r'^(?P<pk>\d+)/setup/$', SetUserUp.as_view(), name='setup'),
     url(r'^base/$', views.baseView, name='base'),
     url(r'questions/', include('questions.urls')),
     url(r'tags/', include('tags.urls')),
