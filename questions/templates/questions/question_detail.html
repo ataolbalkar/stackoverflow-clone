@@ -1,6 +1,7 @@
 {% extends 'questions/base.html' %}
 {% load staticfiles %}
 {% load humanize %}
+{% load question_templatetags %}
 
 {% block title %}
     {{ question.tags.first }} - {{ question.title }}
@@ -50,7 +51,11 @@
                 </div>
             </div>
             <div class="top-right-area">
-                <a class="ask-question-button" href="{% url 'ask' %}">Ask Question</a>
+                {% if user.is_authenticated %}
+                    <a class="ask-question-button" href="{% url 'ask' %}">Ask Question</a>
+                {% else %}
+                    <a class="ask-question-button" href="{% url 'login' %}">Ask Question</a>
+                {% endif %}
             </div>
         </div>
         <div class="question-content" id="{{ question.pk }}">
@@ -68,45 +73,68 @@
                     <button class="question-vote-button-down question-vote-down" id="question-vote-down--{{ question.pk }}"><i class="fas fa-caret-down fa-3x"></i></button>
                 {% endif %}
 
+                {% if not user.is_authenticated or user.reputation < 15 %}
+                    <style>
+                        #question-vote-up--{{ question.pk }}, #question-vote-down--{{ question.pk }} {
+                            color: #bbc0c4;
+                        }
+                    </style>
+                    <script>
+                        $('#question-vote-up--{{ question.pk }}').attr('disabled', 'disabled');
+                        $('#question-vote-down--{{ question.pk }}').attr('disabled', 'disabled');
+                    </script>
+                {% endif %}
+
                 <button class="question-left-button"><i class="fas fa-bookmark"></i></button>
-                <!-- @TODO Bookmark -->
                 <button class="question-left-button" style="margin-left: 6px;"><i class="fas fa-history"></i></button>
             </div>
             <div class="question-content-content">
                 <div class="question-body">
-                    {{ question.body }}
+                    {{ question.body|safe }}
                 </div>
                 <div class="question-tag-area">
                     {% for tag in question.tags.values %}
-                        <a href="#" class="question-tag">{{ tag.name }}</a>
+                        <a href="{% url 'tag_detail' tag.name %}" class="question-tag">{{ tag.name }}</a>
                     {% endfor %}
                 </div>
                 <div class="question-body-bottom">
                     <div class="question-body-bottom-options">
-                        <a id="question-body-bottom-option-share" class="question-body-bottom-option" href="#">
-                            Share
-                        </a>
-                        <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="{% url 'question_update' question.pk %}">
-                            Edit
-                        </a>
-                        <a id="question-body-bottom-option-follow" class="question-body-bottom-option" href="#">
-                            <!-- @TODO follow sistemi ekle -->
-                            Follow
-                        </a>
+                        <div class="dropdown">
+                            <button id="question-body-bottom-option-share" class="question-body-bottom-option" data-toggle="dropdown">
+                                Share
+                            </button>
+                            <div class="dropdown-menu" style="width: max-content; padding: 10px;">
+                                <div style="font-family: Arial, sans-serif; font-size: 13px; font-weight: bold">
+                                    Share a link to this question.
+                                </div>
+                                <input class="form-control form-control-sm" value="{{ question.pk|get_question_link }}" style="width: 300px;">
+                            </div>
+                        </div>
+                        {% if user.is_authenticated %}
+                            {% if user.pk == question.author.pk %}
+                                <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="{% url 'question_update' question.pk %}">
+                                    Edit
+                                </a>
+                            {% endif %}
+                            <button id="question-body-bottom-option-follow" class="question-body-bottom-option">
+                                <!-- @TODO follow sistemi ekle -->
+                                Follow
+                            </button>
+                        {% endif %}
                     </div>
                     <div class="question-body-users">
                         {% if question.is_modified %}
                             <div class="question-edited">
                                 <div class="question-edited-info">
-                                    <a href="#" class="question-edited-date">
-                                        edited  {{ question.modified_date }}
+                                    <a href="{% url 'question_detail' question.pk %}" class="question-edited-date">
+                                        edited  {{ question.modified_date|naturaltime }}
                                     </a>
                                     <div class="question-user">
                                         <div class="question-user-profile-image">
                                             <!-- @TODO profil resmi -->
                                         </div>
                                         <div class="question-user-info">
-                                                <a href="#" class="question-username">
+                                                <a href="{% url 'profile_detail' modified_author.pk %}" class="question-username">
                                                 {{ modified_author.username }}
                                                 </a>
                                             <div class="question-user-scores">
@@ -121,14 +149,14 @@
                         {% endif %}
                         <div class="question-asked">
                             <a class="question-asked-date">
-                                asked {{ question.asked_date }}
+                                asked {{ question.asked_date|naturaltime }}
                             </a>
                             <div class="question-user">
                                 <div class="question-user-profile-image">
                                     <!-- @TODO Profil resmi -->
                                 </div>
                                 <div class="question-user-info">
-                                    <a href="#" class="question-username">
+                                    <a href="{% url 'profile_detail' author.pk %}" class="question-username">
                                         {{ author.username }}
                                     </a>
                                     <div class="question-user-scores">
@@ -172,20 +200,22 @@
                                             </style>
                                         {% endif %}
                                         <div class="question-comment-votes-buttons">
-                                            <button class="question-comment-vote-button question-comment-vote-button-up" id="question-comment-vote-button-up--{{ comment.pk }}">
-                                                <i class="fas fa-caret-up" style="color: #32a246;"></i>
-                                            </button>
-                                            <button class="question-comment-vote-button question-comment-vote-button-down" id="question-comment-vote-button-down--{{ comment.pk }}">
-                                                <i class="fas fa-caret-down" style="color: #c3212a;"></i>
-                                            </button>
-                                            {% if comment in user.voted_question_comments.all %}
-                                                <script>
-                                                    $('#question-comment-vote-button-up--{{ comment.pk }}').attr('disabled', 'true')
-                                                </script>
-                                            {% elif comment in user.voted_down_question_comments.all %}
-                                                <script>
-                                                    $('#question-comment-vote-button-down--{{ comment.pk }}').attr('disabled', 'true')
-                                                </script>
+                                            {% if user.is_authenticated %}
+                                                <button class="question-comment-vote-button question-comment-vote-button-up" id="question-comment-vote-button-up--{{ comment.pk }}">
+                                                    <i class="fas fa-caret-up" style="color: #32a246;"></i>
+                                                </button>
+                                                <button class="question-comment-vote-button question-comment-vote-button-down" id="question-comment-vote-button-down--{{ comment.pk }}">
+                                                    <i class="fas fa-caret-down" style="color: #c3212a;"></i>
+                                                </button>
+                                                {% if comment in user.voted_question_comments.all %}
+                                                    <script>
+                                                        $('#question-comment-vote-button-up--{{ comment.pk }}').attr('disabled', 'true')
+                                                    </script>
+                                                {% elif comment in user.voted_down_question_comments.all %}
+                                                    <script>
+                                                        $('#question-comment-vote-button-down--{{ comment.pk }}').attr('disabled', 'true')
+                                                    </script>
+                                                {% endif %}
                                             {% endif %}
                                         </div>
                                     </div>
@@ -194,7 +224,7 @@
                                             {{ comment.comment }}
                                         </span>
                                         –&nbsp;
-                                        <a href="#" class="question-comment-author">
+                                        <a href="{% url 'profile_detail' comment.author.pk %}" class="question-comment-author">
 
                                             {{ comment.author }}
                                         </a>
@@ -214,19 +244,19 @@
                         </div>
 
                     {% endif %}
-                    {% if question.is_active %}
-                        <div id="add-question-comment-add" class="add-question-comment-add">
-                            <a id="add-question-comment" class="add-question-comment add-comment" role="button">
-                                Add a comment
-                            </a>
-                            <div id="add-question-comment-area" class="add-comment-area">
-                                <!-- @TODO AJAX Form -->
-                                <input id="add-question-comment-input" type="text" class="form-control add-comment-input">
-                                <button id="add-question-comment-submit" class="btn btn-secondary add-comment-button">Add a comment</button>
+                    {% if user.is_authenticated %}
+                        {% if question.is_active %}
+                            <div id="add-question-comment-add" class="add-question-comment-add">
+                                <a id="add-question-comment" class="add-question-comment add-comment" role="button">
+                                    Add a comment
+                                </a>
+                                <div id="add-question-comment-area" class="add-comment-area">
+                                    <input id="add-question-comment-input" type="text" class="form-control add-comment-input">
+                                    <button id="add-question-comment-submit" class="btn btn-secondary add-comment-button">Add a comment</button>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
-
                 </div>
             </div>
         </div>
@@ -289,27 +319,97 @@
                             </script>
                         {% endif %}
 
-                        {% if answer.is_best_answer %}
-                            <i class="fas fa-check fa-2x" style="color: #48a868; padding-bottom: 15px;"></i>
+                        {% if not user.is_authenticated or user.reputation < 15 %}
+                            <script>
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').css('color', '#bbc0c4');
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').css('color', '#bbc0c4');
+
+                                $('#question-answer-vote-button-up--' + '{{ answer.pk }}').attr('disabled', 'disabled');
+                                $('#question-answer-vote-button-down--' + '{{ answer.pk }}').attr('disabled', 'disabled');
+                            </script>
+
                         {% endif %}
+
+                        <button id="unset_best_answer--{{ answer.pk }}" class="question-left-button unset_best_answer" style="margin: unset;" onclick="unsetBestAnswer({{ answer.pk }});"><i class="fas fa-check fa-2x" style="color: #48a868; padding-bottom: 15px;"></i></button>
+                        <button id="set-best-answer--{{ answer.pk }}" class="question-left-button set-best-answer" style="margin: unset;" onclick="setBestAnswer({{ answer.pk }});"><i class="fas fa-check fa-2x" style="color: #bbc0c4; padding-bottom: 15px;"></i></button>
+
+                            {% if answer.is_best_answer %}
+                                {% if user.is_authenticated and user.pk == question.author.pk %}
+                                    <style>
+                                        #unset_best_answer--{{ answer.pk }} {
+                                            display: block;
+                                        }
+
+                                        #set-best-answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+                                    </style>
+                                {% else %}
+                                    <style>
+                                        #unset_best_answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+
+                                        #set-best-answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+                                    </style>
+                                    <i class="fas fa-check fa-2x" style="color: #48a868; padding-bottom: 15px;"></i>
+                                {% endif %}
+                            {% else %}
+                                {% if user.is_authenticated and user.pk == question.author.pk %}
+                                    <style>
+                                        #unset_best_answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+
+                                        #set-best-answer--{{ answer.pk }} {
+                                            display: block;
+                                        }
+                                    </style>
+                                {% else %}
+                                    <style>
+                                        #unset_best_answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+
+                                        #set-best-answer--{{ answer.pk }} {
+                                            display: none;
+                                        }
+                                    </style>
+                                {% endif %}
+                            {% endif %}
+
                         <button class="question-left-button" style="margin-left: 6px;"><i class="fas fa-history"></i></button>
                     </div>
                     <div class="question-content-content">
                         <div class="question-body">
-                            {{ answer.body }}
+                            {{ answer.body|safe }}
                         </div>
                         <div class="question-body-bottom">
                             <div class="question-body-bottom-options">
-                                <a id="question-body-bottom-option-share" class="question-body-bottom-option" href="#">
-                                    Share
-                                </a>
-                                <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="#">
-                                    Edit
-                                </a>
-                                <a id="question-body-bottom-option-follow" class="question-body-bottom-option" href="#">
-                                    <!-- @TODO follow sistemi ekle -->
-                                    Follow
-                                </a>
+                                <div class="dropdown">
+                                    <button id="question-body-bottom-option-share" class="question-body-bottom-option" data-toggle="dropdown">
+                                        Share
+                                    </button>
+                                    <div class="dropdown-menu" style="width: max-content; padding: 10px;">
+                                        <div style="font-family: Arial, sans-serif; font-size: 13px; font-weight: bold">
+                                            Share a link to this question.
+                                        </div>
+                                        <input class="form-control form-control-sm" value="{{ question.pk|get_question_link }}#answer-content--{{ answer.pk }}" style="width: 300px;">
+                                    </div>
+                                </div>
+                                {% if user.is_authenticated %}
+                                    {% if user.pk == answer.author.pk %}
+                                        <a id="question-body-bottom-option-edit" class="question-body-bottom-option" href="{% url 'answer_update' answer.pk %}">
+                                            Edit
+                                        </a>
+                                    {% endif %}
+                                    <button id="question-body-bottom-option-follow" class="question-body-bottom-option">
+                                        <!-- @TODO follow sistemi ekle -->
+                                        Follow
+                                    </button>
+                                {% endif %}
                             </div>
                             <div class="question-body-users">
                                 {% if answer.is_edited %}
@@ -426,7 +526,6 @@
                                         Add a comment
                                     </a>
                                     <div id="add-answer-comment-area--{{ answer.pk }}" class="add-comment-area add-answer-comment-area">
-                                        <!-- @TODO AJAX Form -->
                                         <input type="text" class="form-control add-comment-input add-answer-comment-input" id="add-answer-comment-input--{{ answer.pk }}">
                                         <button id="add-answer-comment-submit--{{ answer.pk }}" class="btn btn-secondary add-comment-button add-answer-comment-submit">Add a comment</button>
                                     </div>

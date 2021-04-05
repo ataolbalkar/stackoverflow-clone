@@ -59,8 +59,7 @@
             </div>
             <div class="question-content-content">
                 <div class="question-body">
-                    <!-- @TODO As HTML -->
-                    {{ question.body }}
+                    {{ question.body|safe }}
                 </div>
                 <div class="question-tag-area">
                     {% for tag in question.tags.values %}

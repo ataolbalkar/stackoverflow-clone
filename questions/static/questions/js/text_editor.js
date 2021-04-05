@@ -1,6 +1,11 @@
 function enableEditMode() {
         richTextField.document.designMode = 'On';
-        tagEditor.document.designMode = 'On';
+        try {
+            tagEditor.document.designMode = 'On';
+        }
+        catch (e) {
+
+        }
 }
 
 function enableEditModeText() {

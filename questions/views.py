@@ -180,6 +180,16 @@ class QuestionDetailView(DetailView):
         object.views += 1
         object.save()
 
+        question_author = get_object_or_404(User, pk=object.author.pk)
+        question_author.reputation += 0.1
+        question_author.save()
+
+        for answer in object.answer_set.all():
+            if answer.is_best_answer:
+                answer_author = get_object_or_404(User, pk=answer.author.pk)
+                answer_author.reputation += 0.1
+                answer_author.save()
+
         return object
 
     def post(self, request, pk):
@@ -190,6 +200,10 @@ class QuestionDetailView(DetailView):
                     question = get_object_or_404(Question, pk=pk)
                     question.votes += 1
                     question.save()
+
+                    author = get_object_or_404(User, pk=question.author.pk)
+                    author.reputation += 1
+                    author.save()
 
                     if question in user.voted_down_questions.all():
                         user.voted_down_questions.remove(question)
@@ -202,6 +216,10 @@ class QuestionDetailView(DetailView):
                     question_comment.votes += 1
                     question_comment.save()
 
+                    author = get_object_or_404(User, pk=question_comment.author.pk)
+                    author.reputation += 1
+                    author.save()
+
                     if question_comment in user.voted_down_question_comments.all():
                         user.voted_down_question_comments.remove(question_comment)
 
@@ -213,6 +231,10 @@ class QuestionDetailView(DetailView):
                     answer.votes += 1
                     answer.save()
 
+                    author = get_object_or_404(User, pk=answer.author.pk)
+                    author.reputation += 1
+                    author.save()
+
                     if answer in request.user.voted_down_answers.all():
                         user.voted_down_answers.remove(answer)
 
@@ -223,6 +245,10 @@ class QuestionDetailView(DetailView):
                     answer_comment = get_object_or_404(AnswerComment, pk=request.POST.get('pk'))
                     answer_comment.votes += 1
                     answer_comment.save()
+
+                    author = get_object_or_404(User, pk=answer_comment.author.pk)
+                    author.reputation += 1
+                    author.save()
 
                     if answer_comment in user.voted_down_answer_comments.all():
                         user.voted_down_answer_comments.remove(answer_comment)
@@ -236,6 +262,10 @@ class QuestionDetailView(DetailView):
                     question.votes -= 1
                     question.save()
 
+                    author = get_object_or_404(User, pk=question.author.pk)
+                    author.reputation -= 1
+                    author.save()
+
                     if question in user.voted_questions.all():
                         user.voted_questions.remove(question)
 
@@ -246,6 +276,10 @@ class QuestionDetailView(DetailView):
                     question_comment = get_object_or_404(QuestionComment, pk=request.POST.get('pk'))
                     question_comment.votes -= 1
                     question_comment.save()
+
+                    author = get_object_or_404(User, pk=question_comment.author.pk)
+                    author.reputation -= 1
+                    author.save()
 
                     if question_comment in user.voted_question_comments.all():
                         user.voted_question_comments.remove(question_comment)
@@ -258,6 +292,10 @@ class QuestionDetailView(DetailView):
                     answer.votes -= 1
                     answer.save()
 
+                    author = get_object_or_404(User, pk=answer.author.pk)
+                    author.reputation -= 1
+                    author.save()
+
                     if answer in request.user.voted_answers.all():
                         user.voted_answers.remove(answer)
 
@@ -268,6 +306,10 @@ class QuestionDetailView(DetailView):
                     answer_comment = get_object_or_404(AnswerComment, pk=request.POST.get('pk'))
                     answer_comment.votes -= 1
                     answer_comment.save()
+
+                    author = get_object_or_404(User, pk=answer_comment.author.pk)
+                    author.reputation -= 1
+                    author.save()
 
                     if answer_comment in user.voted_answer_comments.all():
                         user.voted_answer_comments.remove(answer_comment)
@@ -309,6 +351,38 @@ class QuestionDetailView(DetailView):
                     body=request.POST.get('content')
                 )
                 answer.save()
+
+            elif request.POST.get('type') == 'set_best_answer':
+                answer = get_object_or_404(Answer, pk=request.POST.get('pk'))
+                question = answer.question
+                if (not question.has_best_answer) and (not answer.is_best_answer):
+                    answer.is_best_answer = True
+                    question.has_best_answer = True
+
+                    author = get_object_or_404(User, pk=answer.author.pk)
+                    author.reputation += 20
+                    author.save()
+
+                    answer.save()
+                    question.save()
+
+                    return JsonResponse({'data': 'success'}, status=200)
+
+            elif request.POST.get('type') == 'unset_best_answer':
+                answer = get_object_or_404(Answer, pk=request.POST.get('pk'))
+                question = answer.question
+                if question.has_best_answer and answer.is_best_answer:
+                    answer.is_best_answer = False
+                    question.has_best_answer = False
+
+                    author = get_object_or_404(User, pk=answer.author.pk)
+                    author.reputation -= 20
+                    author.save()
+
+                    answer.save()
+                    question.save()
+
+                    return JsonResponse({'data': 'success'}, status=200)
 
         return JsonResponse({'status': 'success'}, status=200)
 

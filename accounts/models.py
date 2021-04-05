@@ -42,7 +42,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     full_name = models.CharField(max_length=255, blank=True, null=True)
 
-    reputation = models.IntegerField(default=0)
+    reputation = models.FloatField(default=1.0)
     profile_views = models.PositiveIntegerField(default=0)
 
     is_active = models.BooleanField(default=True)

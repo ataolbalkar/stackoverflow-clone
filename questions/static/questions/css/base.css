@@ -279,3 +279,11 @@
     color: white;
     background-color: #0077cc;
 }
+
+.reputation {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #5c647e;
+    font-weight: bold;
+    margin: 7px 0;
+}

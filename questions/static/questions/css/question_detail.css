@@ -124,11 +124,17 @@
 
 .question-body-bottom-options {
     font-size: 13px;
+    display: flex;
 }
 
 .question-body-bottom-option {
     color: #827391;
-    margin-right: 5px;
+    margin-right: 8px;
+    padding: 0;
+
+    background-color: unset;
+    border: none;
+    display: flex
 }
 
 .question-body-bottom-option:hover {

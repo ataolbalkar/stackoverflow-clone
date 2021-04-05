@@ -1,7 +1,6 @@
 $(document).ready(function () {
     // CSRF TOKEN
     const csrf = $('input[name=csrfmiddlewaretoken]').val();
-
     // VOTE QUESTION UP
     $('.question-vote-up').click(function () {
         let voteButtonDown = $('.question-vote-down');  // Vote down button
@@ -539,5 +538,45 @@ $(document).ready(function () {
     });
 });
 
+function setBestAnswer(answer_pk) {
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: {
+            type: 'set_best_answer',
+            pk: answer_pk,
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (response) {
+            if (response.data === 'success') {
+                $('#unset_best_answer--' + answer_pk.toString()).css('display', 'block');
+                $('#set-best-answer--' + answer_pk.toString()).css('display', 'none');
+            }
+        }
+    });
+}
+
+function unsetBestAnswer(answer_pk) {
+    $.ajax({
+        url: '',
+        type: 'POST',
+        data: {
+            type: 'unset_best_answer',
+            pk: answer_pk,
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function (response) {
+            if (response.data === 'success') {
+                $('#unset_best_answer--' + answer_pk.toString()).css('display', 'none');
+                $('#set-best-answer--' + answer_pk.toString()).css('display', 'block');
+            }
+        }
+    });
+}
+
 $('.add-comment-area').slideUp('fast');  // Slide all comment inputs up at start.
+
+for (code of $('font')) {
+    code.parentNode.style.backgroundColor = '#f6f6f6'
+}
 
