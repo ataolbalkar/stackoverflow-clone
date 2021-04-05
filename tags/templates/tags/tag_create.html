@@ -44,7 +44,7 @@
             {% for tag in tag_list %}
                 <div class="tag">
                     <div class="tag-name-area">
-                        <a href="#" class="tag-name">
+                        <a href="{% url 'tag_detail' tag.pk %}" class="tag-name">
                             {{ tag.name }}
                         </a>
                     </div>

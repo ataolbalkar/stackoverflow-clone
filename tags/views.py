@@ -3,11 +3,13 @@ from django.shortcuts import render, get_object_or_404
 from tags.models import Tag
 from questions.models import Question
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from tags.forms import CreateTagForm
 from django.db.models import Count
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
 
 from django.core import serializers
 
@@ -18,11 +20,19 @@ from django.views.generic import ListView, CreateView, DetailView
 
 User = get_user_model()
 
-class TagCreateView(CreateView):
+
+class TagCreateView(LoginRequiredMixin, CreateView):
     model = Tag
     form_class = CreateTagForm
     template_name = 'tags/tag_create.html'
     success_url = '/tags/create'
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_manager:
+            return super(TagCreateView, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
     def get_context_data(self, **kwargs):
         context = super(TagCreateView, self).get_context_data(**kwargs)
