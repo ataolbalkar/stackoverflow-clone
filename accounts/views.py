@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate, login, mixins
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
@@ -150,22 +150,43 @@ class ProfileDetail(DetailView):
         return context
 
 
-class ProfileSettings(UpdateView):
+class ProfileSettings(mixins.LoginRequiredMixin, UpdateView):
     model = user
     template_name = 'account/profile_settings.html'
     form_class = ProfileSettingsForm
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object():
+            return super(ProfileSettings, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
 
-class EmailSettings(UpdateView):
+class EmailSettings(mixins.LoginRequiredMixin, UpdateView):
     model = user
     template_name = 'account/email_settings.html'
     form_class = EmailSettingsForm
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object():
+            return super(EmailSettings, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
 
-class TagSettings(UpdateView):
+class TagSettings(mixins.LoginRequiredMixin, UpdateView):
     model = user
     template_name = 'account/tag_settings.html'
     fields = ('interested_tags', 'ignored_tags')
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object():
+            return super(TagSettings, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
     def post(self, request, *args, **kwargs):
         this_user = get_object_or_404(user, pk=request.user.pk)
@@ -194,8 +215,15 @@ class TagSettings(UpdateView):
                 return JsonResponse({'status': 'success'}, status=200)
 
 
-class DeleteAccount(DeleteView):
+class DeleteAccount(mixins.LoginRequiredMixin, DeleteView):
     model = user
     template_name = 'account/delete_account.html'
     success_url = '/'
+    login_url = reverse_lazy('login')
+
+    def get(self, request, *args, **kwargs):
+        if request.user == self.get_object():
+            return super(DeleteAccount, self).get(request, *args, **kwargs)
+        else:
+            return HttpResponseRedirect(reverse_lazy('login'))
 
