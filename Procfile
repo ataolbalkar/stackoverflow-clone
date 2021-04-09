@@ -1,2 +1,3 @@
 web: gunicorn stackoverflow_clone.wsgi
-main_worker: celery -A stackoverflow_clone worker --beat -Q uw -l info --without-gossip --without-mingle --without-heartbeat
+worker: celery -A stackoverflow_clone worker -l info
+beat: celery -A proj beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
