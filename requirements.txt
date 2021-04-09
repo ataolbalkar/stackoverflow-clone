@@ -24,6 +24,7 @@ idna==2.10
 importlib-metadata==3.10.0
 kombu==4.6.11
 Pillow==8.1.0
+pkg-resources==0.0.0
 prometheus-client==0.8.0
 prompt-toolkit==3.0.18
 psycopg2-binary==2.8.6
