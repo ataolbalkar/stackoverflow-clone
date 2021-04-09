@@ -12,7 +12,7 @@
 
 {% block content %}
     <div class="tag-detail-main">
-        <div class="tag-detail-main-left">
+        <div class="tag-detail-main-left" style="width: 100%">
             <div class="tag-detail">
                 <div class="tag-title-block">
                     <h5 class="tag-title" id="{{ tag.pk }}">
@@ -207,7 +207,7 @@
                                             {{ question.title }}
                                         </a>
                                         <div class="tag-question-body">
-                                            {{ question.body }}
+                                            {{ question.body|safe }}
                                         </div>
                                     </div>
                                     <div class="tag-question-bottom">
@@ -224,14 +224,14 @@
                                             </span>
                                             <div class="tag-question-author">
                                                 <div class="tag-question-author-image">
-                                                    <!-- @TODO Profile image -->
+                                                    <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ question.author.profile_image.url }}" alt="">
                                                 </div>
                                                 <div class="tag-question-author-info">
                                                     <a href="{% url 'profile_detail' question.author.pk %}" class="tag-question-author-profile">
                                                         {{ question.author.username }}
                                                     </a>
                                                     <span class="reputation-score">
-                                                        {{ question.author.reputation }}
+                                                        {{ question.author.reputation|floatformat:0 }}
                                                     </span>
                                                 </div>
                                             </div>

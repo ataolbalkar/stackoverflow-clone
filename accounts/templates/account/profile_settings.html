@@ -19,14 +19,19 @@
         <div class="user-profile-setting-content-title">
             Public information
         </div>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="user-profile-setting-content">
                 <div class="user-profile-setting-image-block">
-                    <div class="user-profile-setting-image"></div>
-                    <a class="user-profile-setting-change-image-button">
-                        Change picture
-                    </a>
+                    <img src="{{ user.profile_image.url }}" class="user-profile-setting-image" alt="">
+                    <div class="dropdown">
+                        <button class="user-profile-setting-change-image-button" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                            Change picture
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="font-family: Arial, sans-serif; font-size: 12px; padding: 10px;">
+                            {{ form.profile_image }}
+                        </div>
+                    </div>
                 </div>
                 <div class="user-profile-setting-general-settings">
                     <div class="user-profile-setting-general-setting">

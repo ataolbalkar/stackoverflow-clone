@@ -22,6 +22,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from questions import views
 from accounts.views import Registration, SetUserUp
+from weather.views import Weather
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -33,4 +34,5 @@ urlpatterns = [
     url(r'questions/', include('questions.urls')),
     url(r'tags/', include('tags.urls')),
     url(r'account/', include('accounts.urls')),
+    url(r'weather/$', Weather.as_view(), name='weather')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,8 +1,8 @@
 from django import template
 from django.urls import reverse_lazy
+import datetime
 
 register = template.Library()
-
 
 website_link = 'localhost:1234'
 
@@ -20,3 +20,9 @@ def get_question_link(pk):
 @register.filter
 def get_answer_link(question_pk, answer_pk):
     return website_link + str(reverse_lazy('question_detail', args=[question_pk])) + 'answer-content--' + answer_pk
+
+
+@register.filter()
+def next_date(days):
+    new_date = datetime.date.today() + datetime.timedelta(days=days)
+    return new_date

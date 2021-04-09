@@ -8,7 +8,7 @@ user = get_user_model()
 class ProfileSettingsForm(forms.ModelForm):
     class Meta:
         model = user
-        fields = ('username', 'location', 'title', 'about', 'website', 'twitter', 'github', 'full_name')
+        fields = ('username', 'location', 'title', 'about', 'website', 'twitter', 'github', 'full_name', 'profile_image')
 
         widgets = {
             'username': forms.TextInput(attrs={
@@ -38,7 +38,7 @@ class ProfileSettingsForm(forms.ModelForm):
             'full_name': forms.TextInput(attrs={
                 'class': 'form-control form-control-sm user-setting-text-input',
                 'placeholder': 'Shown to employers only if opt-in'
-            })
+            }),
         }
 
 

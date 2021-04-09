@@ -131,7 +131,7 @@
                                     </a>
                                     <div class="question-user">
                                         <div class="question-user-profile-image">
-                                            <!-- @TODO profil resmi -->
+                                            <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ modified_author.profile_image.url }}" alt="">
                                         </div>
                                         <div class="question-user-info">
                                                 <a href="{% url 'profile_detail' modified_author.pk %}" class="question-username">
@@ -139,7 +139,7 @@
                                                 </a>
                                             <div class="question-user-scores">
                                                 <span class="user-reputation-score">
-                                                    {{ modified_author.reputation }}
+                                                    {{ modified_author.reputation|floatformat:0 }}
                                                 </span>
                                             </div>
                                         </div>
@@ -153,7 +153,7 @@
                             </a>
                             <div class="question-user">
                                 <div class="question-user-profile-image">
-                                    <!-- @TODO Profil resmi -->
+                                    <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ author.profile_image.url }}" alt="">
                                 </div>
                                 <div class="question-user-info">
                                     <a href="{% url 'profile_detail' author.pk %}" class="question-username">
@@ -161,7 +161,7 @@
                                     </a>
                                     <div class="question-user-scores">
                                         <span class="user-reputation-score">
-                                            {{ author.reputation }}
+                                            {{ author.reputation|floatformat:0 }}
                                         </span>
                                     </div>
                                 </div>
@@ -420,7 +420,7 @@
                                             </a>
                                             <div class="question-user">
                                                 <div class="question-user-profile-image">
-                                                    <!-- @TODO profil resmi -->
+                                                    <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ answer.edited_author.profile_image.url }}" alt="">
                                                 </div>
                                                 <div class="question-user-info">
                                                         <a href="#" class="question-username">
@@ -428,7 +428,7 @@
                                                         </a>
                                                     <div class="question-user-scores">
                                                         <span class="user-reputation-score">
-                                                            {{ answer.edited_author.reputation }}
+                                                            {{ answer.edited_author.reputation|floatformat:0 }}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -442,7 +442,7 @@
                                     </a>
                                     <div class="question-user">
                                         <div class="question-user-profile-image">
-                                            <!-- @TODO Profil resmi -->
+                                            <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ answer.author.profile_image.url }}" alt="">
                                         </div>
                                         <div class="question-user-info">
                                             <a href="#" class="question-username">
@@ -450,7 +450,7 @@
                                             </a>
                                             <div class="question-user-scores">
                                                 <span class="user-reputation-score">
-                                                    {{ answer.author.reputation }}
+                                                    {{ answer.author.reputation|floatformat:0 }}
                                                 </span>
                                             </div>
                                         </div>

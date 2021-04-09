@@ -150,8 +150,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item top-nav-icon profile-icon">
                     <a href="{% url 'profile_detail' user.pk %}" class="top-nav-button" style="display: flex; justify-content: center;">
-                        <img style="width: 32px; height: 32px; background: #4b4b4b" alt="">
-                        <span class="reputation">{{ user.reputation }}</span>
+                        <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ user.profile_image.url }}" alt="">
+                        <span class="reputation">{{ user.reputation|floatformat:0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item top-nav-icon">

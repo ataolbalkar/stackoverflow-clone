@@ -25,7 +25,7 @@ SECRET_KEY = '!ydso=%8to#n4mjcy4115(u8tbg0cth5=_zu&(=fz)(krp*e29'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:8000', 'localhost', 'localhost:8000']
 
 
 # Application definition
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'questions',
     'accounts',
     'tags',
+    'weather',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -82,11 +84,11 @@ WSGI_APPLICATION = 'stackoverflow_clone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'stackover',
-        'USER': 'admin',
-        'PASSWORD': 'Password123',
-        'HOST': 'localhost',
-        'PORT': ''
+        'NAME': 'daia197globjc4',
+        'USER': 'onahyyfsdvypay',
+        'PASSWORD': '2accffdbe7194f16b1c16f53061b5b1a9fc5c651a9f0e58ea00dcb8a6e652c03',
+        'HOST': 'ec2-54-155-226-153.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
@@ -133,9 +135,31 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'questions/static')
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'questions/media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/account/images')
+MEDIA_URL = '/images/'
 
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'accounts.UserProfile'
+
+CELERY_BROKER_URL = 'amqps://rxmcjzkh:72a2RpAmS6aPqCAukSAZjU2r8Xsxcn2b@hawk.rmq.cloudamqp.com/rxmcjzkh'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'galyus.deneme@gmail.com'
+EMAIL_HOST_PASSWORD = 'Password.123'
+EMAIL_USE_TLS = True
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'scheduled_task': {
+        'task': 'send_email_task',
+        'schedule': crontab(minute=0, hour='*/1'),
+    }
+}

@@ -77,7 +77,7 @@
                                     </a>
                                     <div class="question-user">
                                         <div class="question-user-profile-image">
-                                            <!-- @TODO profil resmi -->
+                                            <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ question.modified_author.profile_image.url }}" alt="">
                                         </div>
                                         <div class="question-user-info">
                                                 <a href="#" class="question-username">
@@ -85,7 +85,7 @@
                                                 </a>
                                             <div class="question-user-scores">
                                                 <span class="user-reputation-score">
-                                                    {{ question.modified_author.reputation }}
+                                                    {{ question.modified_author.reputation|floatformat:0 }}
                                                 </span>
                                             </div>
                                         </div>
@@ -99,7 +99,7 @@
                             </a>
                             <div class="question-user">
                                 <div class="question-user-profile-image">
-                                    <!-- @TODO Profil resmi -->
+                                    <img style="width: 32px; height: 32px; background: #4b4b4b" src="{{ question.author.profile_image.url }}" alt="">
                                 </div>
                                 <div class="question-user-info">
                                     <a href="#" class="question-username">
@@ -107,7 +107,7 @@
                                     </a>
                                     <div class="question-user-scores">
                                         <span class="user-reputation-score">
-                                            {{ question.author.reputation }}
+                                            {{ question.author.reputation|floatformat:0 }}
                                         </span>
                                     </div>
                                 </div>

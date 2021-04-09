@@ -26,10 +26,10 @@
         <div class="user-profile-top">
             <div class="user-profile-top-left">
                 <div class="user-profile-avatar-field">
-                    <div class="user-profile-avatar"></div>
+                    <img class="user-profile-avatar" src="{{ userprofile.profile_image.url }}" alt="">
                     <div class="user-profile-reputation-field">
                         <span class="user-profile-reputation">
-                            {{ userprofile.reputation }}
+                            {{ userprofile.reputation|floatformat:0 }}
                         </span>
                         REPUTATION
                     </div>

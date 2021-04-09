@@ -1,0 +1,141 @@
+{% extends 'questions/base.html' %}
+{% load staticfiles %}
+{% load question_templatetags %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'weather/css/weather.css' %}">
+{% endblock %}
+
+{% block title %}
+    Weather
+{% endblock %}
+
+{% block content %}
+    <div class="weather-content">
+        <div class="weather-today">
+            <div style="display: flex; justify-content: center;">
+                <div class="weather-today-container">
+                    <div class="weather-today-info">
+                        Current
+                    </div>
+                    <img src="http://openweathermap.org/img/wn/{{ weather_now.weather.0.icon }}@4x.png" alt="">
+                    <div class="weather-today-info">
+                        <i class="fas fa-temperature-low"></i>
+                        {{ weather_now.main.temp|floatformat:0 }}°C
+                    </div>
+                    <div class="weather-today-info">
+                        <i class="fas fa-tint"></i>
+                        {{ weather_now.main.humidity }}%
+                    </div>
+                    <div class="weather-today-info">
+                        {{ weather_now.weather.0.main }}
+                    </div>
+                </div>
+            </div>
+            <div class="weather-day-night">
+                <div class="weather-today-day">
+                    <i class="fas fa-sun fa-4x"></i>
+                    <div class="weather-today-day-info">
+                        <div class="weather-today-day-info">
+                            <i class="fas fa-temperature-low"></i>
+                            {{ weather.list.0.temp.day|floatformat:0 }}°C
+                        </div>
+                        <div class="weather-today-day-info">
+                            <i class="fas fa-tint"></i>
+                            {{ weather.list.0.humidity }}%
+                        </div>
+                        <div class="weather-today-day-info">
+                            {{ weather.list.0.weather.0.main }}
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-today-night">
+                    <i class="fas fa-moon fa-4x"></i>
+                    <div class="weather-today-night-info">
+                        <div class="weather-today-day-info">
+                            <i class="fas fa-temperature-low"></i>
+                            {{ weather.list.0.temp.night|floatformat:0 }}°C
+                        </div>
+                        <div class="weather-today-day-info">
+                            <i class="fas fa-tint"></i>
+                            {{ weather.list.0.humidity }}%
+                        </div>
+                        <div class="weather-today-day-info">
+                            {{ weather.list.0.weather.0.main }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div class="weather-others">
+                <div class="weather-others-content">
+                    <div class="weather-others-info">
+                        Tomorrow
+                    </div>
+                    <img src="http://openweathermap.org/img/wn/{{ weather.list.1.weather.0.icon }}@2x.png" alt="">
+                    <div class="weather-others-info">
+                        <i class="fas fa-temperature-low"></i>
+                        <span class="weather-others-info-max">
+                            {{ weather.list.1.temp.max|floatformat:0 }}°C
+                        </span>
+                        <span class="weather-others-info-min">
+                            {{ weather.list.1.temp.min|floatformat:0 }}°C
+                        </span>
+                    </div>
+                    <div class="weather-others-info">
+                        <i class="fas fa-tint"></i>
+                        {{ weather.list.1.humidity }}%
+                    </div>
+                    <div class="weather-others-info">
+                        {{ weather.list.1.weather.0.main }}
+                    </div>
+                </div>
+                <div class="weather-others-content">
+                    <div class="weather-others-info">
+                        {{ 2|next_date|date:'d F' }}
+                    </div>
+                    <img src="http://openweathermap.org/img/wn/{{ weather.list.2.weather.0.icon }}@2x.png" alt="">
+                    <div class="weather-others-info">
+                        <i class="fas fa-temperature-low"></i>
+                        <span class="weather-others-info-max">
+                            {{ weather.list.2.temp.max|floatformat:0 }}°C
+                        </span>
+                        <span class="weather-others-info-min">
+                            {{ weather.list.2.temp.min|floatformat:0 }}°C
+                        </span>
+                    </div>
+                    <div class="weather-others-info">
+                        <i class="fas fa-tint"></i>
+                        {{ weather.list.2.humidity }}%
+                    </div>
+                    <div class="weather-others-info">
+                        {{ weather.list.2.weather.0.main }}
+                    </div>
+                </div>
+                <div class="weather-others-content" style="border-right: none;">
+                    <div class="weather-others-info">
+                        {{ 3|next_date|date:'d F' }}
+                    </div>
+                    <img src="http://openweathermap.org/img/wn/{{ weather.list.3.weather.0.icon }}@2x.png" alt="">
+                    <div class="weather-others-info">
+                        <i class="fas fa-temperature-low"></i>
+                        <span class="weather-others-info-max">
+                            {{ weather.list.3.temp.max|floatformat:0 }}°C
+                        </span>
+                        <span class="weather-others-info-min">
+                            {{ weather.list.3.temp.min|floatformat:0 }}°C
+                        </span>
+                    </div>
+                    <div class="weather-others-info">
+                        <i class="fas fa-tint"></i>
+                        {{ weather.list.3.humidity }}%
+                    </div>
+                    <div class="weather-others-info">
+                        {{ weather.list.3.weather.0.main }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

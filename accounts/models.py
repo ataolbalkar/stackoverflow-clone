@@ -44,6 +44,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     reputation = models.FloatField(default=1.0)
     profile_views = models.PositiveIntegerField(default=0)
+    profile_image = models.ImageField(blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -69,7 +70,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     registered_date = models.DateTimeField(default=timezone.now)
 
-    object = UserProfileManager()
+    objects = UserProfileManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'password']

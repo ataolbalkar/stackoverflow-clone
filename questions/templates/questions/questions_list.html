@@ -110,7 +110,7 @@ Questions
                                         {{ question.author }}
                                     </a>
                                     <span class="reputation-score">
-                                        {{ question.author.reputation }}
+                                        {{ question.author.reputation|floatformat:0 }}
                                     </span>
                                 </div>
                             </div>
