@@ -1,1 +1,1 @@
-web: gunicorn the_weather.wsgi
+web: gunicorn stackoverflow_clone.wsgi
