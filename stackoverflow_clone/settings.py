@@ -163,6 +163,6 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'scheduled_task': {
         'task': 'send_email_task',
-        'schedule': crontab(minute=0, hour='*/1'),
+        'schedule': 10.0,
     }
 }
