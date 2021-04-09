@@ -25,7 +25,7 @@ SECRET_KEY = '!ydso=%8to#n4mjcy4115(u8tbg0cth5=_zu&(=fz)(krp*e29'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '127.0.0.1:8000', 'localhost', 'localhost:8000']
+ALLOWED_HOSTS = ['127.0.0.1', 'pure-island-62704.herokuapp.com']
 
 
 # Application definition
