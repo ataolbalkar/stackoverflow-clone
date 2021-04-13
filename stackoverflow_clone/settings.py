@@ -25,7 +25,7 @@ SECRET_KEY = '!ydso=%8to#n4mjcy4115(u8tbg0cth5=_zu&(=fz)(krp*e29'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'pure-island-62704.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'pure-island-62704.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -85,10 +85,10 @@ WSGI_APPLICATION = 'stackoverflow_clone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'daia197globjc4',
-        'USER': 'onahyyfsdvypay',
-        'PASSWORD': '2accffdbe7194f16b1c16f53061b5b1a9fc5c651a9f0e58ea00dcb8a6e652c03',
-        'HOST': 'ec2-54-155-226-153.eu-west-1.compute.amazonaws.com',
+        'NAME': 'd9jeq9i9hm4vci',
+        'USER': 'snbdizksfowocv',
+        'PASSWORD': '631292e62929578578ad462c4e8e6e298caa54f3bf53ffbc7c82756963bc30fe',
+        'HOST': 'ec2-52-19-170-215.eu-west-1.compute.amazonaws.com',
         'PORT': '5432'
     }
 }

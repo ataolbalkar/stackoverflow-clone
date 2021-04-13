@@ -170,8 +170,35 @@
                     </div>
                 </div>
                 <div class="question-comments">
-                    {% if question_comments %}
-                        <div id="question-comments-area" class="question-comments-area">
+                    <div id="question-comments-area" class="question-comments-area">
+                        <div class="question-comment" style="display: none;">
+                            <div class="question-comment-votes">
+                                <div style="width: 25px;" class="question-comment-votes-text" id="question-comment-votes-text--">
+                                </div>
+                                <div class="question-comment-votes-buttons">
+                                    {% if user.is_authenticated %}
+                                        <button class="question-comment-vote-button question-comment-vote-button-up" id="question-comment-vote-button-up--">
+                                            <i class="fas fa-caret-up" style="color: #32a246;"></i>
+                                        </button>
+                                        <button class="question-comment-vote-button question-comment-vote-button-down" id="question-comment-vote-button-down--">
+                                            <i class="fas fa-caret-down" style="color: #c3212a;"></i>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="question-comment-body">
+                                <span class="question-comment-text">
+
+                                </span>
+                                –&nbsp;
+                                <a href="" class="question-comment-author">
+
+                                </a>
+                                <span class="question-comment-date">
+                                </span>
+                            </div>
+                        </div>
+                        {% if question_comments %}
                             {% for comment in question_comments %}
                                 <div class="question-comment">
                                     <div class="question-comment-votes">
@@ -241,9 +268,8 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
-
-                    {% endif %}
+                        {% endif %}
+                    </div>
                     {% if user.is_authenticated %}
                         {% if question.is_active %}
                             <div id="add-question-comment-add" class="add-question-comment-add">
@@ -459,10 +485,10 @@
                             </div>
                         </div>
                         <div class="question-comments">
-                            {% if answer_comments %}
-                                {% for comment in answer_comments %}
-                                    {% if comment.answer == answer %}
-                                        <div id="answer-comments-area--{{ answer.pk }}" class="answer-comments-area">
+                            <div id="answer-comments-area--{{ answer.pk }}" class="answer-comments-area">
+                                {% if answer_comments %}
+                                    {% for comment in answer_comments %}
+                                        {% if comment.answer == answer %}
                                             <div class="question-comment">
                                                 <div class="question-comment-votes">
                                                     <div id="question-answer-comment-votes--{{ comment.pk }}" style="width: 25px;">
@@ -516,10 +542,10 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
                             {% if question.is_active %}
                                 <div id="add-answer-comment-add--{{ answer.pk }}" class="add-answer-comment-add">
                                     <a id="add-answer-comment--{{ answer.pk }}" class="add-question-comment add-comment add-answer-comment" role="button">

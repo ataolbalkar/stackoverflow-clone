@@ -429,7 +429,7 @@ $(document).ready(function () {
             $('#add-question-comment-input').focus();  // Focus to the input:
         } else {
             if ($('.add-question-comment-error-message').length > 0) {
-                // If there is error message:
+                // If there is an error message:
                 $('.add-question-comment-error-message').remove();  // Remove the error message,
                 // Change the inputs border color to the origin:
                 $('#add-question-comment-input').css('border-color', '#bdc3c9');
@@ -448,6 +448,7 @@ $(document).ready(function () {
                 success: function (response) {
                     // Clone the first comment element to display:
                     let newComment = $('.question-comment')[0].cloneNode(true);
+                    newComment.style.display = 'flex';
                     newComment.children[0].children[0].innerText = '';  // It has 0 votes.
                     newComment.children[1].children[0].innerText = response.comment;  // Comment body.
                     newComment.children[1].children[1].innerText = response.user;  // Username of the user.
@@ -507,6 +508,7 @@ $(document).ready(function () {
                     success: function (response) {
                         // Clone the first comment element to display:
                         let newComment = $('.question-comment')[0].cloneNode(true);
+                        newComment.style.display = 'flex';
                         newComment.children[0].children[0].innerText = '';  // It has 0 votes.
                         newComment.children[1].children[0].innerText = response.comment;  // Comment body.
                         newComment.children[1].children[1].innerText = response.user;  // Username of the user.
