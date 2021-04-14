@@ -23,6 +23,27 @@ class Registration(CreateView):
     template_name = 'account/registration.html'
     success_url = '/'
 
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('type') == 'check_username':
+            username = request.POST.get('data')
+            if username in [u.username for u in user.objects.all()]:
+                result = 'unavailable'
+            else:
+                result = 'available'
+
+            return JsonResponse({'result': result}, status=200)
+
+        if request.POST.get('type') == 'check_email':
+            email = request.POST.get('data')
+            if email in [u.email for u in user.objects.all()]:
+                result = 'unavailable'
+            else:
+                result = 'available'
+
+            return JsonResponse({'result': result}, status=200)
+        else:
+            return super(Registration, self).post(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.save()
         username = self.request.POST.get('username')

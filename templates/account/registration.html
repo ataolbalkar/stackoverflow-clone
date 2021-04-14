@@ -18,22 +18,26 @@
                         Display name
                     </label>
                     {{ form.username }}
+                    <div id="username-control" class="username-control"></div>
                     <label for="{{ form.email.id }}" class="registration-label">
                         Email
                     </label>
                     {{ form.email }}
+                    <div id="email-control" class="username-control"></div>
                     <label for="{{ form.password1.id }}" class="registration-label">
                         Password
                     </label>
                     {{ form.password1 }}
-                    <p class="registration-form-info">
+                    <div id="password1-control" class="username-control"></div>
+                    <p id="password1-info" class="registration-form-info">
                         Passwords must contain at least eight characters, including at least 1 letter and 1 number.
                     </p>
                     <label for="{{ form.password2.id }}" class="registration-label">
                         Confirm password
                     </label>
                     {{ form.password2 }}
-                    <p class="registration-form-info">
+                    <div id="password2-control" class="username-control"></div>
+                    <p id="password2-info" class="registration-form-info">
                         Enter the same password as before, for verification.
                     </p>
                     <button type="submit" class="btn btn-primary btn-block sign-up-button">
@@ -46,4 +50,6 @@
             </form>
         </div>
     </div>
+
+    <script src="{% static 'account/js/register.js' %}"></script>
 {% endblock %}

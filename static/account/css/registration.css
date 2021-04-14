@@ -35,3 +35,15 @@
     border: ridge #66beff 1px;
     margin: 20px 0 40px;
 }
+
+.username-control {
+    margin-top: 5px;
+}
+
+.username-control-available {
+    color: #4bbe00;
+}
+
+.username-control-unavailable {
+    color: darkred;
+}
